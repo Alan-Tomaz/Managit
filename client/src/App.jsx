@@ -1,10 +1,17 @@
-import { useState } from 'react'
-import './App.css'
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import HeroSection from "./pages/HeroSection";
+import './App.css';
 
 function App() {
 
   return (
-    <div></div>
+    <div className="app">
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<HeroSection />} />
+        </Routes>
+      </BrowserRouter>
+    </div>
   )
 }
 
