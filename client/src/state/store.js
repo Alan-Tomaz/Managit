@@ -11,9 +11,11 @@ import {
     PURGE,
     REGISTER
 } from "redux-persist";
+import UserReducer from "./User/UserSlice";
+import MiscReducer from "./Misc/MiscSlice";
 
 /* UNIFY REDUCERS */
-const rootReducer = combineReducers({})
+const rootReducer = combineReducers({ UserReducer, MiscReducer })
 
 /* CREATE PERSIST REDUX CONFIG */
 const persistConfig = {

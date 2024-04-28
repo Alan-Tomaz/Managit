@@ -72,7 +72,11 @@ img {
     color: var(--text-color-variant);
     border-radius: 5px;
     font-size: .9rem;
-    padding: .8rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 140px;
+    height: 52px;
     font-weight: var(--font-semi-bold);
     border: 2px solid var(--color-primary);
 }
@@ -91,4 +95,25 @@ img {
 .button--outlined:hover {
     color: var(--text-color-variant);
     background-color: var(--color-primary);
+}
+
+/* ============== MEDIA QUERIES =============== */
+
+/* Medium Devices = 1024 */
+
+@media screen and (max-width: 1024px) {}
+
+/* Small Devices = 600 */
+
+@media screen and (max-width:600px) {
+    :root {
+        /* ======== FONT and Typography ========= */
+
+        /* .5rem = 8px, 1rem = 16px, 1.5rem = 24px, ...*/
+        --giant-title: 3rem;
+        --title: 1.8rem;
+        --big-text: 3rem;
+        --normal-font-size: 1rem;
+        --small-font-size: .813rem;
+    }
 }

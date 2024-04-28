@@ -3,3 +3,166 @@ body {
     width: 100vw;
     background-color: var(--bg-color);
 }
+
+.hero-section {
+    display: flex;
+    position: relative;
+    height: 100vh;
+    width: 100vw;
+}
+
+.hero-section__text {
+    position: absolute;
+    left: 7%;
+    top: 20%;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    z-index: 1;
+}
+
+.hero-section__title {
+    font-size: 4rem;
+}
+
+.hero-section__title--colored {
+    color: var(--color-primary);
+}
+
+.hero-section__subtitle {
+    font-size: 1.2rem;
+    font-weight: var(--font-semi-bold);
+}
+
+.hero-section__buttons {
+    display: flex;
+    gap: 2rem;
+}
+
+.hero-section__button {
+    font-size: 1.2rem !important;
+    width: 220px !important;
+    height: 70px !important;
+}
+
+.hero-section__image {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    top: 55%;
+    left: 70%;
+    width: 50%;
+}
+
+.hero-section__image img {
+    max-height: 550px;
+    z-index: 0;
+}
+
+.hero-section__circle {
+    position: absolute;
+    height: 3rem;
+    width: 3rem;
+    background-color: var(--color-primary);
+    border-radius: 100%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+}
+
+#circle-1 {
+    bottom: 125%;
+    left: 80%;
+}
+
+#circle-2 {
+    bottom: 100%;
+    left: 50%;
+}
+
+#circle-3 {
+    bottom: 85%;
+    left: 90%;
+}
+
+/* ============== MEDIA QUERIES =============== */
+
+/* Medium Devices = 1024 */
+
+@media screen and (max-width: 1024px) {
+
+    .hero-section__text {
+        left: 3%;
+    }
+
+    .hero-section__title {
+        font-size: 2.5rem;
+    }
+
+    .hero-section__subtitle {
+        font-size: 1rem;
+        font-weight: var(--font-semi-bold);
+    }
+
+    .hero-section__button {
+        font-size: 1rem !important;
+        width: 160px !important;
+        height: 60px !important;
+    }
+
+    .hero-section__circle {
+        width: 2rem;
+        height: 2rem;
+    }
+
+    .hero-section__image {
+        left: 73%;
+    }
+}
+
+/* Small Devices = 600 */
+
+@media screen and (max-width:600px) {
+
+    .hero-section {
+        flex-direction: column;
+        align-items: center;
+        gap: 2rem;
+    }
+
+    .hero-section__text {
+        margin-top: 2rem;
+        top: initial;
+        left: initial;
+        position: relative;
+    }
+
+    .hero-section__title,
+    .hero-section__subtitle {
+        text-align: center;
+    }
+
+    .hero-section__buttons {
+        gap: 0rem;
+        display: flex;
+        justify-content: space-evenly;
+    }
+
+    .hero-section__button {
+        font-size: .8rem !important;
+        width: 130px !important;
+        height: 50px !important;
+    }
+
+    .hero-section__image {
+        position: relative;
+        left: initial;
+        top: initial;
+        transform: initial;
+        width: 100%;
+        padding: 0 1rem;
+    }
+
+    .hero-section__circle {
+        display: none;
+    }
+
+}
