@@ -101,6 +101,111 @@
     background-color: #e0e0e0;
 }
 
+/* REGISTER PHONE NUMBER */
+
+.register__input-phonenumber {
+    border-radius: 5px;
+    display: flex;
+    background-color: var(--bg-color);
+    padding-left: .8rem;
+    transition: var(--transition);
+    position: relative;
+}
+
+.register__input-phonenumber:hover {
+    background-color: #e0e0e0;
+
+}
+
+.register__input__country-selected {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .4rem;
+}
+
+.register__input__country-selected:hover {
+    cursor: pointer;
+}
+
+.register__input__country-flag {
+    width: 25px;
+}
+
+.register__input__country-arrow {
+    width: 15px;
+
+}
+
+.register__input__phone-input {
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+}
+
+.register__input__phone-input:focus {
+    background-color: transparent;
+}
+
+.register__input__countries {
+    transition: var(--transition);
+    position: absolute;
+    top: 60px;
+    display: flex;
+    flex-direction: column;
+    background-color: #e0e0e0;
+    border-radius: 5px;
+    width: 250px;
+    min-height: 82px;
+}
+
+.register__input__country-search {
+    background-color: #cecece;
+    height: 40px;
+    font-size: .8rem;
+    font-weight: var(--font-semi-bold);
+    border-radius: 5px 5px 0px 0px;
+}
+
+.register__input__country-search:focus {
+    background-color: #cecece;
+}
+
+.register__input__contry-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.register__input__contry-item {
+    padding: 1.3rem;
+    width: 100%;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.register__input__contry-item:hover {
+    transition: var(--transition);
+    background-color: #b9b9b9;
+    cursor: pointer;
+}
+
+.register__input__contry-img {
+    display: flex;
+    gap: .5rem;
+}
+
+.register__input__country-text {
+    font-size: .9rem;
+}
+
+.hide {
+    display: none;
+}
+
+
+
 .register__input-location,
 .register__input-description {
     grid-column: 1 / 3;
