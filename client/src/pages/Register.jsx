@@ -21,15 +21,19 @@ function Register() {
     const [description, setDescription] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-    const [countryCode, setCountryCode] = useState("1");
+    const [countryCode, setCountryCode] = useState(1);
 
     const [isFocusingPhoneInput, setIsFocusingPhoneInput] = useState(false);
     const [isCountryListOpen, setIsCountryListOpen] = useState(false);
+    const [birthInputType, setBirthInputType] = useState("text");
+    const [previewImg, setPreviewImg] = useState(UserImg);
+
     const [countries, setCountries] = useState([<li key={1} id='country-item-1' className='register__input__contry-item' onClick={() => handleChangeCountry(1)}><div className="register__input__contry-img"><US className='register__input__country-flag' /><span className='register__input__country-text' id='country-1'>United States</span></div><span className='register__input__country-text'>+1</span></li>, <li key={2} className='register__input__contry-item' id='country-item-2' onClick={() => handleChangeCountry(55)}><div className="register__input__contry-img"><BR className='register__input__country-flag' /><span className='register__input__country-text' id='country-2'>Brazil</span></div><span className='register__input__country-text'>+55</span></li>]);
 
     const countryListRef = useRef(null);
 
     useEffect(() => {
+        /* CLOSE WINDOW WHEN CLICK OUTSIDE */
         const handleClickOutside = (event) => {
             if (countryListRef.current && !countryListRef.current.contains(event.target)) {
                 setIsCountryListOpen(false);
@@ -43,37 +47,46 @@ function Register() {
     }, []);
 
     const handlePhoneNumber = (e) => {
-
+        /* FORMATTING PHONE NUMBER */
         const newPhoneNumber = e.target.value.replace(/[^\d]/g, '');
-
         const phoneNumberLength = newPhoneNumber.length;
-
-        if (phoneNumberLength < 3) {
-            setPhoneNumber(newPhoneNumber);
+        switch (countryCode) {
+            case 1:
+                if (phoneNumberLength < 4) {
+                    setPhoneNumber(newPhoneNumber);
+                }
+                else if (phoneNumberLength < 7) {
+                    setPhoneNumber(`(${newPhoneNumber.slice(0, 3)}) ${newPhoneNumber.slice(3)}`);
+                }
+                else {
+                    setPhoneNumber(`(${newPhoneNumber.slice(0, 3)}) ${newPhoneNumber.slice(3, 6)}-${newPhoneNumber.slice(6, 10)}`);
+                }
+                break;
+            case 55:
+                if (phoneNumberLength < 3) {
+                    setPhoneNumber(newPhoneNumber);
+                }
+                else if (phoneNumberLength < 4) {
+                    setPhoneNumber(`(${newPhoneNumber.slice(0, 2)}) ${newPhoneNumber.slice(2, 3)}`);
+                }
+                else if (phoneNumberLength < 8) {
+                    setPhoneNumber(`(${newPhoneNumber.slice(0, 2)}) ${newPhoneNumber.slice(2, 3)} ${newPhoneNumber.slice(3)}`);
+                }
+                else {
+                    setPhoneNumber(`(${newPhoneNumber.slice(0, 2)}) ${newPhoneNumber.slice(2, 3)} ${newPhoneNumber.slice(3, 7)}-${newPhoneNumber.slice(7, 11)}`);
+                }
+                break;
         }
-        else if (phoneNumberLength < 4) {
-            setPhoneNumber(`(${newPhoneNumber.slice(0, 2)}) ${newPhoneNumber.slice(2, 3)}`);
-        }
-        else if (phoneNumberLength < 8) {
-            setPhoneNumber(`(${newPhoneNumber.slice(0, 2)}) ${newPhoneNumber.slice(2, 3)} ${newPhoneNumber.slice(3)}`);
-        }
-        else {
-            setPhoneNumber(`(${newPhoneNumber.slice(0, 2)}) ${newPhoneNumber.slice(2, 3)} ${newPhoneNumber.slice(3, 7)}-${newPhoneNumber.slice(7, 11)}`);
-        }
-
     }
 
-    const handleSubmitForm = (e) => {
-        e.preventDefault();
-    }
 
     const handleChangeCountry = (code) => {
         setCountryCode(code);
         setIsCountryListOpen(false);
+        setPhoneNumber("");
     }
 
     const handleSearchCountry = (e) => {
-
         const searchValue = e.target.value.toLowerCase();
 
         countries.map((country, index) => {
@@ -87,8 +100,48 @@ function Register() {
 
     const handleChangePhoneInputBackground = () => {
         const isFocusing = isFocusingPhoneInput;
-
         setIsFocusingPhoneInput(!isFocusing);
+    }
+
+    const handleChangeDateInput = (e, type) => {
+        const input = e.target;
+
+        switch (type) {
+            case "focus":
+                setBirthInputType("date");
+                break;
+            case "blur":
+                if (input.value.length == 0) {
+                    setBirthInputType("text");
+                }
+                break;
+            case "double_click":
+                input.showPicker();
+                break;
+        }
+
+    }
+
+    const handlePreviewImage = (e) => {
+        const inputTarget = e.target;
+        const file = inputTarget.files[0];
+
+        const fileSize = (file.size / 1024);
+
+        if (file && fileSize < 2048) {
+            const reader = new FileReader();
+
+            reader.addEventListener('load', (e) => {
+                const readerTarget = e.target;
+                setPreviewImg(readerTarget.result);
+            })
+
+            reader.readAsDataURL(file);
+        }
+    }
+
+    const handleSubmitForm = (e) => {
+        e.preventDefault();
     }
 
     return (
@@ -101,8 +154,9 @@ function Register() {
                     <div className="register__box">
                         <h3 className='register__title'>Create an Account</h3>
                         <div className="register__user">
-                            <img src={UserImg} alt="" className='register__user-img' />
-                            <img src={Image} alt="" className='register__img' />
+                            <img src={previewImg} alt="User Picture" className='register__user-img' />
+                            <img src={Image} alt="" className='register__img' onClick={() => document.getElementById("register__file").click()} />
+                            <input type="file" name="register__file" id="register__file" className='register__file' onChange={handlePreviewImage} />
                         </div>
                         <form className="register__form" id='register__form' onSubmit={() => handleSubmitForm()}>
                             <input type="text" placeholder='Name:' className='register__input-name register__input' onChange={(e) => setName(e.target.value)} />
@@ -122,7 +176,7 @@ function Register() {
                                     </ul>
                                 </div>
                             </div>
-                            <input type="date" placeholder='Birth Date:' className='register__input-birthdate register__input' id='input__birth-date' onChange={(e) => setBirthDate(e.target.value)} />
+                            <input type={birthInputType} placeholder='Birth Date:' className='register__input-birthdate register__input' id='input__birth-date' onChange={(e) => setBirthDate(e.target.value)} onFocus={(e) => handleChangeDateInput(e, "focus")} onBlur={(e) => handleChangeDateInput(e, "blur")} onDoubleClick={(e) => handleChangeDateInput(e, "double_click")} />
                             <input type="text" placeholder='Location:' className='register__input-location register__input' onChange={(e) => setLocation(e.target.value)} />
                             <textarea type="text" placeholder='Description:' className='register__input-description register__input' onChange={(e) => setDescription(e.target.value)}></textarea>
                             <input type="password" placeholder='Password:' className='register__input-password register__input' onChange={(e) => setPassword(e.target.value)} />
@@ -137,4 +191,4 @@ function Register() {
     )
 }
 
-export default Register
+export default Register;

@@ -53,11 +53,10 @@
 }
 
 .register__user-img {
-    width: 120px;
-    height: 120px;
+    width: 130px;
+    height: 130px;
     border-radius: 100%;
-    border: 10px solid var(--bg-color-variant);
-    padding: .2rem;
+    object-fit: cover;
 }
 
 .register__img {
@@ -72,6 +71,13 @@
     cursor: pointer;
 }
 
+.register__file {
+    position: absolute;
+    top: 110px;
+    left: 50px;
+    display: none;
+}
+
 .register__form {
     width: 100%;
     display: grid;
@@ -84,6 +90,7 @@
     background-color: var(--bg-color);
     border-radius: 5px;
     padding: .8rem;
+    height: 50px;
     font-size: 1rem;
     font-weight: var(--font-semi-bold);
 
@@ -104,6 +111,7 @@
 /* REGISTER PHONE NUMBER */
 
 .register__input-phonenumber {
+    width: 100%;
     border-radius: 5px;
     display: flex;
     background-color: var(--bg-color);
@@ -150,7 +158,7 @@
 .register__input__countries {
     transition: var(--transition);
     position: absolute;
-    top: 60px;
+    top: 50px;
     display: flex;
     flex-direction: column;
     background-color: #e0e0e0;
@@ -204,7 +212,9 @@
     display: none;
 }
 
-
+::-webkit-calendar-picker-indicator:hover {
+    cursor: pointer;
+}
 
 .register__input-location,
 .register__input-description {
