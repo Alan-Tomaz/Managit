@@ -23,8 +23,10 @@ function Register() {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [countryCode, setCountryCode] = useState(1);
 
+
     const [isFocusingPhoneInput, setIsFocusingPhoneInput] = useState(false);
     const [isCountryListOpen, setIsCountryListOpen] = useState(false);
+    const [errorMsg, setErrorMsg] = useState("");
     const [birthInputType, setBirthInputType] = useState("text");
     const [previewImg, setPreviewImg] = useState(UserImg);
 
@@ -126,9 +128,12 @@ function Register() {
         const inputTarget = e.target;
         const file = inputTarget.files[0];
 
+        const fileType = file.name.split('.')[1];
         const fileSize = (file.size / 1024);
 
-        if (file && fileSize < 2048) {
+        const supportedFiles = ['jpeg', 'png', 'jpg'];
+
+        if (file && fileSize < 2048 && supportedFiles.includes(fileType)) {
             const reader = new FileReader();
 
             reader.addEventListener('load', (e) => {
@@ -142,6 +147,8 @@ function Register() {
 
     const handleSubmitForm = (e) => {
         e.preventDefault();
+
+        setErrorMsg("AAA");
     }
 
     return (
@@ -158,7 +165,7 @@ function Register() {
                             <img src={Image} alt="" className='register__img' onClick={() => document.getElementById("register__file").click()} />
                             <input type="file" name="register__file" id="register__file" className='register__file' onChange={handlePreviewImage} />
                         </div>
-                        <form className="register__form" id='register__form' onSubmit={() => handleSubmitForm()}>
+                        <form className="register__form" id='register__form' onSubmit={handleSubmitForm}>
                             <input type="text" placeholder='Name:' className='register__input-name register__input' onChange={(e) => setName(e.target.value)} />
                             <input type="text" placeholder='Email:' className='register__input-email register__input' onChange={(e) => setEmail(e.target.value)} />
                             <div className="register__input-phonenumber" style={{ backgroundColor: isFocusingPhoneInput === true ? "#e0e0e0" : "var(--bg-color)" }} ref={countryListRef} >
@@ -181,6 +188,7 @@ function Register() {
                             <textarea type="text" placeholder='Description:' className='register__input-description register__input' onChange={(e) => setDescription(e.target.value)}></textarea>
                             <input type="password" placeholder='Password:' className='register__input-password register__input' onChange={(e) => setPassword(e.target.value)} />
                             <input type="password" placeholder='Confirm Your Password:' className='register__input-password register__input' onChange={(e) => setConfirmPassword(e.target.value)} />
+                            <p className='register__alert' style={{ display: errorMsg.length > 0 ? "inline-block" : "none" }}>{errorMsg}</p>
                             <input type="submit" value="Create Account" className='register__submit button' />
                         </form>
                         <p className='register__link'>Already Have an Account? <Link to="/login" className='register__link-purple'>Login</Link></p>
