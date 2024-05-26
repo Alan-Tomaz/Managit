@@ -148,7 +148,72 @@ function Register() {
     const handleSubmitForm = (e) => {
         e.preventDefault();
 
-        setErrorMsg("AAA");
+        /* USA FORMAT */
+        const phoneRegex1 = new RegExp('\\(?([0-9]{3})\\)?([ .-]?)([0-9]{3})-([0-9]{4})');
+        /* BRAZIL FORMAT */
+        const phoneRegex2 = new RegExp('\\(?([0-9]{2})\\)?([ .-]?)9?([ .-]?)([0-9]{4})([ .-]?)([0-9]{4})');
+
+        const passRegex1 = new RegExp('[a-z]', 'g');
+        const passRegex2 = new RegExp('[A-Z]', 'g');
+        const passRegex3 = new RegExp('[0-9]', 'g');
+        const passRegex4 = new RegExp('[^A-Za-z0-9]', 'g');
+
+        const emailRegex = new RegExp('^(([^<>()[\\]\\\\.,;:\\s@\\"]+(\\.[^<>()[\\]\\\\.,;:\\s@\\"]+)*)|(\\".+\\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$');
+
+        /* FORM VALIDATION */
+
+        if ((name == "" || name == undefined) || (email == "" || email == undefined) || (phoneNumber == "" || phoneNumber == undefined) || (birthDate == "" || birthDate == undefined) || (location == "" || location == undefined) || (description == "" || description == undefined) || (password == "" || password == undefined) || (confirmPassword == "" || confirmPassword == undefined)) {
+            setErrorMsg("Fill in all form fields");
+        }
+
+        else if (!emailRegex.test(email)) {
+            setErrorMsg("Invalid email");
+        }
+
+        else if (!phoneRegex1.test(phoneNumber) && !phoneRegex2.test(phoneNumber)) {
+            setErrorMsg("Incorret Phone Number");
+        }
+
+        else if (location.length < 8) {
+            setErrorMsg("Location too Short");
+        }
+
+        else if (description.length < 8) {
+            setErrorMsg("Description too Short");
+        }
+
+        else if (password.length < 8) {
+            setErrorMsg("Password too Short");
+        }
+
+        else if (confirmPassword.length < 8) {
+            setErrorMsg("Password Confirm too Short");
+        }
+
+        else if (!passRegex1.test(password)) {
+            setErrorMsg("The password must contain at least one lowercase letter");
+        }
+
+        else if (!passRegex2.test(password)) {
+            setErrorMsg("The password must contain at least one uppercase letter");
+        }
+
+        else if (!passRegex3.test(password)) {
+            setErrorMsg("The password must contain at least one number");
+        }
+
+        else if (!passRegex4.test(password)) {
+            setErrorMsg("The password must contain at least one special symbol");
+        }
+
+        else if (password != confirmPassword) {
+            setErrorMsg("Passwords don't match");
+        }
+
+        else {
+
+        }
+
     }
 
     return (

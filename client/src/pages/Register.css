@@ -260,6 +260,34 @@
     text-align: center;
 }
 
+/* LOGIN FORM */
+.login__box {
+    justify-content: center;
+    gap: 4rem;
+}
+
+.login__form {
+    justify-items: center;
+    gap: 1.5rem;
+}
+
+.login__input {
+    grid-column: 1/3;
+    width: 90%;
+    max-width: 500px;
+}
+
+.input__submit {
+    margin-top: 3rem;
+    width: 140px;
+    height: 55px;
+}
+
+.login__link {
+    text-align: center;
+}
+
+
 /* ============== MEDIA QUERIES =============== */
 
 /* Medium Devices = 1024 */
@@ -291,7 +319,10 @@
         display: none;
     }
 
-
+    /* LOGIN FORM */
+    .login__box {
+        justify-content: center;
+    }
 }
 
 /* Small Devices = 600 */
@@ -320,5 +351,10 @@
 
     .register__input {
         width: 100%;
+    }
+
+    /* LOGIN FORM */
+    .login {
+        height: 100vh;
     }
 }
