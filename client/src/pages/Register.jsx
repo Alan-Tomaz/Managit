@@ -4,14 +4,19 @@ import RegisterImg from "../assets/images/register-img.svg";
 import { useSelector } from 'react-redux';
 import UserImg from "../assets/images/user.png";
 import Image from "../assets/images/image.png";
-import { Link } from "react-router-dom";
+import LoadingSuccess from "../assets/images/loading-success.svg";
+import Loading from "../assets/images/loading.svg"
+import { Link, useNavigate } from "react-router-dom";
 import { US, BR } from "country-flag-icons/react/3x2";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 
 function Register() {
     const apiUrl = useSelector((state) => state.MiscReducer.apiUrl);
     const apiPort = useSelector((state) => state.MiscReducer.apiPort);
+
+    const navigate = useNavigate();
 
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
@@ -22,30 +27,49 @@ function Register() {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [countryCode, setCountryCode] = useState(1);
+    const [picture, setPicture] = useState("");
 
-
+    const [isShowingPassword, setIsShowingPassword] = useState("password");
+    const [isShowingConfirmPassword, setIsShowingConfirmPassword] = useState("password");
+    const [isLoading, setIsLoading] = useState(false);
+    const [isDisabled, setIsDisabled] = useState(false);
     const [isFocusingPhoneInput, setIsFocusingPhoneInput] = useState(false);
     const [isCountryListOpen, setIsCountryListOpen] = useState(false);
     const [errorMsg, setErrorMsg] = useState("");
+    const [successMsg, setSuccessMsg] = useState("");
+    const [showPasswordButton, setShowPasswordButton] = useState(false);
+    const [showConfirmPasswordButton, setShowConfirmPasswordButton] = useState(false);
     const [birthInputType, setBirthInputType] = useState("text");
     const [previewImg, setPreviewImg] = useState(UserImg);
 
     const [countries, setCountries] = useState([<li key={1} id='country-item-1' className='register__input__contry-item' onClick={() => handleChangeCountry(1)}><div className="register__input__contry-img"><US className='register__input__country-flag' /><span className='register__input__country-text' id='country-1'>United States</span></div><span className='register__input__country-text'>+1</span></li>, <li key={2} className='register__input__contry-item' id='country-item-2' onClick={() => handleChangeCountry(55)}><div className="register__input__contry-img"><BR className='register__input__country-flag' /><span className='register__input__country-text' id='country-2'>Brazil</span></div><span className='register__input__country-text'>+55</span></li>]);
 
+    const showPassword = useRef(null)
+    const showConfirmPassword = useRef(null)
     const countryListRef = useRef(null);
 
     useEffect(() => {
         /* CLOSE WINDOW WHEN CLICK OUTSIDE */
         const handleClickOutside = (event) => {
+            /* CLOSE PHONE NUMBER SEARCH WINDOW */
             if (countryListRef.current && !countryListRef.current.contains(event.target)) {
                 setIsCountryListOpen(false);
+            }
+            /* SHOW PASSWORD BUTTON */
+            if (showPassword.current && !showPassword.current.contains(event.target)) {
+                setShowPasswordButton(false);
+            }
+            if (showConfirmPassword.current && !showConfirmPassword.current.contains(event.target)) {
+                setShowConfirmPasswordButton(false);
             }
         };
 
         document.addEventListener("mousedown", handleClickOutside);
+
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
+
     }, []);
 
     const handlePhoneNumber = (e) => {
@@ -100,6 +124,27 @@ function Register() {
 
     }
 
+    const handleShowPassword = (passwordType) => {
+        switch (passwordType) {
+            case 0:
+                if (isShowingPassword == "password") {
+                    setIsShowingPassword("text")
+                }
+                else {
+                    setIsShowingPassword("password")
+                }
+                break;
+            case 1:
+                if (isShowingConfirmPassword == "password") {
+                    setIsShowingConfirmPassword("text")
+                }
+                else {
+                    setIsShowingConfirmPassword("password")
+                }
+                break;
+        }
+    }
+
     const handleChangePhoneInputBackground = () => {
         const isFocusing = isFocusingPhoneInput;
         setIsFocusingPhoneInput(!isFocusing);
@@ -139,14 +184,23 @@ function Register() {
             reader.addEventListener('load', (e) => {
                 const readerTarget = e.target;
                 setPreviewImg(readerTarget.result);
+                setPicture(file);
             })
 
             reader.readAsDataURL(file);
         }
     }
 
-    const handleSubmitForm = (e) => {
+    const handleSubmitForm = async (e, values) => {
         e.preventDefault();
+
+        if (isDisabled == true) {
+            return;
+        }
+
+        setIsDisabled(true);
+
+        setErrorMsg("");
 
         /* USA FORMAT */
         const phoneRegex1 = new RegExp('\\(?([0-9]{3})\\)?([ .-]?)([0-9]{3})-([0-9]{4})');
@@ -210,9 +264,44 @@ function Register() {
             setErrorMsg("Passwords don't match");
         }
 
-        else {
-
+        else if (picture == "") {
+            setErrorMsg("Please Insert a Profile Image");
         }
+
+        else {
+            // this allows us to send form info with image
+            const formData = new FormData();
+            for (let value in values) {
+                formData.append(value, values[value]);
+            }
+
+            formData.append("picturePath", values.picture.name);
+
+            setIsLoading(true);
+
+            const savedUserResponse = await fetch(
+                `${apiUrl}:${apiPort}/`,
+                {
+                    method: "POST",
+                    body: formData,
+                }
+            );
+            const savedUser = await savedUserResponse.json();
+
+            if (savedUser) {
+                setIsLoading(false);
+                setSuccessMsg(`Account Created Successfully. Redirecting to Login Page `);
+                setTimeout(() => {
+                    navigate("/login");
+                }, 3000);
+                return;
+            }
+        }
+
+        e.target.reset();
+        setPhoneNumber("");
+        setIsDisabled(false);
+        return
 
     }
 
@@ -230,7 +319,7 @@ function Register() {
                             <img src={Image} alt="" className='register__img' onClick={() => document.getElementById("register__file").click()} />
                             <input type="file" name="register__file" id="register__file" className='register__file' onChange={handlePreviewImage} />
                         </div>
-                        <form className="register__form" id='register__form' onSubmit={handleSubmitForm}>
+                        <form className="register__form" id='register__form' onSubmit={(e) => handleSubmitForm(e, { name, phoneNumber, email, picture, birthDate, location, description, password })}>
                             <input type="text" placeholder='Name:' className='register__input-name register__input' onChange={(e) => setName(e.target.value)} />
                             <input type="text" placeholder='Email:' className='register__input-email register__input' onChange={(e) => setEmail(e.target.value)} />
                             <div className="register__input-phonenumber" style={{ backgroundColor: isFocusingPhoneInput === true ? "#e0e0e0" : "var(--bg-color)" }} ref={countryListRef} >
@@ -251,16 +340,29 @@ function Register() {
                             <input type={birthInputType} placeholder='Birth Date:' className='register__input-birthdate register__input' id='input__birth-date' onChange={(e) => setBirthDate(e.target.value)} onFocus={(e) => handleChangeDateInput(e, "focus")} onBlur={(e) => handleChangeDateInput(e, "blur")} onDoubleClick={(e) => handleChangeDateInput(e, "double_click")} />
                             <input type="text" placeholder='Location:' className='register__input-location register__input' onChange={(e) => setLocation(e.target.value)} />
                             <textarea type="text" placeholder='Description:' className='register__input-description register__input' onChange={(e) => setDescription(e.target.value)}></textarea>
-                            <input type="password" placeholder='Password:' className='register__input-password register__input' onChange={(e) => setPassword(e.target.value)} />
-                            <input type="password" placeholder='Confirm Your Password:' className='register__input-password register__input' onChange={(e) => setConfirmPassword(e.target.value)} />
+                            <div className="password__field" ref={showPassword}>
+                                <input type={isShowingPassword} placeholder='Password:' className='register__input-password register__input' onChange={(e) => setPassword(e.target.value)} onClick={() => setShowPasswordButton(true)} />
+                                <FaEye className='password__show' onClick={() => handleShowPassword(0)} style={{ display: isShowingPassword == "text" ? "inline-block" : "none", visibility: showPasswordButton == true ? "visible" : "hidden" }} />
+                                <FaEyeSlash className='password__show' onClick={() => handleShowPassword(0)} style={{ display: isShowingPassword == "password" ? "inline-block" : "none", visibility: showPasswordButton == true ? "visible" : "hidden" }} />
+                            </div>
+                            <div className="password__field" ref={showConfirmPassword}>
+                                <input type={isShowingConfirmPassword} placeholder='Confirm Your Password:' className='register__input-password register__input' onChange={(e) => setConfirmPassword(e.target.value)} onClick={() => setShowConfirmPasswordButton(true)} />
+                                <FaEye className='password__show' onClick={() => handleShowPassword(1)} style={{ display: isShowingConfirmPassword == "text" ? "inline-block" : "none", visibility: showConfirmPasswordButton == true ? "visible" : "hidden" }} />
+                                <FaEyeSlash className='password__show' onClick={() => handleShowPassword(1)} style={{ display: isShowingConfirmPassword == "password" ? "inline-block" : "none", visibility: showConfirmPasswordButton == true ? "visible" : "hidden" }} />
+                            </div>
                             <p className='register__alert' style={{ display: errorMsg.length > 0 ? "inline-block" : "none" }}>{errorMsg}</p>
-                            <input type="submit" value="Create Account" className='register__submit button' />
+                            <div className='register__alert__success' style={{ display: successMsg.length > 0 ? "flex" : "none" }} >
+                                <p className='register__alert register__alert--success' style={{ display: successMsg.length > 0 ? "inline-block" : "none" }}>{successMsg}</p>
+                                <img style={{ display: successMsg.length > 0 ? "inline-block" : "none" }} className='submit__loading submit__loading--success' src={LoadingSuccess} />
+                            </div>
+                            <img style={{ display: isLoading == true ? "inline-block" : "none" }} className='submit__loading' src={Loading} />
+                            <input type="submit" value="Create Account" id='register__submit' className='register__submit button' style={{ backgroundColor: isDisabled == true ? "var(--color-primary-variant)" : "" }} />
                         </form>
                         <p className='register__link'>Already Have an Account? <Link to="/login" className='register__link-purple'>Login</Link></p>
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     )
 }
 

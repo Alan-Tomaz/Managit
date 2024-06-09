@@ -28,7 +28,8 @@ app.post('/file', upload.single('file'), (req, res) => res.status(500).json({ ms
 app.post('/auth/register', upload.single('avatar'), register);
 
 /* ROUTES */
-app.get("/", (req, res) => res.status(500).json({ msg: "Hello World!" }));
+app.get("/", (req, res) => res.status(200).json({ status: 200, msg: "Hello World!" }));
+app.post("/", (req, res) => res.status(200).json({ status: 200, msg: "Hello World!" }));
 app.use("/auth", authRoutes);
 
 /* MONGOOSE SETUP */
