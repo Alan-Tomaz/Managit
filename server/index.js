@@ -18,14 +18,15 @@ const storage = multer.diskStorage({
         cb(null, 'public/assets/')
     },
     filename: function (req, file, cb) {
-        cb(null, Date.now() + '-' + file.originalname);
+        const pictureName = Date.now() + '-' + file.originalname;
+        req.body.picturePath = pictureName;
+        cb(null, pictureName);
     }
 })
 const upload = multer({ storage })
 
 /* ROUTES WITH FILES */
-app.post('/file', upload.single('file'), (req, res) => res.status(500).json({ msg: "File Successfully Updated", file: req.file }))
-app.post('/auth/register', upload.single('avatar'), register);
+app.post('/auth/register', upload.single('picture'), register);
 
 /* ROUTES */
 app.get("/", (req, res) => res.status(200).json({ status: 200, msg: "Hello World!" }));

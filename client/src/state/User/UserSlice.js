@@ -1,17 +1,21 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    apiUrl: import.meta.env.VITE_API_PRIVATE_KEY || null,
-    templateKey: import.meta.env.VITE_API_TEMPLATE_KEY || null,
+    user: null,
+    token: null
 }
 
 const UserSlice = createSlice({
     name: "User",
     initialState,
     reducers: {
+        setLogin: (state, action) => {
+            state.user = action.payload.user;
+            state.token = action.payload.token;
+        }
     }
 })
 
-export const { } = UserSlice.actions;
+export const { setLogin } = UserSlice.actions;
 
 export default UserSlice.reducer;

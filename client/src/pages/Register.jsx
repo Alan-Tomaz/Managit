@@ -202,6 +202,8 @@ function Register() {
 
         setErrorMsg("");
 
+        const birthRegex = new RegExp('^\\d{4}(-)(((0)[0-9])|((1)[0-2]))(-)([0-2^([0-2][0-9]|(3)[0-1])$');
+
         /* USA FORMAT */
         const phoneRegex1 = new RegExp('\\(?([0-9]{3})\\)?([ .-]?)([0-9]{3})-([0-9]{4})');
         /* BRAZIL FORMAT */
@@ -244,6 +246,10 @@ function Register() {
             setErrorMsg("Password Confirm too Short");
         }
 
+        else if (!birthRegex.test(birthDate)) {
+            setErrorMsg("Birth Date Format Incorret");
+        }
+
         else if (!passRegex1.test(password)) {
             setErrorMsg("The password must contain at least one lowercase letter");
         }
@@ -276,11 +282,13 @@ function Register() {
             }
 
             formData.append("picturePath", values.picture.name);
+            /* SEND COUNTRY CODE FOR PHONE NUMBER */
+            formData.append("countryCode", countryCode);
 
             setIsLoading(true);
 
             const savedUserResponse = await fetch(
-                `${apiUrl}:${apiPort}/`,
+                `${apiUrl}:${apiPort}/auth/register`,
                 {
                     method: "POST",
                     body: formData,
@@ -289,17 +297,25 @@ function Register() {
             const savedUser = await savedUserResponse.json();
 
             if (savedUser) {
-                setIsLoading(false);
-                setSuccessMsg(`Account Created Successfully. Redirecting to Login Page `);
-                setTimeout(() => {
-                    navigate("/login");
-                }, 3000);
-                return;
+                if (savedUser.status == 201) {
+                    setIsLoading(false);
+
+                    e.target.reset();
+                    setPhoneNumber("");
+
+                    setSuccessMsg(`Account Created Successfully. Redirecting to Login Page `);
+                    setTimeout(() => {
+                        navigate("/login");
+                    }, 3000);
+                    return;
+                }
+                else {
+                    setErrorMsg(savedUser.msg);
+                }
             }
         }
 
-        e.target.reset();
-        setPhoneNumber("");
+        setIsLoading(false);
         setIsDisabled(false);
         return
 
