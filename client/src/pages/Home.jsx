@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import './Home.css';
 import Logo from "../assets/images/favicon.png";
 import { MdDashboard } from "react-icons/md";
@@ -16,14 +16,25 @@ import { IoIosNotifications } from "react-icons/io";
 import { useDispatch, useSelector } from 'react-redux';
 import { IoMdArrowDropdown } from "react-icons/io";
 import DefaultView from '../components/DefaultView';
+import NotificationItem from "../assets/images/notification_item.png";
 import { useNavigate, useParams } from 'react-router-dom';
+import { logout } from "../state/User/UserSlice.js";
 
 function Home() {
 
     const { choosenSection, choosenSubSection } = useParams();
 
+    /* GET WINDOW DIMENSIONS */
+    const { innerWidth: width, innerHeight: height } = window
+
+    const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+
+    const [isSidebarStopped, setIsSidebarStopped] = useState(true);
     const [sectionDisplay, setSectionDisplay] = useState(choosenSection ?? "dashboard");
     const [subSectionDisplay, setSubSectionDisplay] = useState(choosenSubSection ?? "");
+    const [showNavbarOptions, setShowNavbarOptions] = useState(false);
+    const [showNavbarNotifications, setShowNavbarNotifications] = useState(false);
+    const [showSearchInput, setShowSearchInput] = useState(false);
 
     const dispatch = useDispatch();
     const apiUrl = useSelector((state) => state.MiscReducer.apiUrl);
@@ -35,23 +46,21 @@ function Home() {
 
     const imgPaths = `${apiUrl}:${apiPort}/assets/`;
 
+
+    /* ASIDE */
     const handleChangeSection = (section) => {
         switch (section) {
             case 0:
                 navigate("/home/dashboard");
                 handleCloseMoreOptions("dashboard");
                 setSectionDisplay("dashboard");
+                setSubSectionDisplay("");
                 break;
             case 1:
                 navigate("/home/stock");
                 handleCloseMoreOptions("stock");
                 setSectionDisplay("stock");
-                break;
-            case 2:
-                navigate("/home/manage/products");
-                handleCloseMoreOptions("manage");
-                setSectionDisplay("manage");
-                setSubSectionDisplay("products");
+                setSubSectionDisplay("");
                 break;
             case 2:
                 navigate("/home/manage/products");
@@ -104,101 +113,114 @@ function Home() {
         }
     }
 
-    const handleOpenMoreOptions = (options) => {
+    const handleOpenMoreOptions = (options, passCheck = 0) => {
+
         switch (options) {
             case 0:
-                handleCloseMoreOptions("manage");
-                document.querySelectorAll(".sidebar__manage").forEach((sidebar) => {
-                    if (!sidebar.classList.contains("sidebar__manage--open")) {
-                        sidebar.classList.toggle("sidebar__manage--open")
-                        document.querySelectorAll(".moreoptions__manage").forEach((sidebar) => sidebar.classList.toggle
-                            ("moreoptions__manage--open"))
-                        document.querySelectorAll(".manage__option1").forEach((sidebar) => sidebar.classList.toggle("manage__option1--open"))
-                    }
-                })
-                setTimeout(() => {
-                    document.querySelectorAll(".manage__option1").forEach((sidebar) => {
-                        if (!sidebar.classList.contains("manage__option1--open2")) {
-                            sidebar.classList.toggle("manage__option1--open2")
-                            document.querySelectorAll(".manage__option2").forEach((sidebar) => sidebar.classList.toggle("manage__option2--open"))
+                if ((isSidebarOpen == true && isSidebarStopped == true) || passCheck != 0) {
+                    handleCloseMoreOptions("manage");
+                    document.querySelectorAll(".sidebar__manage").forEach((sidebar) => {
+                        if (!sidebar.classList.contains("sidebar__manage--open")) {
+                            sidebar.classList.toggle("sidebar__manage--open")
+                            document.querySelectorAll(".moreoptions__manage").forEach((sidebar) => sidebar.classList.toggle
+                                ("moreoptions__manage--open"))
+                            document.querySelectorAll(".manage__option1").forEach((sidebar) => sidebar.classList.toggle("manage__option1--open"))
                         }
                     })
-                }, 250)
-                setTimeout(() => {
-                    document.querySelectorAll(".manage__option2").forEach((sidebar) => {
-                        if (!sidebar.classList.contains("manage__option2--open2")) {
-                            sidebar.classList.toggle("manage__option2--open2")
-                            document.querySelectorAll(".manage__option3").forEach((sidebar) => sidebar.classList.toggle("manage__option3--open"))
-                        }
-                    })
-                }, 500)
-                setTimeout(() => {
-                    document.querySelectorAll(".manage__option3").forEach((sidebar) => {
-                        if (!sidebar.classList.contains("manage__option3--open2")) {
-                            sidebar.classList.toggle("manage__option3--open2")
-                        }
-                    })
-                }, 750)
+                    setTimeout(() => {
+                        document.querySelectorAll(".manage__option1").forEach((sidebar) => {
+                            if (!sidebar.classList.contains("manage__option1--open2")) {
+                                sidebar.classList.toggle("manage__option1--open2")
+                                document.querySelectorAll(".manage__option2").forEach((sidebar) => sidebar.classList.toggle("manage__option2--open"))
+                            }
+                        })
+                    }, 250)
+                    setTimeout(() => {
+                        document.querySelectorAll(".manage__option2").forEach((sidebar) => {
+                            if (!sidebar.classList.contains("manage__option2--open2")) {
+                                sidebar.classList.toggle("manage__option2--open2")
+                                document.querySelectorAll(".manage__option3").forEach((sidebar) => sidebar.classList.toggle("manage__option3--open"))
+                            }
+                        })
+                    }, 500)
+                    setTimeout(() => {
+                        document.querySelectorAll(".manage__option3").forEach((sidebar) => {
+                            if (!sidebar.classList.contains("manage__option3--open2")) {
+                                sidebar.classList.toggle("manage__option3--open2")
+                            }
+                        })
+                    }, 750)
+                } else {
+                    handleCloseSideBar(0);
+                }
                 break;
             case 1:
-                handleCloseMoreOptions("movement");
-                document.querySelectorAll(".sidebar__movement").forEach((sidebar) => {
-                    if (!sidebar.classList.contains("sidebar__movement--open")) {
-                        sidebar.classList.toggle("sidebar__movement--open")
-                        document.querySelectorAll(".moreoptions__movement").forEach((sidebar) => sidebar.classList.toggle
-                            ("moreoptions__movement--open"))
-                        document.querySelectorAll(".movement__option1").forEach((sidebar) => sidebar.classList.toggle("movement__option1--open"))
-                    }
-                })
-                setTimeout(() => {
-                    document.querySelectorAll(".movement__option1").forEach((sidebar) => {
-                        if (!sidebar.classList.contains("movement__option1--open2")) {
-                            sidebar.classList.toggle("movement__option1--open2")
-                            document.querySelectorAll(".movement__option2").forEach((sidebar) => sidebar.classList.toggle("movement__option2--open"))
+                if ((isSidebarOpen == true && isSidebarStopped == true) || passCheck != 0) {
+                    handleCloseMoreOptions("movement");
+                    document.querySelectorAll(".sidebar__movement").forEach((sidebar) => {
+                        if (!sidebar.classList.contains("sidebar__movement--open")) {
+                            sidebar.classList.toggle("sidebar__movement--open")
+                            document.querySelectorAll(".moreoptions__movement").forEach((sidebar) => sidebar.classList.toggle
+                                ("moreoptions__movement--open"))
+                            document.querySelectorAll(".movement__option1").forEach((sidebar) => sidebar.classList.toggle("movement__option1--open"))
                         }
                     })
-                }, 250)
-                setTimeout(() => {
-                    document.querySelectorAll(".movement__option2").forEach((sidebar) => {
-                        if (!sidebar.classList.contains("movement__option2--open2")) {
-                            sidebar.classList.toggle("movement__option2--open2")
-                        }
-                    })
-                }, 500)
+                    setTimeout(() => {
+                        document.querySelectorAll(".movement__option1").forEach((sidebar) => {
+                            if (!sidebar.classList.contains("movement__option1--open2")) {
+                                sidebar.classList.toggle("movement__option1--open2")
+                                document.querySelectorAll(".movement__option2").forEach((sidebar) => sidebar.classList.toggle("movement__option2--open"))
+                            }
+                        })
+                    }, 250)
+                    setTimeout(() => {
+                        document.querySelectorAll(".movement__option2").forEach((sidebar) => {
+                            if (!sidebar.classList.contains("movement__option2--open2")) {
+                                sidebar.classList.toggle("movement__option2--open2")
+                            }
+                        })
+                    }, 500)
+                } else {
+                    handleCloseSideBar(1);
+                }
                 break;
             case 2:
-                handleCloseMoreOptions("admin");
-                document.querySelectorAll(".sidebar__admin").forEach((sidebar) => {
-                    if (!sidebar.classList.contains("sidebar__admin--open")) {
-                        sidebar.classList.toggle("sidebar__admin--open")
-                        document.querySelectorAll(".moreoptions__admin").forEach((sidebar) => sidebar.classList.toggle
-                            ("moreoptions__admin--open"))
-                        document.querySelectorAll(".admin__option1").forEach((sidebar) => sidebar.classList.toggle("admin__option1--open"))
-                    }
-                })
-                setTimeout(() => {
-                    document.querySelectorAll(".admin__option1").forEach((sidebar) => {
-                        if (!sidebar.classList.contains("admin__option1--open2")) {
-                            sidebar.classList.toggle("admin__option1--open2")
-                            document.querySelectorAll(".admin__option2").forEach((sidebar) => sidebar.classList.toggle("admin__option2--open"))
+                if ((isSidebarOpen == true && isSidebarStopped == true) || passCheck != 0) {
+                    handleCloseMoreOptions("admin");
+                    document.querySelectorAll(".sidebar__admin").forEach((sidebar) => {
+                        if (!sidebar.classList.contains("sidebar__admin--open")) {
+                            sidebar.classList.toggle("sidebar__admin--open")
+                            document.querySelectorAll(".moreoptions__admin").forEach((sidebar) => sidebar.classList.toggle
+                                ("moreoptions__admin--open"))
+                            document.querySelectorAll(".admin__option1").forEach((sidebar) => sidebar.classList.toggle("admin__option1--open"))
                         }
                     })
-                }, 250)
-                setTimeout(() => {
-                    document.querySelectorAll(".admin__option2").forEach((sidebar) => {
-                        if (!sidebar.classList.contains("admin__option2--open2")) {
-                            sidebar.classList.toggle("admin__option2--open2")
-                            document.querySelectorAll(".admin__option3").forEach((sidebar) => sidebar.classList.toggle("admin__option3--open"))
-                        }
-                    })
-                }, 500)
-                setTimeout(() => {
-                    document.querySelectorAll(".admin__option3").forEach((sidebar) => {
-                        if (!sidebar.classList.contains("admin__option3--open2")) {
-                            sidebar.classList.toggle("admin__option3--open2")
-                        }
-                    })
-                }, 750)
+                    setTimeout(() => {
+                        document.querySelectorAll(".admin__option1").forEach((sidebar) => {
+                            if (!sidebar.classList.contains("admin__option1--open2")) {
+                                sidebar.classList.toggle("admin__option1--open2")
+                                document.querySelectorAll(".admin__option2").forEach((sidebar) => sidebar.classList.toggle("admin__option2--open"))
+                            }
+                        })
+                    }, 250)
+                    setTimeout(() => {
+                        document.querySelectorAll(".admin__option2").forEach((sidebar) => {
+                            if (!sidebar.classList.contains("admin__option2--open2")) {
+                                sidebar.classList.toggle("admin__option2--open2")
+                                document.querySelectorAll(".admin__option3").forEach((sidebar) => sidebar.classList.toggle("admin__option3--open"))
+                            }
+                        })
+                    }, 500)
+                    setTimeout(() => {
+                        document.querySelectorAll(".admin__option3").forEach((sidebar) => {
+                            if (!sidebar.classList.contains("admin__option3--open2")) {
+                                sidebar.classList.toggle("admin__option3--open2")
+                            }
+                        })
+                    }, 750)
+                } else {
+                    handleCloseSideBar(2);
+                }
                 break;
         }
     }
@@ -249,18 +271,160 @@ function Home() {
         }
     }
 
-    const handleCloseSideBar = () => {
+    const handleCloseSideBar = (option) => {
+        if (isSidebarStopped) {
+            if (isSidebarOpen == true) {
+                setIsSidebarStopped(false);
+                setIsSidebarOpen(false)
 
+                document.querySelectorAll(".home").forEach((item) => {
+                    item.classList.toggle("home__withoutsidebar");
+                })
+
+                document.querySelectorAll(".sidebar__moreoptions").forEach((item) => {
+                    item.classList.toggle("hide__sidebar_2");
+                })
+                document.querySelectorAll(".sidebar__logo--title").forEach((item) => {
+                    item.classList.toggle("hide__sidebar");
+                })
+                document.querySelectorAll(".sidebar__title").forEach((item) => {
+                    item.classList.toggle("hide__sidebar");
+                })
+                setTimeout(() => {
+                    document.querySelectorAll(".sidebar__title").forEach((item) => {
+                        item.classList.toggle("hide__sidebar_2");
+                    })
+                    document.querySelectorAll(".sidebar__logo--title").forEach((item) => {
+                        item.classList.toggle("hide__sidebar_2");
+                    })
+                }, 300);
+                setTimeout(() => {
+                    setIsSidebarStopped(true);
+                }, 1000);
+            } else {
+                setIsSidebarOpen(true)
+                setIsSidebarStopped(false);
+
+                switch (option) {
+                    case 0:
+                        handleCloseMoreOptions("manage");
+                        break;
+                    case 1:
+                        handleCloseMoreOptions("movement");
+                        break;
+                    case 2:
+                        handleCloseMoreOptions("admin");
+                        break;
+                }
+
+                document.querySelectorAll(".home").forEach((item) => {
+                    item.classList.remove("home__withoutsidebar");
+                })
+                setTimeout(() => {
+                    document.querySelectorAll(".sidebar__title").forEach((item) => {
+                        item.classList.remove("hide__sidebar_2");
+                    })
+                    document.querySelectorAll(".sidebar__logo--title").forEach((item) => {
+                        item.classList.remove("hide__sidebar_2");
+                    })
+                    document.querySelectorAll(".sidebar__moreoptions").forEach((item) => {
+                        item.classList.remove("hide__sidebar_2");
+                    })
+                    setTimeout(() => {
+                        document.querySelectorAll(".sidebar__logo--title").forEach((item) => {
+                            item.classList.remove("hide__sidebar");
+                        })
+                        document.querySelectorAll(".sidebar__title").forEach((item) => {
+                            item.classList.remove("hide__sidebar");
+                        })
+                        document.querySelectorAll(".sidebar__logo--title").forEach((item) => {
+                            item.classList.add("show__sidebar");
+                        })
+                        document.querySelectorAll(".sidebar__title").forEach((item) => {
+                            item.classList.add("show__sidebar");
+                        })
+                    }, 100);
+                    switch (option) {
+                        case 0:
+
+                            handleOpenMoreOptions(0, 1);
+
+                            break;
+                        case 1:
+
+                            handleOpenMoreOptions(1, 1);
+
+                            break;
+                        case 2:
+
+                            handleOpenMoreOptions(2, 1);
+
+                            break;
+                    }
+                }, 300);
+                setTimeout(() => {
+                    setIsSidebarStopped(true);
+                    document.querySelectorAll(".sidebar__logo--title").forEach((item) => {
+                        item.classList.remove("show__sidebar");
+                    })
+                    document.querySelectorAll(".sidebar__title").forEach((item) => {
+                        item.classList.remove("show__sidebar");
+                    })
+                }, 1000);
+            }
+        }
+    }
+
+
+    /* NAVBAR */
+    const handleShowProfileOptions = () => {
+        setShowNavbarOptions(!showNavbarOptions);
+    }
+
+    const handleShowNotifications = () => {
+        setShowNavbarNotifications(!showNavbarNotifications);
+    }
+
+    const handleShowSearchInput = () => {
+        setShowSearchInput(!showSearchInput);
+    }
+
+    const profileRef = useRef(null);
+    const notificationRef = useRef(null);
+
+    useEffect(() => {
+        /* CLOSE WINDOW WHEN CLICK OUTSIDE */
+        const handleClickOutside = (event) => {
+            if (profileRef.current && !profileRef.current.contains(event.target)) {
+                setShowNavbarOptions(false)
+            }
+
+            if (notificationRef.current && !notificationRef.current.contains(event.target)) {
+                setShowNavbarNotifications(false)
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+
+    }, []);
+
+    const logoutUser = () => {
+        dispatch(logout());
+        navigate('/')
     }
 
     return (
         <>
             {userInfo != null ? (
-                <main className='home'>
+                <main className='home' onLoad={() => { if (innerWidth <= 600) { handleCloseSideBar() } }}>
                     <aside className='home__sidebar'>
                         <div className="sidebar__logo" onClick={handleCloseSideBar}>
                             <img src={Logo} alt="logo" />
-                            <h2>Managit</h2>
+                            <h2 className='sidebar__logo--title'>Managit</h2>
                         </div>
                         <div className="sidebar__option sidebar__dashboard" onClick={() => handleChangeSection(0)} >
                             <div className="sidebar__trace" style={{ opacity: sectionDisplay == "dashboard" ? "1" : "0" }}></div>
@@ -307,10 +471,33 @@ function Home() {
                         )}
                     </aside>
                     <nav className='home__navbar'>
+                        <div className="navbar__search" style={{ visibility: showSearchInput == true ? "visible" : "hidden", opacity: showSearchInput == true ? "1" : "0" }}>
+                            <input type="text" name="" id="" placeholder='Search:' className="input__search" />
+                        </div>
                         <div className="navbar__content">
-                            <FaSearch className='navbar__icons' />
-                            <IoIosNotifications className='navbar__icons' />
-                            <div className="navbar__profile">
+                            <FaSearch className='navbar__icons ' onClick={handleShowSearchInput} />
+                            <div className="navbar__notification" ref={notificationRef}>
+                                <IoIosNotifications className='navbar__icons notification__icon' onClick={handleShowNotifications} />
+                                <div className="notification__circle"></div>
+                                <div className="notification__container" style={{ display: showNavbarNotifications == true ? "flex" : "none" }}>
+                                    <div className="notification__item" >
+                                        <img src={NotificationItem} alt="notification_item_img" className='notification__img' />
+                                        <h3 className="notification__name">Example</h3>
+                                        <span className="notification__time">3 min ago.</span>
+                                    </div>
+                                    <div className="notification__item" >
+                                        <img src={NotificationItem} alt="notification_item_img" className='notification__img' />
+                                        <h3 className="notification__name">Example</h3>
+                                        <span className="notification__time">3 min ago.</span>
+                                    </div>
+                                    <div className="notification__item" >
+                                        <img src={NotificationItem} alt="notification_item_img" className='notification__img' />
+                                        <h3 className="notification__name">Example</h3>
+                                        <span className="notification__time">3 min ago.</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="navbar__profile" onClick={handleShowProfileOptions}>
                                 <div className="profile__container">
                                     <div className="profile__image">
                                         <img src={`${imgPaths}${userInfo.picturePath}`} alt="profile-image" />
@@ -318,16 +505,41 @@ function Home() {
                                     <span className='profile__name'>{userInfo.name}</span>
                                     <IoMdArrowDropdown className='profile__arrow' />
                                 </div>
-                                <div className="profile__options">
-                                    <span className="profile__option profile__logout">Logout</span>
+                                <div className="profile__options" ref={profileRef} style={{ display: showNavbarOptions == true ? "flex" : "none" }}>
+                                    <span className="profile__option profile__inventories">Inventories</span>
+                                    <span className="profile__option profile__edit">Edit Profile</span>
+                                    <span className="profile__option profile__logout" onClick={logoutUser}>Logout</span>
                                 </div>
                             </div>
                         </div>
                     </nav>
                     <section className='home__section'>
                         <div className="section__display">
-                            <MdDashboard />
-                            <span>Dashboard</span>
+                            <div className="section__name" style={{ display: sectionDisplay == "dashboard" ? "flex" : "none" }}>
+                                <MdOutlineDashboard className='section__icon' />
+                                <span>Dashboard</span>
+                            </div>
+                            <div className="section__name" style={{ display: sectionDisplay == "stock" ? "flex" : "none" }}>
+                                <FaDropbox className='section__icon' />
+                                <span>Stock</span>
+                            </div>
+                            <div className="section__name" style={{ display: sectionDisplay == "manage" ? "flex" : "none" }}>
+                                <MdOutlineContentPasteSearch className='section__icon' />
+                                <span style={{ display: subSectionDisplay == "products" ? "initial" : "none" }}>Products</span>
+                                <span style={{ display: subSectionDisplay == "categories" ? "initial" : "none" }}>Categories</span>
+                                <span style={{ display: subSectionDisplay == "suppliers" ? "initial" : "none" }}>Suppliers</span>
+                            </div>
+                            <div className="section__name" style={{ display: sectionDisplay == "movement" ? "flex" : "none" }}>
+                                <MdOutlineLocalShipping className='section__icon' />
+                                <span style={{ display: subSectionDisplay == "purchases" ? "initial" : "none" }}>Purchases</span>
+                                <span style={{ display: subSectionDisplay == "sales" ? "initial" : "none" }}>Sales</span>
+                            </div>
+                            <div className="section__name" style={{ display: sectionDisplay == "admin" ? "flex" : "none" }}>
+                                <MdOutlineAdminPanelSettings className='section__icon' />
+                                <span style={{ display: subSectionDisplay == "users" ? "initial" : "none" }}>Users</span>
+                                <span style={{ display: subSectionDisplay == "log" ? "initial" : "none" }}>Activities Log</span>
+                                <span style={{ display: subSectionDisplay == "details" ? "initial" : "none" }}>Edit Details</span>
+                            </div>
                         </div>
                         <div className="section__content">
 

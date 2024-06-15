@@ -5,7 +5,7 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   //FOR MOBILE TEST
-  /*   server: {
-      host: '0.0.0.0',
-    }, */
+  /* server: {
+    host: '0.0.0.0',
+  }, */
 })
