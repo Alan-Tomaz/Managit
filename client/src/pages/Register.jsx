@@ -230,6 +230,10 @@ function Register() {
             setErrorMsg("Incorret Phone Number");
         }
 
+        else if (name.length > 15) {
+            setErrorMsg("Name too Large");
+        }
+
         else if (location.length < 8) {
             setErrorMsg("Location too Short");
         }
@@ -281,7 +285,6 @@ function Register() {
                 formData.append(value, values[value]);
             }
 
-            formData.append("picturePath", values.picture.name);
             /* SEND COUNTRY CODE FOR PHONE NUMBER */
             formData.append("countryCode", countryCode);
 
