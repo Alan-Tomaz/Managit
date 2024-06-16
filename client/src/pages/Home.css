@@ -6,6 +6,33 @@
     grid-template-columns: 300px 1fr;
     grid-template-rows: min-content 1fr;
     transition: all ease 1s;
+    position: relative;
+}
+
+.modal__window {
+    display: none;
+    position: absolute;
+    background-color: var(--box-color);
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+    box-shadow: 3px 3px 3px rgba(0, 0, 0, .1);
+}
+
+.modal__editprofile {
+    display: none;
+}
+
+.modal__editinventories {
+    display: none;
+}
+
+.modal__createinventory {
+    display: none;
+}
+
+.modal__enterinventory {
+    display: none;
 }
 
 .home__withoutsidebar {
