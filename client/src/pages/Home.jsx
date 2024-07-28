@@ -21,7 +21,16 @@ import { BsBoxSeam } from "react-icons/bs";
 import { RiMoneyDollarCircleLine } from "react-icons/ri";
 import { FaUser } from "react-icons/fa";
 import { IoEnterOutline } from "react-icons/io5";
-
+import Dashboard from "../components/sections/Dashboard.jsx";
+import Stock from "../components/sections/Stock.jsx";
+import Products from "../components/sections/Products.jsx";
+import Categories from "../components/sections/Categories.jsx";
+import Suppliers from "../components/sections/Suppliers.jsx";
+import Purchases from "../components/sections/Purchases.jsx";
+import Sales from "../components/sections/Sales.jsx";
+import Users from "../components/sections/Users.jsx";
+import ActivitiesLog from "../components/sections/ActivitiesLog.jsx";
+import EditDetails from "../components/sections/EditDetails.jsx";
 
 function Home() {
 
@@ -31,7 +40,7 @@ function Home() {
     const { innerWidth: width, innerHeight: height } = window
 
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-
+    const [isLoadingSection, setIsLoadingSection] = useState(false);
     const [isSidebarStopped, setIsSidebarStopped] = useState(true);
 
     const [sectionDisplay, setSectionDisplay] = useState(choosenSection ?? "dashboard");
@@ -482,7 +491,7 @@ function Home() {
                         </div>
 
                     </div>
-                    <div className="modal__window modal__editinventories">
+                    {/* <div className="modal__window modal__editinventories">
                         <IoClose />
                         <h2>Inventories</h2>
                         <div className="editinventories__inventories editinventories__row1">
@@ -526,7 +535,7 @@ function Home() {
                             <input type="password" name="createinvenory__password" id="createinvenory__password" className="createinvenory__password" placeholder='Password:' />
                             <input type="password" name="createinvenory__confirmpassword" id="createinvenory__confirmpassword" className="createinvenory__confirmpassword" placeholder='Confirm Password:' />
                         </div>
-                    </div>
+                    </div> */}
                     <div className="modal__window modal__createinventory">
                         <IoClose />
                         <h2>Inventories</h2>
@@ -663,7 +672,38 @@ function Home() {
                             </div>
                         </div>
                         <div className="section__content">
-
+                            {sectionDisplay == "dashboard" ?
+                                <Dashboard />
+                                :
+                                sectionDisplay == "stock" ?
+                                    <Stock />
+                                    :
+                                    subSectionDisplay == "products" ?
+                                        <Products />
+                                        :
+                                        subSectionDisplay == "categories" ?
+                                            <Categories />
+                                            :
+                                            subSectionDisplay == "suppliers" ?
+                                                <Suppliers />
+                                                :
+                                                subSectionDisplay == "purchases" ?
+                                                    <Purchases />
+                                                    :
+                                                    subSectionDisplay == "sales" ?
+                                                        <Sales />
+                                                        :
+                                                        subSectionDisplay == "users" ?
+                                                            <Users />
+                                                            :
+                                                            subSectionDisplay == "log" ?
+                                                                <ActivitiesLog />
+                                                                :
+                                                                subSectionDisplay == "details" ?
+                                                                    <EditDetails />
+                                                                    :
+                                                                    <></>
+                            }
                         </div>
                     </section>
                 </main >

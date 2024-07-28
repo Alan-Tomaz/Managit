@@ -419,6 +419,29 @@
     gap: 30px;
     padding: 0 20px;
     grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: max-content;
+    padding-top: 4rem;
+}
+
+.card {
+    display: flex;
+    background-color: var(--box-color);
+}
+
+.card--xsm {
+    grid-column: 1/2;
+}
+
+.card--sm {
+    grid-column: span 3;
+}
+
+.card--md {
+    grid-column: 1/7;
+}
+
+.card--bg {
+    grid-column: 1/13;
 }
 
 /* ============== MEDIA QUERIES =============== */
