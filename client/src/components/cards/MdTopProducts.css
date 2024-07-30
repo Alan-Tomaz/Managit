@@ -1,0 +1,26 @@
+.MdTopProducts {
+    display: flex;
+    align-items: center;
+}
+
+.MdTopProducts__products {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+.MdTopProducts span {
+    font-weight: var(--font-bold);
+    font-size: 1.2rem;
+}
+
+.MdTopProducts img {
+    width: 64px;
+}
+
+.MdTopProducts__line {
+    height: 80%;
+    width: 2px;
+    background-color: black;
+    opacity: .7;
+}

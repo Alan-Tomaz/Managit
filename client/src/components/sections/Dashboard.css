@@ -1,3 +1,68 @@
-.totalsales__card {
-    height: 200px;
+.dashboard__card--sm {
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
+
+}
+
+.dashboard__card--sm__img {
+    font-size: 2.5rem;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    width: 56px;
+    height: 56px;
+}
+
+.totalsales__img {
+    background-color: var(--active);
+}
+
+.totalbuys__img {
+    background-color: var(--blue);
+    font-size: 2.2rem;
+}
+
+.totalstock__img {
+    background-color: var(--purple);
+}
+
+.totallowstock__img {
+    background-color: var(--delete);
+    font-size: 3rem;
+}
+
+.dashboard__card--sm__txt {
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    gap: .2rem;
+}
+
+.dashboard__card--sm__txt p {
+    font-weight: var(--font-bold);
+    font-size: 1.5rem;
+}
+
+.dashboard__card--sm__txt span {
+    opacity: .6;
+    font-size: .9rem;
+}
+
+.dashboard__card--md {
+    height: 250px;
+}
+
+.topseelling__card {
+    display: flex;
+    flex-direction: column;
+}
+
+.topselling__products {
+    display: flex;
+    overflow-y: auto;
 }

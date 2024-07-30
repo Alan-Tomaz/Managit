@@ -13,7 +13,8 @@
     --bg-color-variant: #cbcbcb;
     --active: #089D29;
     --delete: #b60c0c;
-
+    --blue: #0c18be;
+    --purple: #910bb3;
     /* Transition Variables */
     --transition: all 300ms ease;
     --transition-slow: all 1s ease;
