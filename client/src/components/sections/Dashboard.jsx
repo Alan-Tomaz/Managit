@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import "./Dashboard.css";
 import { RiMoneyDollarCircleLine } from "react-icons/ri";
 import { GrMoney } from "react-icons/gr";
@@ -8,6 +8,42 @@ import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import MdTopProducts from '../cards/MdTopProducts';
 
 function Dashboard() {
+
+    /* CREATE ARROWS SCROLLBAR MOVE */
+    const scrollContainerRef1 = useRef(null);
+
+    const scrollContainerRef2 = useRef(null);
+
+    const handleMoveCard1 = (option) => {
+        switch (option) {
+            case 0:
+                if (scrollContainerRef1.current) {
+                    scrollContainerRef1.current.scrollBy({ left: -300, behavior: 'smooth' });
+                }
+                break;
+            case 1:
+                if (scrollContainerRef1.current) {
+                    scrollContainerRef1.current.scrollBy({ left: 300, behavior: 'smooth' });
+                }
+                break;
+        }
+    }
+
+    const handleMoveCard2 = (option) => {
+        switch (option) {
+            case 0:
+                if (scrollContainerRef2.current) {
+                    scrollContainerRef2.current.scrollBy({ left: -300, behavior: 'smooth' });
+                }
+                break;
+            case 1:
+                if (scrollContainerRef2.current) {
+                    scrollContainerRef2.current.scrollBy({ left: 300, behavior: 'smooth' });
+                }
+                break;
+        }
+    }
+
     return (
         <>
             <div className="card card--sm dashboard__card--sm totalsales__card">
@@ -48,15 +84,15 @@ function Dashboard() {
             </div>
 
             <div className="card card--md dashboard__card--md topseelling__card">
-                <div className="topselling__principal">
-                    <p className="topseelling__card__title">TOP SELLING ITEMS</p>
-                    <div className="topseelling__card_move">
-                        <IoIosArrowBack />
-                        <IoIosArrowForward />
+                <div className="dashboard__topsellingprincipal topselling__principal">
+                    <h4 className="topseelling__card__title">TOP SELLING ITEMS</h4>
+                    <div className="dashboard__topsellingmove topseelling__card_move">
+                        <IoIosArrowBack className='dashboard__topsellingarrow' onClick={() => handleMoveCard1(0)} />
+                        <IoIosArrowForward className='dashboard__topsellingarrow' onClick={() => handleMoveCard1(1)} />
                     </div>
                 </div>
                 <hr />
-                <div className="topselling__products">
+                <div className="dashboard__topproducts topselling__products" ref={scrollContainerRef1}>
                     <MdTopProducts isLast={false} />
                     <MdTopProducts isLast={false} />
                     <MdTopProducts isLast={false} />
@@ -70,6 +106,33 @@ function Dashboard() {
                     <MdTopProducts isLast={false} />
                     <MdTopProducts isLast={true} />
                 </div>
+            </div>
+            <div className="card card--md dashboard__card--md recentlyadded__card">
+                <div className="dashboard__topsellingprincipal recentlyadded__principal">
+                    <h4 className="recentlyadded__card__title">RECENTLY ADDED</h4>
+                    <div className="dashboard__topsellingmove recentlyadded__card_move">
+                        <IoIosArrowBack className='dashboard__topsellingarrow' onClick={() => handleMoveCard2(0)} />
+                        <IoIosArrowForward className='dashboard__topsellingarrow' onClick={() => handleMoveCard2(1)} />
+                    </div>
+                </div>
+                <hr />
+                <div className="dashboard__topproducts recentlyadded__products" ref={scrollContainerRef2}>
+                    <MdTopProducts isLast={false} />
+                    <MdTopProducts isLast={false} />
+                    <MdTopProducts isLast={false} />
+                    <MdTopProducts isLast={false} />
+                    <MdTopProducts isLast={false} />
+                    <MdTopProducts isLast={false} />
+                    <MdTopProducts isLast={false} />
+                    <MdTopProducts isLast={false} />
+                    <MdTopProducts isLast={false} />
+                    <MdTopProducts isLast={false} />
+                    <MdTopProducts isLast={false} />
+                    <MdTopProducts isLast={true} />
+                </div>
+            </div>
+            <div className="card card--bg dashboard__card--bg">
+
             </div>
         </>
     )

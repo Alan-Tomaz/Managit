@@ -6,21 +6,40 @@
 .MdTopProducts__products {
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
     gap: .5rem;
 }
 
-.MdTopProducts span {
-    font-weight: var(--font-bold);
-    font-size: 1.2rem;
-}
-
-.MdTopProducts img {
+.MdTopProducts__product img {
+    margin-bottom: .4rem;
     width: 64px;
 }
 
+.MdTopProducts__product {
+    cursor: pointer;
+    padding: 1rem 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: .3rem;
+    height: 100%;
+}
+
+.MdTopProducts__product p {
+    font-size: .9rem;
+    text-align: center;
+}
+
+.MdTopProducts__product span {
+    text-align: center;
+    font-weight: var(--font-bold);
+    font-size: 1.1rem;
+}
+
 .MdTopProducts__line {
-    height: 80%;
-    width: 2px;
-    background-color: black;
+    height: 90%;
+    width: 1px;
+    background-color: rgba(0, 0, 0, .4);
     opacity: .7;
 }
