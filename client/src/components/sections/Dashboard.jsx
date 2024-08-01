@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import "./Dashboard.css";
 import { RiMoneyDollarCircleLine } from "react-icons/ri";
 import { GrMoney } from "react-icons/gr";
@@ -6,8 +6,44 @@ import { LuBoxes } from "react-icons/lu";
 import { DiDropbox } from "react-icons/di";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import MdTopProducts from '../cards/MdTopProducts';
+/* CHART */
+import Chart from "chart.js/auto";
+import { CategoryScale } from 'chart.js/auto';
+import LineChartCard from '../cards/LineChartCard';
+
+/* CREATE CHART */
+Chart.register(CategoryScale);
 
 function Dashboard() {
+
+    const dummyData = [
+    ];
+
+    /* CONFIGURE CHART */
+    const [chartData, setChartData] = useState({
+        labels: ["Jan", "Feb", "Mar", "Apr", "May"],
+        datasets: [
+            {
+                label: "Purchases",
+                data: [7000, 2000, 10000, 13000, 9000],
+                backgroundColor: [
+                    "rgba(252, 76, 135, 0.3)",
+                ],
+                borderColor: 'rgba(252, 76, 135, 1)',
+                borderWidth: 3
+            },
+            {
+                label: "Sales",
+                data: [2000, 4000, 1000, 2000, 17000],
+                backgroundColor: [
+                    "rgba(59, 116, 247,0.3)",
+                ],
+                borderColor: "rgba(59, 116, 247, 1)",
+                borderWidth: 3
+            }
+        ]
+    })
+
 
     /* CREATE ARROWS SCROLLBAR MOVE */
     const scrollContainerRef1 = useRef(null);
@@ -132,7 +168,7 @@ function Dashboard() {
                 </div>
             </div>
             <div className="card card--bg dashboard__card--bg">
-
+                <LineChartCard chartData={chartData} />
             </div>
         </>
     )
