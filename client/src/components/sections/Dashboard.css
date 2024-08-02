@@ -135,3 +135,89 @@
     height: 600px;
     padding: 1rem 2rem;
 }
+
+.chart-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    align-items: center;
+    max-height: 510px;
+    width: 100%;
+    position: relative;
+    object-fit: contain;
+}
+
+.chart-container__title {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+.chart__customselect {
+    margin-right: 25px;
+    position: relative;
+}
+
+.chart__customselect select {
+    display: none;
+}
+
+.chart__select-selected {
+    background-color: transparent;
+}
+
+.chart__select-selected:after {
+    position: absolute;
+    content: "";
+    top: 9px;
+    right: -20px;
+    width: 0;
+    height: 0;
+    border: 6px solid transparent;
+    border-color: black transparent transparent transparent;
+}
+
+.chart__select-selected.chart__select-arrow-active:after {
+    border-color: transparent transparent black transparent;
+    top: 3px;
+}
+
+.chart__select-items div,
+.chart__select-selected {
+    border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
+    cursor: pointer;
+    user-select: none;
+}
+
+.chart__select-items {
+    position: absolute;
+    top: 100%;
+    left: -15px;
+    right: 0px;
+    z-index: 99;
+    width: 130px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background-color: var(--bg-color);
+}
+
+.chart__select-items div {
+    width: 100%;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.chart__select-hide {
+    display: none;
+}
+
+.chart__select-items div:hover,
+.chart__same-as-selected {
+    background-color: rgb(221, 221, 221);
+}
