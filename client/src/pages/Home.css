@@ -443,6 +443,7 @@
 }
 
 .card--bg {
+    padding: 1rem 2rem;
     grid-column: span 12;
 }
 
