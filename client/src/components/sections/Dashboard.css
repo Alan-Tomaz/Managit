@@ -156,68 +156,29 @@
 
 
 .chart__customselect {
-    margin-right: 25px;
     position: relative;
 }
 
-.chart__customselect select {
-    display: none;
-}
-
-.chart__select-selected {
-    background-color: transparent;
-}
-
-.chart__select-selected:after {
-    position: absolute;
-    content: "";
-    top: 9px;
-    right: -20px;
-    width: 0;
-    height: 0;
-    border: 6px solid transparent;
-    border-color: black transparent transparent transparent;
-}
-
-.chart__select-selected.chart__select-arrow-active:after {
-    border-color: transparent transparent black transparent;
-    top: 3px;
-}
-
-.chart__select-items div,
-.chart__select-selected {
-    border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
+.chart-customselect__title {
     cursor: pointer;
-    user-select: none;
+    display: flex;
+    align-items: center;
+    gap: .3rem;
 }
 
-.chart__select-items {
+.chart__time {
     position: absolute;
-    top: 100%;
-    left: -15px;
-    right: 0px;
-    z-index: 99;
-    width: 130px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    right: -10px;
     flex-direction: column;
-    background-color: var(--bg-color);
+    background-color: rgb(236, 236, 236);
 }
 
-.chart__select-items div {
-    width: 100%;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.chart-time__options {
+    width: 130px;
+    padding: 1rem .5rem;
 }
 
-.chart__select-hide {
-    display: none;
-}
-
-.chart__select-items div:hover,
-.chart__same-as-selected {
-    background-color: rgb(221, 221, 221);
+.chart-time__options:hover {
+    cursor: pointer;
+    background-color: rgb(216, 216, 216);
 }
