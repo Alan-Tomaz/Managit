@@ -12,7 +12,6 @@ import { CategoryScale } from 'chart.js/auto';
 import LineChartCard from '../cards/LineChartCard';
 
 /* CREATE CHART */
-Chart.register(CategoryScale);
 
 function Dashboard() {
 

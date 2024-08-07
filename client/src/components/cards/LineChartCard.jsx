@@ -11,6 +11,9 @@ function LineChartCard({ chartData }) {
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
+                        datalabels: {
+                            display: false
+                        },
                         title: {
                             display: false,
                         },
