@@ -14,7 +14,7 @@ import { MdRemove } from "react-icons/md";
 import { MdArrowDropUp } from "react-icons/md";
 import { MdModeEditOutline } from "react-icons/md";
 
-function ItemsCard() {
+function ItemsCard({ option = 0 }) {
 
     const buttonRef = useRef(null);
 
@@ -100,269 +100,43 @@ function ItemsCard() {
                     </div>
                 </div>
                 <div className="stock__items">
-                    <div className="stockitems__header stock__item">
+                    <div className="stockitems__header stock__item" style={{ gridTemplateColumns: option == 0 ? 'min-content 65px 250px 100px 100px 50px 100px 1fr 100px 100px' : option == 1 ? 'min-content 65px 250px 100px 100px 100px 100px 1fr 100px' : 0 }}>
                         <div className="stockitem__select" onClick={handleSelectAllItems}></div>
                         <div className=""></div>
                         <p className="stockitem__productname stockitem__productname--header stockitem__product--header">Product Name</p>
                         <p className="stockitem__productcategory stockitem__productcategory--header stockitem__product--header ">Category</p>
+                        {option == 1 &&
+                            <p className="stockitem__productsupplier stockitem__productsupplier--header stockitem__product--header ">Supplier</p>
+                        }
                         <p className="stockitem__productcode stockitem__productcode--header stockitem__product--header">Code</p>
-                        <p className="stockitem__productqnt stockitem__productqnt--header stockitem__product--header">Qnt</p>
+                        {option == 0 &&
+                            <p className="stockitem__productqnt stockitem__productqnt--header stockitem__product--header">Qnt</p>
+                        }
                         <p className="stockitem__productsellprice stockitem__productsellprice--header stockitem__product--header">Sell Price</p>
                         <p className="stockitem__productdescription stockitem__productdescription--header stockitem__product--header">Description</p>
-                        <p className="stockitem__productstatus--header stockitem__product--header">Status</p>
+                        {option == 0 &&
+                            <p className="stockitem__productstatus--header stockitem__product--header">Status</p>
+                        }
                         <div className="stockitem__productsdelete button" style={{ display: "none" }}>Delete</div>
                     </div>
                     <div className="stock__items-container">
-                        <div className="stock__item">
+                        <div className="stock__item" style={{ gridTemplateColumns: option == 0 ? 'min-content 65px 250px 100px 100px 50px 100px 1fr 100px 100px' : option == 1 ? 'min-content 65px 250px 100px 100px 100px 100px 1fr 100px' : 0 }}>
                             <div className="stockitem__select" onClick={(e) => handleSelectItem(e)}></div>
                             <img src={Tshirt} className='stockitem__img' />
                             <p className="stockitem__productname">Example Example Example</p>
                             <p className="stockitem__productcategory">CATEGORY</p>
+                            {option == 1 &&
+                                <div className="stockitem__productsupplier stockitem__productsupplier--active">Dress Store</div>
+                            }
                             <p className="stockitem__productcode">Code</p>
-                            <p className="stockitem__productqnt">17</p>
+                            {option == 0 &&
+                                <p className="stockitem__productqnt">17</p>
+                            }
                             <p className="stockitem__productsellprice">$24.00</p>
                             <p className="stockitem__productdescription">{`Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus consequuntur praesentium animi quaerat quae perspiciatis, amet voluptates blanditiis corporis facilis eos natus nihil. Dolorem, reiciendis! Commodi, exercitationem nostrum veritatis suscipit et tempora consequuntur odit eaque totam dolorem enim aspernatur quasi fuga eius deleniti possimus dolores expedita aliquam rem ipsam maxime! Rem, accusantium odio quae dolorem expedita voluptatibus, dignissimos illo, reprehenderit numquam facere molestiae excepturi ullam fugiat quos omnis? Earum repellendus explicabo sint voluptatibus, illum ea magni qui laudantium neque doloribus maxime debitis nisi. Dolor deserunt maxime in alias architecto reiciendis doloribus. Incidunt, recusandae facere. Eius saepe iste optio deleniti nostrum.`.slice(0, 30)}...</p>
-                            <div className="stockitem__productstatus stockitem__productstatus--active">Active</div>
-                            <div className="stockitem__productoptions">
-                                <div className="stockitem__productremove"><MdModeEditOutline /></div>
-                                <div className="stockitem__productremove" ><MdRemove /></div>
-                            </div>
-                        </div>
-                        <div className="stock__item">
-                            <div className="stockitem__select" onClick={(e) => handleSelectItem(e)}></div>
-                            <img src={Tshirt} className='stockitem__img' />
-                            <p className="stockitem__productname">Example Example Example</p>
-                            <p className="stockitem__productcategory">CATEGORY</p>
-                            <p className="stockitem__productcode">Code</p>
-                            <p className="stockitem__productqnt">17</p>
-                            <p className="stockitem__productsellprice">$24.00</p>
-                            <p className="stockitem__productdescription">{`Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus consequuntur praesentium animi quaerat quae perspiciatis, amet voluptates blanditiis corporis facilis eos natus nihil. Dolorem, reiciendis! Commodi, exercitationem nostrum veritatis suscipit et tempora consequuntur odit eaque totam dolorem enim aspernatur quasi fuga eius deleniti possimus dolores expedita aliquam rem ipsam maxime! Rem, accusantium odio quae dolorem expedita voluptatibus, dignissimos illo, reprehenderit numquam facere molestiae excepturi ullam fugiat quos omnis? Earum repellendus explicabo sint voluptatibus, illum ea magni qui laudantium neque doloribus maxime debitis nisi. Dolor deserunt maxime in alias architecto reiciendis doloribus. Incidunt, recusandae facere. Eius saepe iste optio deleniti nostrum.`.slice(0, 30)}...</p>
-                            <div className="stockitem__productstatus stockitem__productstatus--active">Active</div>
-                            <div className="stockitem__productoptions">
-                                <div className="stockitem__productremove"><MdModeEditOutline /></div>
-                                <div className="stockitem__productremove" ><MdRemove /></div>
-                            </div>
-                        </div>
-                        <div className="stock__item">
-                            <div className="stockitem__select" onClick={(e) => handleSelectItem(e)}></div>
-                            <img src={Tshirt} className='stockitem__img' />
-                            <p className="stockitem__productname">Example Example Example</p>
-                            <p className="stockitem__productcategory">CATEGORY</p>
-                            <p className="stockitem__productcode">Code</p>
-                            <p className="stockitem__productqnt">17</p>
-                            <p className="stockitem__productsellprice">$24.00</p>
-                            <p className="stockitem__productdescription">{`Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus consequuntur praesentium animi quaerat quae perspiciatis, amet voluptates blanditiis corporis facilis eos natus nihil. Dolorem, reiciendis! Commodi, exercitationem nostrum veritatis suscipit et tempora consequuntur odit eaque totam dolorem enim aspernatur quasi fuga eius deleniti possimus dolores expedita aliquam rem ipsam maxime! Rem, accusantium odio quae dolorem expedita voluptatibus, dignissimos illo, reprehenderit numquam facere molestiae excepturi ullam fugiat quos omnis? Earum repellendus explicabo sint voluptatibus, illum ea magni qui laudantium neque doloribus maxime debitis nisi. Dolor deserunt maxime in alias architecto reiciendis doloribus. Incidunt, recusandae facere. Eius saepe iste optio deleniti nostrum.`.slice(0, 30)}...</p>
-                            <div className="stockitem__productstatus stockitem__productstatus--active">Active</div>
-                            <div className="stockitem__productoptions">
-                                <div className="stockitem__productremove"><MdModeEditOutline /></div>
-                                <div className="stockitem__productremove" ><MdRemove /></div>
-                            </div>
-                        </div>
-                        <div className="stock__item">
-                            <div className="stockitem__select" onClick={(e) => handleSelectItem(e)}></div>
-                            <img src={Tshirt} className='stockitem__img' />
-                            <p className="stockitem__productname">Example Example Example</p>
-                            <p className="stockitem__productcategory">CATEGORY</p>
-                            <p className="stockitem__productcode">Code</p>
-                            <p className="stockitem__productqnt">17</p>
-                            <p className="stockitem__productsellprice">$24.00</p>
-                            <p className="stockitem__productdescription">{`Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus consequuntur praesentium animi quaerat quae perspiciatis, amet voluptates blanditiis corporis facilis eos natus nihil. Dolorem, reiciendis! Commodi, exercitationem nostrum veritatis suscipit et tempora consequuntur odit eaque totam dolorem enim aspernatur quasi fuga eius deleniti possimus dolores expedita aliquam rem ipsam maxime! Rem, accusantium odio quae dolorem expedita voluptatibus, dignissimos illo, reprehenderit numquam facere molestiae excepturi ullam fugiat quos omnis? Earum repellendus explicabo sint voluptatibus, illum ea magni qui laudantium neque doloribus maxime debitis nisi. Dolor deserunt maxime in alias architecto reiciendis doloribus. Incidunt, recusandae facere. Eius saepe iste optio deleniti nostrum.`.slice(0, 30)}...</p>
-                            <div className="stockitem__productstatus stockitem__productstatus--active">Active</div>
-                            <div className="stockitem__productoptions">
-                                <div className="stockitem__productremove"><MdModeEditOutline /></div>
-                                <div className="stockitem__productremove" ><MdRemove /></div>
-                            </div>
-                        </div>
-                        <div className="stock__item">
-                            <div className="stockitem__select" onClick={(e) => handleSelectItem(e)}></div>
-                            <img src={Tshirt} className='stockitem__img' />
-                            <p className="stockitem__productname">Example Example Example</p>
-                            <p className="stockitem__productcategory">CATEGORY</p>
-                            <p className="stockitem__productcode">Code</p>
-                            <p className="stockitem__productqnt">17</p>
-                            <p className="stockitem__productsellprice">$24.00</p>
-                            <p className="stockitem__productdescription">{`Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus consequuntur praesentium animi quaerat quae perspiciatis, amet voluptates blanditiis corporis facilis eos natus nihil. Dolorem, reiciendis! Commodi, exercitationem nostrum veritatis suscipit et tempora consequuntur odit eaque totam dolorem enim aspernatur quasi fuga eius deleniti possimus dolores expedita aliquam rem ipsam maxime! Rem, accusantium odio quae dolorem expedita voluptatibus, dignissimos illo, reprehenderit numquam facere molestiae excepturi ullam fugiat quos omnis? Earum repellendus explicabo sint voluptatibus, illum ea magni qui laudantium neque doloribus maxime debitis nisi. Dolor deserunt maxime in alias architecto reiciendis doloribus. Incidunt, recusandae facere. Eius saepe iste optio deleniti nostrum.`.slice(0, 30)}...</p>
-                            <div className="stockitem__productstatus stockitem__productstatus--active">Active</div>
-                            <div className="stockitem__productoptions">
-                                <div className="stockitem__productremove"><MdModeEditOutline /></div>
-                                <div className="stockitem__productremove" ><MdRemove /></div>
-                            </div>
-                        </div>
-                        <div className="stock__item">
-                            <div className="stockitem__select" onClick={(e) => handleSelectItem(e)}></div>
-                            <img src={Tshirt} className='stockitem__img' />
-                            <p className="stockitem__productname">Example Example Example</p>
-                            <p className="stockitem__productcategory">CATEGORY</p>
-                            <p className="stockitem__productcode">Code</p>
-                            <p className="stockitem__productqnt">17</p>
-                            <p className="stockitem__productsellprice">$24.00</p>
-                            <p className="stockitem__productdescription">{`Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus consequuntur praesentium animi quaerat quae perspiciatis, amet voluptates blanditiis corporis facilis eos natus nihil. Dolorem, reiciendis! Commodi, exercitationem nostrum veritatis suscipit et tempora consequuntur odit eaque totam dolorem enim aspernatur quasi fuga eius deleniti possimus dolores expedita aliquam rem ipsam maxime! Rem, accusantium odio quae dolorem expedita voluptatibus, dignissimos illo, reprehenderit numquam facere molestiae excepturi ullam fugiat quos omnis? Earum repellendus explicabo sint voluptatibus, illum ea magni qui laudantium neque doloribus maxime debitis nisi. Dolor deserunt maxime in alias architecto reiciendis doloribus. Incidunt, recusandae facere. Eius saepe iste optio deleniti nostrum.`.slice(0, 30)}...</p>
-                            <div className="stockitem__productstatus stockitem__productstatus--active">Active</div>
-                            <div className="stockitem__productoptions">
-                                <div className="stockitem__productremove"><MdModeEditOutline /></div>
-                                <div className="stockitem__productremove" ><MdRemove /></div>
-                            </div>
-                        </div>
-                        <div className="stock__item">
-                            <div className="stockitem__select" onClick={(e) => handleSelectItem(e)}></div>
-                            <img src={Tshirt} className='stockitem__img' />
-                            <p className="stockitem__productname">Example Example Example</p>
-                            <p className="stockitem__productcategory">CATEGORY</p>
-                            <p className="stockitem__productcode">Code</p>
-                            <p className="stockitem__productqnt">17</p>
-                            <p className="stockitem__productsellprice">$24.00</p>
-                            <p className="stockitem__productdescription">{`Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus consequuntur praesentium animi quaerat quae perspiciatis, amet voluptates blanditiis corporis facilis eos natus nihil. Dolorem, reiciendis! Commodi, exercitationem nostrum veritatis suscipit et tempora consequuntur odit eaque totam dolorem enim aspernatur quasi fuga eius deleniti possimus dolores expedita aliquam rem ipsam maxime! Rem, accusantium odio quae dolorem expedita voluptatibus, dignissimos illo, reprehenderit numquam facere molestiae excepturi ullam fugiat quos omnis? Earum repellendus explicabo sint voluptatibus, illum ea magni qui laudantium neque doloribus maxime debitis nisi. Dolor deserunt maxime in alias architecto reiciendis doloribus. Incidunt, recusandae facere. Eius saepe iste optio deleniti nostrum.`.slice(0, 30)}...</p>
-                            <div className="stockitem__productstatus stockitem__productstatus--active">Active</div>
-                            <div className="stockitem__productoptions">
-                                <div className="stockitem__productremove"><MdModeEditOutline /></div>
-                                <div className="stockitem__productremove" ><MdRemove /></div>
-                            </div>
-                        </div>
-                        <div className="stock__item">
-                            <div className="stockitem__select" onClick={(e) => handleSelectItem(e)}></div>
-                            <img src={Tshirt} className='stockitem__img' />
-                            <p className="stockitem__productname">Example Example Example</p>
-                            <p className="stockitem__productcategory">CATEGORY</p>
-                            <p className="stockitem__productcode">Code</p>
-                            <p className="stockitem__productqnt">17</p>
-                            <p className="stockitem__productsellprice">$24.00</p>
-                            <p className="stockitem__productdescription">{`Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus consequuntur praesentium animi quaerat quae perspiciatis, amet voluptates blanditiis corporis facilis eos natus nihil. Dolorem, reiciendis! Commodi, exercitationem nostrum veritatis suscipit et tempora consequuntur odit eaque totam dolorem enim aspernatur quasi fuga eius deleniti possimus dolores expedita aliquam rem ipsam maxime! Rem, accusantium odio quae dolorem expedita voluptatibus, dignissimos illo, reprehenderit numquam facere molestiae excepturi ullam fugiat quos omnis? Earum repellendus explicabo sint voluptatibus, illum ea magni qui laudantium neque doloribus maxime debitis nisi. Dolor deserunt maxime in alias architecto reiciendis doloribus. Incidunt, recusandae facere. Eius saepe iste optio deleniti nostrum.`.slice(0, 30)}...</p>
-                            <div className="stockitem__productstatus stockitem__productstatus--active">Active</div>
-                            <div className="stockitem__productoptions">
-                                <div className="stockitem__productremove"><MdModeEditOutline /></div>
-                                <div className="stockitem__productremove" ><MdRemove /></div>
-                            </div>
-                        </div>
-                        <div className="stock__item">
-                            <div className="stockitem__select" onClick={(e) => handleSelectItem(e)}></div>
-                            <img src={Tshirt} className='stockitem__img' />
-                            <p className="stockitem__productname">Example Example Example</p>
-                            <p className="stockitem__productcategory">CATEGORY</p>
-                            <p className="stockitem__productcode">Code</p>
-                            <p className="stockitem__productqnt">17</p>
-                            <p className="stockitem__productsellprice">$24.00</p>
-                            <p className="stockitem__productdescription">{`Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus consequuntur praesentium animi quaerat quae perspiciatis, amet voluptates blanditiis corporis facilis eos natus nihil. Dolorem, reiciendis! Commodi, exercitationem nostrum veritatis suscipit et tempora consequuntur odit eaque totam dolorem enim aspernatur quasi fuga eius deleniti possimus dolores expedita aliquam rem ipsam maxime! Rem, accusantium odio quae dolorem expedita voluptatibus, dignissimos illo, reprehenderit numquam facere molestiae excepturi ullam fugiat quos omnis? Earum repellendus explicabo sint voluptatibus, illum ea magni qui laudantium neque doloribus maxime debitis nisi. Dolor deserunt maxime in alias architecto reiciendis doloribus. Incidunt, recusandae facere. Eius saepe iste optio deleniti nostrum.`.slice(0, 30)}...</p>
-                            <div className="stockitem__productstatus stockitem__productstatus--active">Active</div>
-                            <div className="stockitem__productoptions">
-                                <div className="stockitem__productremove"><MdModeEditOutline /></div>
-                                <div className="stockitem__productremove" ><MdRemove /></div>
-                            </div>
-                        </div>
-                        <div className="stock__item">
-                            <div className="stockitem__select" onClick={(e) => handleSelectItem(e)}></div>
-                            <img src={Tshirt} className='stockitem__img' />
-                            <p className="stockitem__productname">Example Example Example</p>
-                            <p className="stockitem__productcategory">CATEGORY</p>
-                            <p className="stockitem__productcode">Code</p>
-                            <p className="stockitem__productqnt">17</p>
-                            <p className="stockitem__productsellprice">$24.00</p>
-                            <p className="stockitem__productdescription">{`Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus consequuntur praesentium animi quaerat quae perspiciatis, amet voluptates blanditiis corporis facilis eos natus nihil. Dolorem, reiciendis! Commodi, exercitationem nostrum veritatis suscipit et tempora consequuntur odit eaque totam dolorem enim aspernatur quasi fuga eius deleniti possimus dolores expedita aliquam rem ipsam maxime! Rem, accusantium odio quae dolorem expedita voluptatibus, dignissimos illo, reprehenderit numquam facere molestiae excepturi ullam fugiat quos omnis? Earum repellendus explicabo sint voluptatibus, illum ea magni qui laudantium neque doloribus maxime debitis nisi. Dolor deserunt maxime in alias architecto reiciendis doloribus. Incidunt, recusandae facere. Eius saepe iste optio deleniti nostrum.`.slice(0, 30)}...</p>
-                            <div className="stockitem__productstatus stockitem__productstatus--active">Active</div>
-                            <div className="stockitem__productoptions">
-                                <div className="stockitem__productremove"><MdModeEditOutline /></div>
-                                <div className="stockitem__productremove" ><MdRemove /></div>
-                            </div>
-                        </div>
-                        <div className="stock__item">
-                            <div className="stockitem__select" onClick={(e) => handleSelectItem(e)}></div>
-                            <img src={Tshirt} className='stockitem__img' />
-                            <p className="stockitem__productname">Example Example Example</p>
-                            <p className="stockitem__productcategory">CATEGORY</p>
-                            <p className="stockitem__productcode">Code</p>
-                            <p className="stockitem__productqnt">17</p>
-                            <p className="stockitem__productsellprice">$24.00</p>
-                            <p className="stockitem__productdescription">{`Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus consequuntur praesentium animi quaerat quae perspiciatis, amet voluptates blanditiis corporis facilis eos natus nihil. Dolorem, reiciendis! Commodi, exercitationem nostrum veritatis suscipit et tempora consequuntur odit eaque totam dolorem enim aspernatur quasi fuga eius deleniti possimus dolores expedita aliquam rem ipsam maxime! Rem, accusantium odio quae dolorem expedita voluptatibus, dignissimos illo, reprehenderit numquam facere molestiae excepturi ullam fugiat quos omnis? Earum repellendus explicabo sint voluptatibus, illum ea magni qui laudantium neque doloribus maxime debitis nisi. Dolor deserunt maxime in alias architecto reiciendis doloribus. Incidunt, recusandae facere. Eius saepe iste optio deleniti nostrum.`.slice(0, 30)}...</p>
-                            <div className="stockitem__productstatus stockitem__productstatus--active">Active</div>
-                            <div className="stockitem__productoptions">
-                                <div className="stockitem__productremove"><MdModeEditOutline /></div>
-                                <div className="stockitem__productremove" ><MdRemove /></div>
-                            </div>
-                        </div>
-                        <div className="stock__item">
-                            <div className="stockitem__select" onClick={(e) => handleSelectItem(e)}></div>
-                            <img src={Tshirt} className='stockitem__img' />
-                            <p className="stockitem__productname">Example Example Example</p>
-                            <p className="stockitem__productcategory">CATEGORY</p>
-                            <p className="stockitem__productcode">Code</p>
-                            <p className="stockitem__productqnt">17</p>
-                            <p className="stockitem__productsellprice">$24.00</p>
-                            <p className="stockitem__productdescription">{`Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus consequuntur praesentium animi quaerat quae perspiciatis, amet voluptates blanditiis corporis facilis eos natus nihil. Dolorem, reiciendis! Commodi, exercitationem nostrum veritatis suscipit et tempora consequuntur odit eaque totam dolorem enim aspernatur quasi fuga eius deleniti possimus dolores expedita aliquam rem ipsam maxime! Rem, accusantium odio quae dolorem expedita voluptatibus, dignissimos illo, reprehenderit numquam facere molestiae excepturi ullam fugiat quos omnis? Earum repellendus explicabo sint voluptatibus, illum ea magni qui laudantium neque doloribus maxime debitis nisi. Dolor deserunt maxime in alias architecto reiciendis doloribus. Incidunt, recusandae facere. Eius saepe iste optio deleniti nostrum.`.slice(0, 30)}...</p>
-                            <div className="stockitem__productstatus stockitem__productstatus--active">Active</div>
-                            <div className="stockitem__productoptions">
-                                <div className="stockitem__productremove"><MdModeEditOutline /></div>
-                                <div className="stockitem__productremove" ><MdRemove /></div>
-                            </div>
-                        </div>
-                        <div className="stock__item">
-                            <div className="stockitem__select" onClick={(e) => handleSelectItem(e)}></div>
-                            <img src={Tshirt} className='stockitem__img' />
-                            <p className="stockitem__productname">Example Example Example</p>
-                            <p className="stockitem__productcategory">CATEGORY</p>
-                            <p className="stockitem__productcode">Code</p>
-                            <p className="stockitem__productqnt">17</p>
-                            <p className="stockitem__productsellprice">$24.00</p>
-                            <p className="stockitem__productdescription">{`Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus consequuntur praesentium animi quaerat quae perspiciatis, amet voluptates blanditiis corporis facilis eos natus nihil. Dolorem, reiciendis! Commodi, exercitationem nostrum veritatis suscipit et tempora consequuntur odit eaque totam dolorem enim aspernatur quasi fuga eius deleniti possimus dolores expedita aliquam rem ipsam maxime! Rem, accusantium odio quae dolorem expedita voluptatibus, dignissimos illo, reprehenderit numquam facere molestiae excepturi ullam fugiat quos omnis? Earum repellendus explicabo sint voluptatibus, illum ea magni qui laudantium neque doloribus maxime debitis nisi. Dolor deserunt maxime in alias architecto reiciendis doloribus. Incidunt, recusandae facere. Eius saepe iste optio deleniti nostrum.`.slice(0, 30)}...</p>
-                            <div className="stockitem__productstatus stockitem__productstatus--active">Active</div>
-                            <div className="stockitem__productoptions">
-                                <div className="stockitem__productremove"><MdModeEditOutline /></div>
-                                <div className="stockitem__productremove" ><MdRemove /></div>
-                            </div>
-                        </div>
-                        <div className="stock__item">
-                            <div className="stockitem__select" onClick={(e) => handleSelectItem(e)}></div>
-                            <img src={Tshirt} className='stockitem__img' />
-                            <p className="stockitem__productname">Example Example Example</p>
-                            <p className="stockitem__productcategory">CATEGORY</p>
-                            <p className="stockitem__productcode">Code</p>
-                            <p className="stockitem__productqnt">17</p>
-                            <p className="stockitem__productsellprice">$24.00</p>
-                            <p className="stockitem__productdescription">{`Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus consequuntur praesentium animi quaerat quae perspiciatis, amet voluptates blanditiis corporis facilis eos natus nihil. Dolorem, reiciendis! Commodi, exercitationem nostrum veritatis suscipit et tempora consequuntur odit eaque totam dolorem enim aspernatur quasi fuga eius deleniti possimus dolores expedita aliquam rem ipsam maxime! Rem, accusantium odio quae dolorem expedita voluptatibus, dignissimos illo, reprehenderit numquam facere molestiae excepturi ullam fugiat quos omnis? Earum repellendus explicabo sint voluptatibus, illum ea magni qui laudantium neque doloribus maxime debitis nisi. Dolor deserunt maxime in alias architecto reiciendis doloribus. Incidunt, recusandae facere. Eius saepe iste optio deleniti nostrum.`.slice(0, 30)}...</p>
-                            <div className="stockitem__productstatus stockitem__productstatus--active">Active</div>
-                            <div className="stockitem__productoptions">
-                                <div className="stockitem__productremove"><MdModeEditOutline /></div>
-                                <div className="stockitem__productremove" ><MdRemove /></div>
-                            </div>
-                        </div>
-                        <div className="stock__item">
-                            <div className="stockitem__select" onClick={(e) => handleSelectItem(e)}></div>
-                            <img src={Tshirt} className='stockitem__img' />
-                            <p className="stockitem__productname">Example Example Example</p>
-                            <p className="stockitem__productcategory">CATEGORY</p>
-                            <p className="stockitem__productcode">Code</p>
-                            <p className="stockitem__productqnt">17</p>
-                            <p className="stockitem__productsellprice">$24.00</p>
-                            <p className="stockitem__productdescription">{`Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus consequuntur praesentium animi quaerat quae perspiciatis, amet voluptates blanditiis corporis facilis eos natus nihil. Dolorem, reiciendis! Commodi, exercitationem nostrum veritatis suscipit et tempora consequuntur odit eaque totam dolorem enim aspernatur quasi fuga eius deleniti possimus dolores expedita aliquam rem ipsam maxime! Rem, accusantium odio quae dolorem expedita voluptatibus, dignissimos illo, reprehenderit numquam facere molestiae excepturi ullam fugiat quos omnis? Earum repellendus explicabo sint voluptatibus, illum ea magni qui laudantium neque doloribus maxime debitis nisi. Dolor deserunt maxime in alias architecto reiciendis doloribus. Incidunt, recusandae facere. Eius saepe iste optio deleniti nostrum.`.slice(0, 30)}...</p>
-                            <div className="stockitem__productstatus stockitem__productstatus--active">Active</div>
-                            <div className="stockitem__productoptions">
-                                <div className="stockitem__productremove"><MdModeEditOutline /></div>
-                                <div className="stockitem__productremove" ><MdRemove /></div>
-                            </div>
-                        </div>
-                        <div className="stock__item">
-                            <div className="stockitem__select" onClick={(e) => handleSelectItem(e)}></div>
-                            <img src={Tshirt} className='stockitem__img' />
-                            <p className="stockitem__productname">Example Example Example</p>
-                            <p className="stockitem__productcategory">CATEGORY</p>
-                            <p className="stockitem__productcode">Code</p>
-                            <p className="stockitem__productqnt">17</p>
-                            <p className="stockitem__productsellprice">$24.00</p>
-                            <p className="stockitem__productdescription">{`Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus consequuntur praesentium animi quaerat quae perspiciatis, amet voluptates blanditiis corporis facilis eos natus nihil. Dolorem, reiciendis! Commodi, exercitationem nostrum veritatis suscipit et tempora consequuntur odit eaque totam dolorem enim aspernatur quasi fuga eius deleniti possimus dolores expedita aliquam rem ipsam maxime! Rem, accusantium odio quae dolorem expedita voluptatibus, dignissimos illo, reprehenderit numquam facere molestiae excepturi ullam fugiat quos omnis? Earum repellendus explicabo sint voluptatibus, illum ea magni qui laudantium neque doloribus maxime debitis nisi. Dolor deserunt maxime in alias architecto reiciendis doloribus. Incidunt, recusandae facere. Eius saepe iste optio deleniti nostrum.`.slice(0, 30)}...</p>
-                            <div className="stockitem__productstatus stockitem__productstatus--active">Active</div>
-                            <div className="stockitem__productoptions">
-                                <div className="stockitem__productremove"><MdModeEditOutline /></div>
-                                <div className="stockitem__productremove" ><MdRemove /></div>
-                            </div>
-                        </div>
-                        <div className="stock__item">
-                            <div className="stockitem__select" onClick={(e) => handleSelectItem(e)}></div>
-                            <img src={Tshirt} className='stockitem__img' />
-                            <p className="stockitem__productname">Example Example Example</p>
-                            <p className="stockitem__productcategory">CATEGORY</p>
-                            <p className="stockitem__productcode">Code</p>
-                            <p className="stockitem__productqnt">17</p>
-                            <p className="stockitem__productsellprice">$24.00</p>
-                            <p className="stockitem__productdescription">{`Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus consequuntur praesentium animi quaerat quae perspiciatis, amet voluptates blanditiis corporis facilis eos natus nihil. Dolorem, reiciendis! Commodi, exercitationem nostrum veritatis suscipit et tempora consequuntur odit eaque totam dolorem enim aspernatur quasi fuga eius deleniti possimus dolores expedita aliquam rem ipsam maxime! Rem, accusantium odio quae dolorem expedita voluptatibus, dignissimos illo, reprehenderit numquam facere molestiae excepturi ullam fugiat quos omnis? Earum repellendus explicabo sint voluptatibus, illum ea magni qui laudantium neque doloribus maxime debitis nisi. Dolor deserunt maxime in alias architecto reiciendis doloribus. Incidunt, recusandae facere. Eius saepe iste optio deleniti nostrum.`.slice(0, 30)}...</p>
-                            <div className="stockitem__productstatus stockitem__productstatus--active">Active</div>
+                            {option == 0 &&
+                                <div className="stockitem__productstatus stockitem__productstatus--active">Active</div>
+                            }
                             <div className="stockitem__productoptions">
                                 <div className="stockitem__productremove"><MdModeEditOutline /></div>
                                 <div className="stockitem__productremove" ><MdRemove /></div>

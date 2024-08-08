@@ -93,7 +93,7 @@ function Stock() {
                 <h3>Stock Info (Per Category)</h3>
                 <DoughnutChartCard options={options} finalData={finalData} />
             </div>
-            <ItemsCard />
+            <ItemsCard option={0} />
         </>
     )
 }
