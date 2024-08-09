@@ -1,10 +1,11 @@
-import React from 'react'
+import React from 'react';
+import ItemsCard from "../cards/ItemsCard.jsx";
 
 function Categories() {
     return (
-        <div>
-            Categories
-        </div>
+        <>
+            <ItemsCard option={2} />
+        </>
     )
 }
 

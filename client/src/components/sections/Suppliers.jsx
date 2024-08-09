@@ -1,10 +1,11 @@
 import React from 'react'
+import ItemsCard from '../cards/ItemsCard'
 
 function Suppliers() {
     return (
-        <div>
-            Suppliers
-        </div>
+        <>
+            <ItemsCard option={3} />
+        </>
     )
 }
 

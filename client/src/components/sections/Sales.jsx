@@ -1,10 +1,11 @@
 import React from 'react'
+import ItemsCard from '../cards/ItemsCard'
 
 function Sales() {
     return (
-        <div>
-            Sales
-        </div>
+        <>
+            <ItemsCard option={5} />
+        </>
     )
 }
 

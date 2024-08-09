@@ -1,10 +1,11 @@
 import React from 'react'
+import ItemsCard from '../cards/ItemsCard'
 
 function ActivitiesLog() {
     return (
-        <div>
-            Activities Log
-        </div>
+        <>
+            <ItemsCard option={7} />
+        </>
     )
 }
 
