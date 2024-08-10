@@ -10,6 +10,7 @@ import MdTopProducts from '../cards/MdTopProducts';
 import Chart from "chart.js/auto";
 import { CategoryScale } from 'chart.js/auto';
 import LineChartCard from '../cards/LineChartCard';
+import NewOrder from '../cards/NewOrder';
 
 /* CREATE CHART */
 
