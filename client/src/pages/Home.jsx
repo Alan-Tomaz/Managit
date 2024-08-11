@@ -15,11 +15,6 @@ import NotificationItem from "../assets/images/notification_item.png";
 import { useNavigate, useParams } from 'react-router-dom';
 import { IoClose } from "react-icons/io5";
 import { logout } from "../state/User/UserSlice.js";
-import { MdOutlineShoppingCart } from "react-icons/md";
-import { BsBoxSeam } from "react-icons/bs";
-import { RiMoneyDollarCircleLine } from "react-icons/ri";
-import { FaUser } from "react-icons/fa";
-import { IoEnterOutline } from "react-icons/io5";
 import Dashboard from "../components/sections/Dashboard.jsx";
 import Stock from "../components/sections/Stock.jsx";
 import Products from "../components/sections/Products.jsx";
@@ -32,6 +27,10 @@ import ActivitiesLog from "../components/sections/ActivitiesLog.jsx";
 import EditDetails from "../components/sections/EditDetails.jsx";
 import NewOrder from '../components/cards/NewOrder.jsx';
 import EditProfile from '../components/cards/EditProfile.jsx';
+import EditInventories from '../components/cards/EditInventories.jsx';
+import CreateProducts from '../components/cards/CreateProducts.jsx';
+import CreateSupplier from '../components/cards/CreateSupplier.jsx';
+import CreateCategory from '../components/cards/CreateCategory.jsx';
 
 function Home() {
 
@@ -295,7 +294,6 @@ function Home() {
                 document.querySelectorAll(".home").forEach((item) => {
                     item.classList.toggle("home__withoutsidebar");
                 })
-
                 document.querySelectorAll(".sidebar__moreoptions").forEach((item) => {
                     item.classList.toggle("hide__sidebar_2");
                 })
@@ -305,7 +303,13 @@ function Home() {
                 document.querySelectorAll(".sidebar__title").forEach((item) => {
                     item.classList.toggle("hide__sidebar");
                 })
+                document.querySelectorAll(".credits").forEach((item) => {
+                    item.classList.toggle("hide__sidebar");
+                })
                 setTimeout(() => {
+                    document.querySelectorAll(".credits").forEach((item) => {
+                        item.classList.toggle("hide__sidebar_2");
+                    })
                     document.querySelectorAll(".sidebar__title").forEach((item) => {
                         item.classList.toggle("hide__sidebar_2");
                     })
@@ -336,6 +340,9 @@ function Home() {
                     item.classList.remove("home__withoutsidebar");
                 })
                 setTimeout(() => {
+                    document.querySelectorAll(".credits").forEach((item) => {
+                        item.classList.remove("hide__sidebar_2");
+                    })
                     document.querySelectorAll(".sidebar__title").forEach((item) => {
                         item.classList.remove("hide__sidebar_2");
                     })
@@ -346,11 +353,17 @@ function Home() {
                         item.classList.remove("hide__sidebar_2");
                     })
                     setTimeout(() => {
+                        document.querySelectorAll(".credits").forEach((item) => {
+                            item.classList.remove("hide__sidebar");
+                        })
                         document.querySelectorAll(".sidebar__logo--title").forEach((item) => {
                             item.classList.remove("hide__sidebar");
                         })
                         document.querySelectorAll(".sidebar__title").forEach((item) => {
                             item.classList.remove("hide__sidebar");
+                        })
+                        document.querySelectorAll(".credits").forEach((item) => {
+                            item.classList.add("show__sidebar");
                         })
                         document.querySelectorAll(".sidebar__logo--title").forEach((item) => {
                             item.classList.add("show__sidebar");
@@ -379,6 +392,9 @@ function Home() {
                 }, 300);
                 setTimeout(() => {
                     setIsSidebarStopped(true);
+                    document.querySelectorAll(".credits").forEach((item) => {
+                        item.classList.remove("show__sidebar");
+                    })
                     document.querySelectorAll(".sidebar__logo--title").forEach((item) => {
                         item.classList.remove("show__sidebar");
                     })
@@ -453,66 +469,20 @@ function Home() {
                             <EditProfile closeWindow={() => setShowModal('')} />
                         }
                         {showModal == 'edit-inventories' &&
-                            <div className="modal__window modal__editinventories">
-                                <IoClose />
-                                <h2>Inventories</h2>
-                                <div className="editinventories__inventories editinventories__row1">
-                                    <div className="editinventories__row">
-                                        <span>Inventory 1</span>
-                                        <div className="editinventories__members">
-                                            <FaUser />
-                                            <span>3</span>
-                                        </div>
-                                    </div>
-                                    <div className="editinventories__row editinventories__row2">
-                                        <span>ID: 5652592995599</span>
-                                    </div>
-                                    <div className="editinventories__row editinventories__row3">
-                                        <div className="editinventories__details">
-                                            <div className="editinventories__buy">
-                                                <MdOutlineShoppingCart />
-                                                <span>24</span>
-                                            </div>
-                                            <div className="editinventories__stock">
-                                                <BsBoxSeam />
-                                                <span>3</span>
-                                            </div>
-                                            <div className="editinventories__sale">
-                                                <RiMoneyDollarCircleLine />
-                                                <span>5</span>
-                                            </div>
-                                        </div>
-                                        <IoEnterOutline className='editinventories__enter' />
-                                    </div>
-                                </div>
-                                <span>Or</span>
-                                <div className="editinventories__buttons">
-                                    <button className="button editinventory__button">Create a inventory</button>
-                                    <button className="button button--outlined editinventory__button">Enter in a inventory</button>
-                                </div>
-                                <div className="modal__window modal__createinventory">
-                                    <IoClose />
-                                    <h2>Inventories</h2>
-                                    <input type="text" name="createinvenory__name" id="createinvenory__name" className="createinvenory__name" placeholder='Name:' />
-                                    <input type="password" name="createinvenory__password" id="createinvenory__password" className="createinvenory__password" placeholder='Password:' />
-                                    <input type="password" name="createinvenory__confirmpassword" id="createinvenory__confirmpassword" className="createinvenory__confirmpassword" placeholder='Confirm Password:' />
-                                </div>
-                            </div>}
-                    </div>
-                    <div className="modal__window modal__createinventory">
-                        <IoClose />
-                        <h2>Inventories</h2>
-                        <input type="text" name="createinvenory__name" id="createinvenory__name" className="createinvenory__name" placeholder='Name:' />
-                        <input type="password" name="createinvenory__password" id="createinvenory__password" className="createinvenory__password" placeholder='Password:' />
-                        <input type="password" name="createinvenory__confirmpassword" id="createinvenory__confirmpassword" className="createinvenory__confirmpassword" placeholder='Confirm Password:' />
-                        <button className="button  createinventory__button">Create Inventory</button>
-                    </div>
-                    <div className="modal__window modal__enterinventory">
-                        <IoClose />
-                        <h2>Enter in a new inventory</h2>
-                        <input type="text" name="enterinventory__id" id="enterinventory__id" className="enterinventory__id" placeholder='ID:' />
-                        <input type="password" name="enterinventory__password" id="enterinventory__password" className="enterinventory__password" placeholder='Password:' />
-                        <button className="button  enterinventory__button">Enter Inventory</button>
+                            <EditInventories closeWindow={() => setShowModal('')} />
+                        }
+                        {showModal == 'edit-inventorie' &&
+                            <EditInventories closeWindow={() => setShowModal('')} showEditInv={false} showCreateInv={true} />
+                        }
+                        {showModal == 'create-products' &&
+                            <CreateProducts closeWindow={() => setShowModal('')} />
+                        }
+                        {showModal == 'create-category' &&
+                            <CreateCategory closeWindow={() => setShowModal('')} />
+                        }
+                        {showModal == 'create-supplier' &&
+                            <CreateSupplier closeWindow={() => setShowModal('')} />
+                        }
                     </div>
                     <aside className='home__sidebar'>
                         <div className="sidebar__logo" onClick={handleCloseSideBar}>
@@ -562,6 +532,7 @@ function Home() {
                                 </div>
                             </>
                         )}
+                        <a className="credits" href="https://github.com/Alan-Tomaz" target='_blank'>Created By <span>Alan Tomaz</span></a>
                     </aside>
                     <nav className='home__navbar'>
                         <div className="navbar__search" style={{ visibility: showSearchInput == true ? "visible" : "hidden", opacity: showSearchInput == true ? "1" : "0" }}>

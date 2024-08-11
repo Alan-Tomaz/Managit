@@ -20,9 +20,13 @@
     z-index: 10;
 }
 
-
+.home__withoutsidebar {
+    grid-template-columns: 80px 1fr;
+}
 
 .home__sidebar {
+    display: flex;
+    flex-direction: column;
     background-color: var(--color-primary);
     color: var(--text-color-variant);
     width: 100%;
@@ -192,6 +196,20 @@
 
 .hide__sidebar_2 {
     display: none;
+}
+
+.credits {
+    margin: auto 0 1rem;
+    align-self: center;
+    font-size: .8rem;
+}
+
+.credits span {
+    text-decoration: none;
+}
+
+.credits span:hover {
+    text-decoration: underline;
 }
 
 .home__navbar {

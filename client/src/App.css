@@ -98,6 +98,17 @@ img {
     background-color: var(--color-primary);
 }
 
+.button--disable:hover {
+    background-color: var(--color-primary);
+    cursor: initial;
+}
+
+.button--outlineddisable:hover {
+    background-color: transparent;
+    color: var(--color-primary);
+    cursor: initial;
+}
+
 /* ============== MEDIA QUERIES =============== */
 
 /* Medium Devices = 1024 */
