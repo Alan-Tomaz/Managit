@@ -73,7 +73,7 @@ function ItemsCard({ option = 0 }) {
                     <div className="stockmenu__options">
                         <form className="stockmenu__search" onSubmit>
                             <IoSearch className='stockmenu__search-icon' />
-                            <input type="text" className="stockmenu__searchinput" placeholder='Search Products' />
+                            <input type="text" className="stockmenu__searchinput" placeholder={option == 0 ? "Search Orders" : option == 1 ? "Search Products" : option == 2 ? 'Search Categories' : option == 3 ? 'Search Suppliers' : option == 4 ? 'Search Orders' : option == 5 ? 'Search Orders' : option == 6 ? 'Search Users' : 'Search Types'} />
                         </form>
                         <div className="stockmenu__filter">
                             <LuFilter className='stockmenu__filter-icon' />
@@ -89,7 +89,7 @@ function ItemsCard({ option = 0 }) {
                                 <div className="stockmenu__button-export__info-png button" onClick={handleExportFile}>XLSX</div>
                             </div>
                         </div>
-                        <div className="button stockmenu__button">New Order</div>
+                        <div className="button stockmenu__button" style={{ display: option != 7 ? 'flex' : 'none' }}>{option == 0 ? "New Order" : option == 1 ? "New Product" : option == 2 ? 'New Category' : option == 3 ? 'New Supplier' : option == 4 ? 'New Order' : option == 5 ? 'New Order' : option == 6 ? 'New User' : 'New Type'}</div>
                     </div>
                 </div>
                 <div className="stock__tags">

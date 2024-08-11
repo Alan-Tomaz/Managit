@@ -14,7 +14,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 2.4rem;
+    gap: 2rem;
 }
 
 .stock-info__range {
@@ -26,14 +26,15 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 5rem;
+    font-size: 7rem;
     color: white;
 }
 
 .stock-info__card h3 {
-    font-size: 1.6rem;
+    font-size: 2.5rem;
 }
 
 .stock-info__card h2 {
-    font-size: 3rem;
+    font-size: 2.2rem;
+    font-weight: var(--font-semi-bold);
 }

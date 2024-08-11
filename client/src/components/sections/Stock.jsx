@@ -71,25 +71,19 @@ function Stock() {
 
     return (
         <>
-            <div className="card card--sm doughnut-chart__info">
+            <div className="card card--xsm doughnut-chart__info">
                 <h3>Stock Info (Per Supplier)</h3>
                 <DoughnutChartCard options={options} finalData={finalData} />
             </div>
-            <div className="card card--sm stock-info__card">
+            <div className="card card--xsm stock-info__card">
                 <div className="stock-info__range">
                     <FaBoxOpen />
                 </div>
                 <h3>Stock Items</h3>
                 <h2>137</h2>
-            </div>
-            <div className="card card--sm stock-info__card">
-                <div className="stock-info__range">
-                    <FaMoneyBill1 />
-                </div>
-                <h3>Stock Items (US$)</h3>
                 <h2>US$1700.43</h2>
             </div>
-            <div className="card card--sm doughnut-chart__info">
+            <div className="card card--xsm doughnut-chart__info">
                 <h3>Stock Info (Per Category)</h3>
                 <DoughnutChartCard options={options} finalData={finalData} />
             </div>

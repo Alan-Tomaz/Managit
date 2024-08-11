@@ -14,7 +14,6 @@ import DefaultView from '../components/DefaultView';
 import NotificationItem from "../assets/images/notification_item.png";
 import { useNavigate, useParams } from 'react-router-dom';
 import { IoClose } from "react-icons/io5";
-import { FaRegEdit } from "react-icons/fa";
 import { logout } from "../state/User/UserSlice.js";
 import { MdOutlineShoppingCart } from "react-icons/md";
 import { BsBoxSeam } from "react-icons/bs";
@@ -31,6 +30,8 @@ import Sales from "../components/sections/Sales.jsx";
 import Users from "../components/sections/Users.jsx";
 import ActivitiesLog from "../components/sections/ActivitiesLog.jsx";
 import EditDetails from "../components/sections/EditDetails.jsx";
+import NewOrder from '../components/cards/NewOrder.jsx';
+import EditProfile from '../components/cards/EditProfile.jsx';
 
 function Home() {
 
@@ -48,6 +49,7 @@ function Home() {
     const [showNavbarOptions, setShowNavbarOptions] = useState(false);
     const [showNavbarNotifications, setShowNavbarNotifications] = useState(false);
     const [showSearchInput, setShowSearchInput] = useState(false);
+    const [showModal, setShowModal] = useState('');
 
     const dispatch = useDispatch();
     const apiUrl = useSelector((state) => state.MiscReducer.apiUrl);
@@ -402,6 +404,14 @@ function Home() {
         setShowSearchInput(!showSearchInput);
     }
 
+    const handlePressKey = (e) => {
+        const keyPress = e.key;
+
+        if (keyPress == "Escape") {
+            setShowModal('');
+        }
+    }
+
     const profileRef = useRef(null);
     const notificationRef = useRef(null);
 
@@ -418,6 +428,7 @@ function Home() {
         };
 
         document.addEventListener("mousedown", handleClickOutside);
+        document.addEventListener("keydown", handlePressKey);
 
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
@@ -434,108 +445,60 @@ function Home() {
         <>
             {userInfo != null ? (
                 <main className='home' onLoad={() => { if (innerWidth <= 600) { handleCloseSideBar() } }}>
-                    <div className="modal__window modal__editprofile">
-                        <IoClose />
-                        <h2>Profile</h2>
-                        <div className="editprofile__imgbox">
-                            <img className='editprofile__img' src={`${imgPaths}${userInfo.picturePath}`} alt="profile_img" />
-                            <FaRegEdit className='editprofile__edit' />
-                        </div>
-                        <div className="editprofile__box">
-                            <div className="editprofile__inputbox">
-                                <div className="editprofile__labelbox">
-                                    <span className='editprofile__label'>Name</span>
-                                    <FaRegEdit className='editprofile__edit' />
+                    <div className="modal__window" style={{ display: showModal != '' ? 'flex' : 'none' }} >
+                        {showModal == 'new-order' &&
+                            <NewOrder closeWindow={() => setShowModal('')} />
+                        }
+                        {showModal == 'edit-profile' &&
+                            <EditProfile closeWindow={() => setShowModal('')} />
+                        }
+                        {showModal == 'edit-inventories' &&
+                            <div className="modal__window modal__editinventories">
+                                <IoClose />
+                                <h2>Inventories</h2>
+                                <div className="editinventories__inventories editinventories__row1">
+                                    <div className="editinventories__row">
+                                        <span>Inventory 1</span>
+                                        <div className="editinventories__members">
+                                            <FaUser />
+                                            <span>3</span>
+                                        </div>
+                                    </div>
+                                    <div className="editinventories__row editinventories__row2">
+                                        <span>ID: 5652592995599</span>
+                                    </div>
+                                    <div className="editinventories__row editinventories__row3">
+                                        <div className="editinventories__details">
+                                            <div className="editinventories__buy">
+                                                <MdOutlineShoppingCart />
+                                                <span>24</span>
+                                            </div>
+                                            <div className="editinventories__stock">
+                                                <BsBoxSeam />
+                                                <span>3</span>
+                                            </div>
+                                            <div className="editinventories__sale">
+                                                <RiMoneyDollarCircleLine />
+                                                <span>5</span>
+                                            </div>
+                                        </div>
+                                        <IoEnterOutline className='editinventories__enter' />
+                                    </div>
                                 </div>
-                                <input type="text" name="editprofile__name" id="editprofile__name" className="editprofile__input editprofile__name" />
-                            </div>
-                            <div className="editprofile__inputbox">
-                                <div className="editprofile__labelbox">
-                                    <span className='editprofile__label'>Phone Number:</span>
-                                    <FaRegEdit className='editprofile__edit' />
+                                <span>Or</span>
+                                <div className="editinventories__buttons">
+                                    <button className="button editinventory__button">Create a inventory</button>
+                                    <button className="button button--outlined editinventory__button">Enter in a inventory</button>
                                 </div>
-                                <input type="text" name="editprofile__phonenumber" id="editprofile__phonenumber" className="editprofile__input editprofile__phonenumber" />
-                            </div>
-                        </div>
-                        <div className="editprofile__row"></div>
-                        <div className="editprofile__box">
-                            <div className="editprofile__inputbox">
-                                <div className="editprofile__labelbox">
-                                    <span className='editprofile__label'>Email:</span>
-                                    <FaRegEdit className='editprofile__edit' />
+                                <div className="modal__window modal__createinventory">
+                                    <IoClose />
+                                    <h2>Inventories</h2>
+                                    <input type="text" name="createinvenory__name" id="createinvenory__name" className="createinvenory__name" placeholder='Name:' />
+                                    <input type="password" name="createinvenory__password" id="createinvenory__password" className="createinvenory__password" placeholder='Password:' />
+                                    <input type="password" name="createinvenory__confirmpassword" id="createinvenory__confirmpassword" className="createinvenory__confirmpassword" placeholder='Confirm Password:' />
                                 </div>
-                                <input type="text" name="editprofile__email" id="editprofile__email" className="editprofile__input editprofile__email" />
-                            </div>
-                            <div className="editprofile__inputbox">
-                                <div className="editprofile__labelbox">
-                                    <span className='editprofile__label'>Birth Date:</span>
-                                    <FaRegEdit className='editprofile__edit' />
-                                </div>
-                                <input type="date" name="editprofile__birthdate" id="editprofile__birthdate" className="editprofile__input editprofile__birthdate" />
-                            </div>
-                            <div className="editprofile__labelbox">
-                                <span className='editprofile__label'>Location:</span>
-                                <FaRegEdit className='editprofile__edit' />
-                            </div>
-                            <input type="text" name="editprofile__location" id="editprofile__location" className="editprofile__input editprofile__location" />
-                            <div className="editprofile__labelbox">
-                                <span className='editprofile__label'>Biography:</span>
-                                <FaRegEdit className='editprofile__edit' />
-                            </div>
-                            <input type="text" name="editprofile__biography" id="editprofile__biography" className="editprofile__input editprofile__biography" />
-                            <div className="editprofile__labelbox">
-                                <span className='editprofile__label'>Password:</span>
-                                <FaRegEdit className='editprofile__edit' />
-                            </div>
-                            <input type="password" name="editprofile__password" id="editprofile__password" className="editprofile__input editprofile__password" />
-                        </div>
-
+                            </div>}
                     </div>
-                    {/* <div className="modal__window modal__editinventories">
-                        <IoClose />
-                        <h2>Inventories</h2>
-                        <div className="editinventories__inventories editinventories__row1">
-                            <div className="editinventories__row">
-                                <span>Inventory 1</span>
-                                <div className="editinventories__members">
-                                    <FaUser />
-                                    <span>3</span>
-                                </div>
-                            </div>
-                            <div className="editinventories__row editinventories__row2">
-                                <span>ID: 5652592995599</span>
-                            </div>
-                            <div className="editinventories__row editinventories__row3">
-                                <div className="editinventories__details">
-                                    <div className="editinventories__buy">
-                                        <MdOutlineShoppingCart />
-                                        <span>24</span>
-                                    </div>
-                                    <div className="editinventories__stock">
-                                        <BsBoxSeam />
-                                        <span>3</span>
-                                    </div>
-                                    <div className="editinventories__sale">
-                                        <RiMoneyDollarCircleLine />
-                                        <span>5</span>
-                                    </div>
-                                </div>
-                                <IoEnterOutline className='editinventories__enter' />
-                            </div>
-                        </div>
-                        <span>Or</span>
-                        <div className="editinventories__buttons">
-                            <button className="button editinventory__button">Create a inventory</button>
-                            <button className="button button--outlined editinventory__button">Enter in a inventory</button>
-                        </div>
-                        <div className="modal__window modal__createinventory">
-                            <IoClose />
-                            <h2>Inventories</h2>
-                            <input type="text" name="createinvenory__name" id="createinvenory__name" className="createinvenory__name" placeholder='Name:' />
-                            <input type="password" name="createinvenory__password" id="createinvenory__password" className="createinvenory__password" placeholder='Password:' />
-                            <input type="password" name="createinvenory__confirmpassword" id="createinvenory__confirmpassword" className="createinvenory__confirmpassword" placeholder='Confirm Password:' />
-                        </div>
-                    </div> */}
                     <div className="modal__window modal__createinventory">
                         <IoClose />
                         <h2>Inventories</h2>
