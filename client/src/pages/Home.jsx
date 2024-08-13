@@ -532,7 +532,7 @@ function Home() {
                                 </div>
                             </>
                         )}
-                        <a className="credits" href="https://github.com/Alan-Tomaz" target='_blank'>Created By <span>Alan Tomaz</span></a>
+                        <p className="credits" >Created By <a href="https://github.com/Alan-Tomaz" target='_blank'>Alan Tomaz</a></p>
                     </aside>
                     <nav className='home__navbar'>
                         <div className="navbar__search" style={{ visibility: showSearchInput == true ? "visible" : "hidden", opacity: showSearchInput == true ? "1" : "0" }}>

@@ -204,11 +204,11 @@
     font-size: .8rem;
 }
 
-.credits span {
+.credits a {
     text-decoration: none;
 }
 
-.credits span:hover {
+.credits a:hover {
     text-decoration: underline;
 }
 
@@ -420,8 +420,7 @@
     gap: 30px;
     padding: 0 20px;
     grid-template-columns: repeat(12, 1fr);
-    padding-top: 4rem;
-    padding-bottom: 2rem;
+
 }
 
 .card {
@@ -461,8 +460,11 @@
 /* Small Devices = 600 */
 
 @media screen and (max-width:600px) {
+
+
     .home {
         grid-template-columns: 200px 1fr;
+        overflow-x: auto;
     }
 
     .home__withoutsidebar {
@@ -515,4 +517,17 @@
         overflow-y: auto;
     }
 
+    .section__content {
+        padding: 0 10px;
+        padding-top: 4rem;
+        padding-bottom: 2rem;
+        grid-template-columns: 1fr;
+    }
+
+    .card--xsm,
+    .card--sm,
+    .card--md,
+    .card--bg {
+        grid-column: span 12;
+    }
 }
