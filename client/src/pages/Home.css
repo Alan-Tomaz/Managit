@@ -419,6 +419,8 @@
     display: grid;
     gap: 30px;
     padding: 0 20px;
+    padding-top: 4rem;
+    padding-bottom: 2rem;
     grid-template-columns: repeat(12, 1fr);
 
 }
@@ -496,17 +498,14 @@
         display: none;
     }
 
-    .navbar__content {
-        margin-right: 3rem;
-    }
-
     .profile__options {
         right: 0;
     }
 
     .home__navbar {
         min-width: initial;
-        width: 100vw;
+        width: 100%;
+        justify-content: end;
         padding-right: 1rem;
     }
 
@@ -522,6 +521,11 @@
         padding-top: 4rem;
         padding-bottom: 2rem;
         grid-template-columns: 1fr;
+        width: calc(100vw - 50px);
+    }
+
+    .card {
+        width: auto;
     }
 
     .card--xsm,
