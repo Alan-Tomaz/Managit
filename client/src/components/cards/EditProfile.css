@@ -167,3 +167,47 @@
     background-color: var(--bg-color);
     border-radius: 5px;
 }
+
+/* ============== MEDIA QUERIES =============== */
+
+/* Medium Devices = 1024 */
+
+@media screen and (max-width: 1024px) {
+    .edit-profile {
+        height: 100%;
+        overflow-y: auto;
+    }
+
+    .edit-profile__close-window {
+        font-size: 2rem;
+    }
+
+}
+
+/* Small Devices = 600 */
+
+@media screen and (max-width:600px) {
+
+    .edit-profile {
+        height: 100%;
+        width: 100%;
+    }
+
+    .editprofile__inputbox-container {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .editprofile__inputbox {
+        width: 100%;
+    }
+
+    .editprofile__box {
+        width: 100%;
+    }
+
+    .editprofile__row {
+        display: none;
+    }
+}

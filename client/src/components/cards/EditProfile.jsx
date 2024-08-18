@@ -32,7 +32,9 @@ function EditProfile({ closeWindow }) {
 
     return (
         <div className="edit-profile">
-            <IoClose className='edit-profile__close-window' onClick={closeWindow} />
+            <div className="edit-profile__close-window">
+                <IoClose onClick={closeWindow} />
+            </div>
             <h2 className='edit-profile__title'>Profile</h2>
             <div className="editprofile__imgbox__container">
                 <div className="editprofile__imgbox">

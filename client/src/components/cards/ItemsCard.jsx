@@ -92,146 +92,151 @@ function ItemsCard({ option = 0 }) {
                         <div className="button stockmenu__button" style={{ display: option != 7 ? 'flex' : 'none' }}>{option == 0 ? "New Order" : option == 1 ? "New Product" : option == 2 ? 'New Category' : option == 3 ? 'New Supplier' : option == 4 ? 'New Order' : option == 5 ? 'New Order' : option == 6 ? 'New User' : 'New Type'}</div>
                     </div>
                 </div>
-                <div className="stock__tags">
-                    <div className="stock__tag">
-                        <span>Active, Out of Stock</span>
-                        <div className="stock__vl"></div>
-                        <HiOutlineXMark className='stock__tag-mark' />
+                <div className="stock__container">
+                    <div className="stock__info">
+                        <div className="stock__tags">
+                            <div className="stock__tag">
+                                <span>Active, Out of Stock</span>
+                                <div className="stock__vl"></div>
+                                <HiOutlineXMark className='stock__tag-mark' />
+                            </div>
+                        </div>
+                        <p className="stock__info__content">Total Products: 67</p>
                     </div>
-                </div>
-                <div className="stock__items">
-                    <div className="stockitems__header stock__item" style={{ gridTemplateColumns: option == 0 ? 'min-content 65px 250px 100px 100px 50px 100px 1fr 100px' : option == 1 ? 'min-content 65px 200px 100px 100px 100px 80px 1fr 100px 100px' : option == 2 ? 'min-content 250px 1fr 100px' : option == 3 ? 'min-content 250px 1fr 100px' : option == 4 ? 'min-content 100px 100px 100px 100px 100px 1fr 100px 100px' : option == 5 ? 'min-content 100px 100px 100px 100px 100px 1fr 100px 100px' : option == 6 ? 'min-content 65px 50px 100px 100px 100px 100px 100px 1fr 100px' : option == 7 ? 'min-content 50px 100px 100px 1fr 100px' : 0 }}>
-                        <div className="stockitem__select" onClick={handleSelectAllItems}></div>
-                        {(option != 2 && option != 3 && option != 4 && option != 5 && option != 7) &&
-                            <div className=""></div>
-                        }
-                        {(option == 4 || option == 5 || option == 6 || option == 7) &&
-                            <p className="stockitem__productnumber stockitem__productnumber--header stockitem__product--header">Nº</p>
-                        }
-                        {(option == 6 || option == 7) &&
-                            <p className="stockitem__productusername stockitem__username--header stockitem__product--header">Username</p>
-                        }
-                        {option == 6 &&
-                            <p className="stockitem__userpermission stockitem__userpermission--header stockitem__product--header">Permission</p>
-                        }
-                        {(option == 4 || option == 5 || option == 6) &&
-                            <p className="stockitem__productcreationdate stockitem__productcreationdate--header stockitem__product--header">Creation Date</p>
-                        }
-                        {option == 6 &&
-                            <p className="stockitem__userlastaccess stockitem__userlastaccess--header stockitem__product--header">Last Access</p>
-                        }
-                        {option == 6 &&
-                            <p className="stockitem__userblocked stockitem__userblocked--header stockitem__product--header">Blocked</p>
-                        }
-                        {(option == 1 || option == 0) &&
-                            <p className="stockitem__productname stockitem__productname--header stockitem__product--header">Product Name</p>
-                        }
-                        {(option == 1 || option == 0 || option == 2 || option == 4 || option == 5) &&
-                            <p className="stockitem__productcategory stockitem__productcategory--header stockitem__product--header ">Category</p>
-                        }
-                        {(option == 1 || option == 3 || option == 4 || option == 5) &&
-                            <p className="stockitem__productsupplier stockitem__productsupplier--header stockitem__product--header ">Supplier</p>
-                        }
-                        {(option == 0 || option == 1) &&
-                            <p className="stockitem__productcode stockitem__productcode--header stockitem__product--header">Code</p>
-                        }
-                        {option == 0 &&
-                            <p className="stockitem__productqnt stockitem__productqnt--header stockitem__product--header">Qnt</p>
-                        }
-                        {(option == 0 || option == 1 || option == 5) &&
-                            < p className="stockitem__productsellprice stockitem__productsellprice--header stockitem__product--header">Sell Price</p>
-                        }
-                        {(option == 4) &&
-                            < p className="stockitem__productbuyprice stockitem__productbuyprice--header stockitem__product--header">Buy Price</p>
-                        }
-                        {option == 7 &&
-                            <p className="stockitem__logdate stockitem__logdate--header stockitem__product--header">Date</p>
-                        }
-                        {option != 6 &&
-                            <p className="stockitem__productdescription stockitem__productdescription--header stockitem__product--header">Description</p>
-                        }
-                        {(option == 6 || option == 7) &&
-                            <div></div>
-                        }
-                        {(option == 1) &&
-                            <p className="stockitem__productstatus--header stockitem__product--header">Status</p>
-                        }
-                        {(option == 4 || option == 5) &&
-                            <p className="stockitem__productorder--header stockitem__product--header">Order</p>
-                        }
-                        {(option != 7) &&
-                            <div className="stockitem__productsdelete button" style={{ display: "none" }}>Delete</div>
-                        }
-                    </div>
-                    <div className="stock__items-container">
-                        <div className="stock__item" style={{ gridTemplateColumns: option == 0 ? 'min-content 65px 250px 100px 100px 50px 100px 1fr 100px' : option == 1 ? 'min-content 65px 200px 100px 100px 100px 80px 1fr 100px 100px' : option == 2 ? 'min-content 250px 1fr 100px' : option == 3 ? 'min-content 250px 1fr 100px' : option == 4 ? 'min-content 100px 100px 100px 100px 100px 1fr 100px 100px' : option == 5 ? 'min-content 100px 100px 100px 100px 100px 1fr 100px 100px' : option == 6 ? 'min-content 65px 50px 100px 100px 100px 100px 100px 1fr 100px' : option == 7 ? 'min-content 50px 100px 100px 1fr 100px' : 0 }}>
-                            <div className="stockitem__select" onClick={(e) => handleSelectItem(e)}></div>
+                    <div className="stock__items">
+                        <div className="stockitems__header stock__item" style={{ gridTemplateColumns: option == 0 ? 'min-content 65px 250px 100px 100px 50px 100px 1fr 100px' : option == 1 ? 'min-content 65px 200px 100px 100px 100px 80px 1fr 100px 100px' : option == 2 ? 'min-content 250px 1fr 100px' : option == 3 ? 'min-content 250px 1fr 100px' : option == 4 ? 'min-content 100px 100px 100px 100px 100px 1fr 100px 100px' : option == 5 ? 'min-content 100px 100px 100px 100px 100px 1fr 100px 100px' : option == 6 ? 'min-content 65px 50px 100px 100px 100px 100px 100px 1fr 100px' : option == 7 ? 'min-content 50px 100px 100px 1fr 100px' : 0 }}>
+                            <div className="stockitem__select" onClick={handleSelectAllItems}></div>
                             {(option != 2 && option != 3 && option != 4 && option != 5 && option != 7) &&
-                                < img src={Tshirt} className='stockitem__img' />
+                                <div className=""></div>
                             }
                             {(option == 4 || option == 5 || option == 6 || option == 7) &&
-                                <p className="stockitem__productnumber">1</p>
+                                <p className="stockitem__productnumber stockitem__productnumber--header stockitem__product--header">Nº</p>
                             }
                             {(option == 6 || option == 7) &&
-                                <p className="stockitem__username">John Roger</p>
+                                <p className="stockitem__productusername stockitem__username--header stockitem__product--header">Username</p>
                             }
                             {option == 6 &&
-                                <p className="stockitem__userpermission">Administrator</p>
+                                <p className="stockitem__userpermission stockitem__userpermission--header stockitem__product--header">Permission</p>
                             }
                             {(option == 4 || option == 5 || option == 6) &&
-                                <p className="stockitem__productcreationdate">July 1, 2024</p>
+                                <p className="stockitem__productcreationdate stockitem__productcreationdate--header stockitem__product--header">Creation Date</p>
+                            }
+                            {option == 6 &&
+                                <p className="stockitem__userlastaccess stockitem__userlastaccess--header stockitem__product--header">Last Access</p>
+                            }
+                            {option == 6 &&
+                                <p className="stockitem__userblocked stockitem__userblocked--header stockitem__product--header">Blocked</p>
                             }
                             {(option == 1 || option == 0) &&
-                                <p className="stockitem__productname">Example Example Example</p>
+                                <p className="stockitem__productname stockitem__productname--header stockitem__product--header">Product Name</p>
                             }
                             {(option == 1 || option == 0 || option == 2 || option == 4 || option == 5) &&
-                                <p className="stockitem__productcategory">CATEGORY</p>
-                            }
-                            {option == 7 &&
-                                <p className="stockitem__logdate">July 1, 2024</p>
+                                <p className="stockitem__productcategory stockitem__productcategory--header stockitem__product--header ">Category</p>
                             }
                             {(option == 1 || option == 3 || option == 4 || option == 5) &&
-                                < div className="stockitem__productsupplier stockitem__productsupplier--active">Dress Store</div>
+                                <p className="stockitem__productsupplier stockitem__productsupplier--header stockitem__product--header ">Supplier</p>
                             }
                             {(option == 0 || option == 1) &&
-                                <p className="stockitem__productcode">Code</p>
+                                <p className="stockitem__productcode stockitem__productcode--header stockitem__product--header">Code</p>
                             }
                             {option == 0 &&
-                                <p className="stockitem__productqnt">17</p>
-                            }
-                            {option == 6 &&
-                                <p className="stockitem__userlastaccess">July 6, 2024</p>
-                            }
-                            {option == 6 &&
-                                <p className="stockitem__userblocked">Yes</p>
+                                <p className="stockitem__productqnt stockitem__productqnt--header stockitem__product--header">Qnt</p>
                             }
                             {(option == 0 || option == 1 || option == 5) &&
-                                <p className="stockitem__productsellprice">$24.00</p>
+                                < p className="stockitem__productsellprice stockitem__productsellprice--header stockitem__product--header">Sell Price</p>
                             }
                             {(option == 4) &&
-                                <p className="stockitem__productbuyprice">$24.00</p>
+                                < p className="stockitem__productbuyprice stockitem__productbuyprice--header stockitem__product--header">Buy Price</p>
+                            }
+                            {option == 7 &&
+                                <p className="stockitem__logdate stockitem__logdate--header stockitem__product--header">Date</p>
                             }
                             {option != 6 &&
-                                <p className="stockitem__productdescription">{`Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus consequuntur praesentium animi quaerat quae perspiciatis, amet voluptates blanditiis corporis facilis eos natus nihil. Dolorem, reiciendis! Commodi, exercitationem nostrum veritatis suscipit et tempora consequuntur odit eaque totam dolorem enim aspernatur quasi fuga eius deleniti possimus dolores expedita aliquam rem ipsam maxime! Rem, accusantium odio quae dolorem expedita voluptatibus, dignissimos illo, reprehenderit numquam facere molestiae excepturi ullam fugiat quos omnis? Earum repellendus explicabo sint voluptatibus, illum ea magni qui laudantium neque doloribus maxime debitis nisi. Dolor deserunt maxime in alias architecto reiciendis doloribus. Incidunt, recusandae facere. Eius saepe iste optio deleniti nostrum.`.slice(0, 30)}...</p>
-                            }
-                            {(option == 1) &&
-                                <div className="stockitem__productstatus stockitem__productstatus--active">Active</div>
-                            }
-                            {(option == 4 || option == 5) &&
-                                <div className="stockitem__productorder stockitem__productorder"></div>
+                                <p className="stockitem__productdescription stockitem__productdescription--header stockitem__product--header">Description</p>
                             }
                             {(option == 6 || option == 7) &&
                                 <div></div>
                             }
+                            {(option == 1) &&
+                                <p className="stockitem__productstatus--header stockitem__product--header">Status</p>
+                            }
+                            {(option == 4 || option == 5) &&
+                                <p className="stockitem__productorder--header stockitem__product--header">Order</p>
+                            }
                             {(option != 7) &&
-                                <div className="stockitem__productoptions">
-                                    <div className="stockitem__productremove"><MdModeEditOutline /></div>
-                                    <div className="stockitem__productremove" ><MdRemove /></div>
-                                </div>
+                                <div className="stockitem__productsdelete button" style={{ display: "none" }}>Delete</div>
                             }
                         </div>
+                        <div className="stock__items-container">
+                            <div className="stock__item" style={{ gridTemplateColumns: option == 0 ? 'min-content 65px 250px 100px 100px 50px 100px 1fr 100px' : option == 1 ? 'min-content 65px 200px 100px 100px 100px 80px 1fr 100px 100px' : option == 2 ? 'min-content 250px 1fr 100px' : option == 3 ? 'min-content 250px 1fr 100px' : option == 4 ? 'min-content 100px 100px 100px 100px 100px 1fr 100px 100px' : option == 5 ? 'min-content 100px 100px 100px 100px 100px 1fr 100px 100px' : option == 6 ? 'min-content 65px 50px 100px 100px 100px 100px 100px 1fr 100px' : option == 7 ? 'min-content 50px 100px 100px 1fr 100px' : 0 }}>
+                                <div className="stockitem__select" onClick={(e) => handleSelectItem(e)}></div>
+                                {(option != 2 && option != 3 && option != 4 && option != 5 && option != 7) &&
+                                    < img src={Tshirt} className='stockitem__img' />
+                                }
+                                {(option == 4 || option == 5 || option == 6 || option == 7) &&
+                                    <p className="stockitem__productnumber">1</p>
+                                }
+                                {(option == 6 || option == 7) &&
+                                    <p className="stockitem__username">John Roger</p>
+                                }
+                                {option == 6 &&
+                                    <p className="stockitem__userpermission">Administrator</p>
+                                }
+                                {(option == 4 || option == 5 || option == 6) &&
+                                    <p className="stockitem__productcreationdate">July 1, 2024</p>
+                                }
+                                {(option == 1 || option == 0) &&
+                                    <p className="stockitem__productname">Example Example Example</p>
+                                }
+                                {(option == 1 || option == 0 || option == 2 || option == 4 || option == 5) &&
+                                    <p className="stockitem__productcategory">CATEGORY</p>
+                                }
+                                {option == 7 &&
+                                    <p className="stockitem__logdate">July 1, 2024</p>
+                                }
+                                {(option == 1 || option == 3 || option == 4 || option == 5) &&
+                                    < div className="stockitem__productsupplier stockitem__productsupplier--active">Dress Store</div>
+                                }
+                                {(option == 0 || option == 1) &&
+                                    <p className="stockitem__productcode">Code</p>
+                                }
+                                {option == 0 &&
+                                    <p className="stockitem__productqnt">17</p>
+                                }
+                                {option == 6 &&
+                                    <p className="stockitem__userlastaccess">July 6, 2024</p>
+                                }
+                                {option == 6 &&
+                                    <p className="stockitem__userblocked">Yes</p>
+                                }
+                                {(option == 0 || option == 1 || option == 5) &&
+                                    <p className="stockitem__productsellprice">$24.00</p>
+                                }
+                                {(option == 4) &&
+                                    <p className="stockitem__productbuyprice">$24.00</p>
+                                }
+                                {option != 6 &&
+                                    <p className="stockitem__productdescription">{`Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus consequuntur praesentium animi quaerat quae perspiciatis, amet voluptates blanditiis corporis facilis eos natus nihil. Dolorem, reiciendis! Commodi, exercitationem nostrum veritatis suscipit et tempora consequuntur odit eaque totam dolorem enim aspernatur quasi fuga eius deleniti possimus dolores expedita aliquam rem ipsam maxime! Rem, accusantium odio quae dolorem expedita voluptatibus, dignissimos illo, reprehenderit numquam facere molestiae excepturi ullam fugiat quos omnis? Earum repellendus explicabo sint voluptatibus, illum ea magni qui laudantium neque doloribus maxime debitis nisi. Dolor deserunt maxime in alias architecto reiciendis doloribus. Incidunt, recusandae facere. Eius saepe iste optio deleniti nostrum.`.slice(0, 30)}...</p>
+                                }
+                                {(option == 1) &&
+                                    <div className="stockitem__productstatus stockitem__productstatus--active">Active</div>
+                                }
+                                {(option == 4 || option == 5) &&
+                                    <div className="stockitem__productorder stockitem__productorder"></div>
+                                }
+                                {(option == 6 || option == 7) &&
+                                    <div></div>
+                                }
+                                {(option != 7) &&
+                                    <div className="stockitem__productoptions">
+                                        <div className="stockitem__productremove"><MdModeEditOutline /></div>
+                                        <div className="stockitem__productremove" ><MdRemove /></div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
                     </div>
-                </div>
+                </div >
             </div >
             <div className="stock__pages card--bg">
                 <div className="stock__page stock__page-back"><IoIosArrowBack /></div>

@@ -59,6 +59,7 @@
     top: 70px;
     left: 0;
     width: 100%;
+    z-index: 1010;
 }
 
 .new-order__type-selection p {
@@ -304,4 +305,50 @@
 .new-type__button {
     margin-top: 2rem;
     align-self: center;
+}
+
+/* ============== MEDIA QUERIES =============== */
+
+/* Medium Devices = 1024 */
+
+@media screen and (max-width: 1024px) {
+
+    .new-order {
+        height: 100%;
+    }
+
+    .new-order__container {
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+    }
+
+    .new-type__vl {
+        display: none;
+    }
+
+    .new-type__button {
+        height: 80px;
+        margin-top: 0rem;
+    }
+}
+
+/* Small Devices = 600 */
+
+@media screen and (max-width:600px) {
+
+    .new-order {
+        height: 100%;
+        width: 100%;
+    }
+
+    .new-order__form {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .new-order__container {
+        overflow-x: auto;
+    }
+
 }

@@ -48,7 +48,7 @@ function Home() {
     const [showNavbarOptions, setShowNavbarOptions] = useState(false);
     const [showNavbarNotifications, setShowNavbarNotifications] = useState(false);
     const [showSearchInput, setShowSearchInput] = useState(false);
-    const [showModal, setShowModal] = useState('');
+    const [showModal, setShowModal] = useState('create-products');
 
     const dispatch = useDispatch();
     const apiUrl = useSelector((state) => state.MiscReducer.apiUrl);
@@ -561,15 +561,15 @@ function Home() {
                                     </div>
                                 </div>
                             </div>
-                            <div className="navbar__profile" onClick={handleShowProfileOptions}>
+                            <div className="navbar__profile" onClick={handleShowProfileOptions} ref={profileRef}>
                                 <div className="profile__container">
-                                    <div className="profile__image">
+                                    <div className="profile__image" >
                                         <img src={`${imgPaths}${userInfo.picturePath}`} alt="profile-image" />
                                     </div>
                                     <span className='profile__name'>{userInfo.name}</span>
                                     <IoMdArrowDropdown className='profile__arrow' />
                                 </div>
-                                <div className="profile__options" ref={profileRef} style={{ display: showNavbarOptions == true ? "flex" : "none" }}>
+                                <div className="profile__options" style={{ display: showNavbarOptions == true ? "flex" : "none" }}>
                                     <span className="profile__option profile__inventories">Inventories</span>
                                     <span className="profile__option profile__edit">Edit Profile</span>
                                     <span className="profile__option profile__logout" onClick={logoutUser}>Logout</span>

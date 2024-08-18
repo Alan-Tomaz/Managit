@@ -16,6 +16,8 @@ import NewOrder from '../cards/NewOrder';
 
 function Dashboard() {
 
+    const { innerWidth: width, innerHeight: height } = window
+
     const setLabels = [["0", "5", "10", "15", "20", "25", "30"], ["0", "10", "20", "30", "40", "50", "60", "70", "80", "90"], ["Jan", "Feb", "Mar", "Apr", "May", "Jun"], ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Set", "Oct", "Nov", "Dec"]]
     const setData = [[[7000, 2000, 10000, 13000, 9000, 4000, 8000], [7000, 10000, 9000, 5000, 3000, 13000, 15000, 7000, 19000, 18000], [9000, 13000, 19000, 7000, 13000, 17000], [9000, 13000, 19000, 7000, 13000, 17000, 4500, 14354, 17000, 18000, 12000, 16000, 10000]], [[3000, 700, 5000, 10000, 16000, 10000, 13000], [14000, 5000, 16000, 10000, 7000, 6000, 9000, 15000, 9000, 13000], [15000, 10000, 13000, 19000, 15600, 11000], [9000, 16000, 13000, 14000, 12000, 8000, 9000, 12000, 13000, 19000, 17000, 15000]]]
 
@@ -91,12 +93,20 @@ function Dashboard() {
         switch (option) {
             case 0:
                 if (scrollContainerRef1.current) {
-                    scrollContainerRef1.current.scrollBy({ left: -300, behavior: 'smooth' });
+                    if (innerWidth > 400) {
+                        scrollContainerRef1.current.scrollBy({ left: -300, behavior: 'smooth' });
+                    } else {
+                        scrollContainerRef1.current.scrollBy({ left: -120, behavior: 'smooth' });
+                    }
                 }
                 break;
             case 1:
                 if (scrollContainerRef1.current) {
-                    scrollContainerRef1.current.scrollBy({ left: 300, behavior: 'smooth' });
+                    if (innerWidth > 400) {
+                        scrollContainerRef1.current.scrollBy({ left: 300, behavior: 'smooth' });
+                    } else {
+                        scrollContainerRef1.current.scrollBy({ left: 120, behavior: 'smooth' });
+                    }
                 }
                 break;
         }
@@ -106,12 +116,20 @@ function Dashboard() {
         switch (option) {
             case 0:
                 if (scrollContainerRef2.current) {
-                    scrollContainerRef2.current.scrollBy({ left: -300, behavior: 'smooth' });
+                    if (innerWidth > 400) {
+                        scrollContainerRef2.current.scrollBy({ left: -300, behavior: 'smooth' });
+                    } else {
+                        scrollContainerRef2.current.scrollBy({ left: -120, behavior: 'smooth' });
+                    }
                 }
                 break;
             case 1:
                 if (scrollContainerRef2.current) {
-                    scrollContainerRef2.current.scrollBy({ left: 300, behavior: 'smooth' });
+                    if (innerWidth > 400) {
+                        scrollContainerRef2.current.scrollBy({ left: 300, behavior: 'smooth' });
+                    } else {
+                        scrollContainerRef2.current.scrollBy({ left: 120, behavior: 'smooth' });
+                    }
                 }
                 break;
         }

@@ -38,3 +38,74 @@
     font-size: 2.2rem;
     font-weight: var(--font-semi-bold);
 }
+
+/* ============== MEDIA QUERIES =============== */
+
+/* Medium Devices = 1024 */
+
+@media screen and (max-width: 1024px) {
+
+    .stock-info__card,
+    .doughnut-chart__info {
+        justify-self: center;
+        grid-column: span 12;
+        width: 80%;
+    }
+
+    .stock-info__range {
+        height: 100px;
+        font-size: 5rem;
+    }
+
+    .stock-info__card {
+        gap: 1rem;
+    }
+
+    .stock-info__card h3 {
+        font-size: 1.8rem;
+    }
+
+    .stock-info__card h2 {
+        font-size: 1.5rem;
+    }
+
+    .stock-info__card h2:last-of-type {
+        margin-bottom: 1rem;
+    }
+}
+
+/* Small Devices = 600 */
+
+@media screen and (max-width:600px) {
+
+    .stock-info__card,
+    .doughnut-chart__info {
+        justify-self: auto;
+        width: calc(100vw - 70px);
+    }
+
+    .doughnut-chart__info h3 {
+        font-size: 1rem;
+    }
+
+    .stock-info__range {
+        height: 40%;
+        font-size: 7rem;
+    }
+
+    .stock-info__card {
+        gap: 1rem;
+    }
+
+    .stock-info__card h3 {
+        font-size: 2rem;
+    }
+
+    .stock-info__card h2 {
+        font-size: 1.5rem;
+    }
+
+    .stock-info__card h2:last-of-type {
+        margin-bottom: 1rem;
+    }
+}

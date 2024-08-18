@@ -457,7 +457,22 @@
 
 /* Medium Devices = 1024 */
 
-@media screen and (max-width: 1024px) {}
+@media screen and (max-width: 1024px) {
+
+    .card--xsm,
+    .card--sm {
+        grid-column: span 6;
+    }
+
+    .card--bg,
+    .card--md {
+        grid-column: span 12;
+    }
+
+    .modal__window {
+        padding: 2rem 0;
+    }
+}
 
 /* Small Devices = 600 */
 
@@ -525,7 +540,7 @@
     }
 
     .card {
-        width: auto;
+        width: calc(100vw - 70px);
     }
 
     .card--xsm,
@@ -533,5 +548,9 @@
     .card--md,
     .card--bg {
         grid-column: span 12;
+    }
+
+    .modal__window {
+        padding: 2rem 1rem;
     }
 }

@@ -159,3 +159,40 @@
     margin-top: 1rem;
     width: 160px;
 }
+
+/* ============== MEDIA QUERIES =============== */
+
+/* Medium Devices = 1024 */
+
+@media screen and (max-width: 1024px) {}
+
+/* Small Devices = 600 */
+
+@media screen and (max-width:600px) {
+
+    .editinventories {
+        min-width: 300px;
+        max-width: 450px;
+        width: 90%;
+    }
+
+    .editinventories__buttons {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .createinventory {
+        width: 300px;
+    }
+
+    .enterinventory {
+        width: 300px;
+    }
+
+    .createinventory__close,
+    .enterinventory__close {
+        font-size: 1.6rem !important;
+    }
+}

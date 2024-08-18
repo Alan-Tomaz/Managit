@@ -213,7 +213,7 @@
     }
 
     .dashboard__card--bg {
-        width: calc(100vw - 60px);
+        width: calc(100vw - 70px);
         height: 100%;
         overflow-x: auto;
     }
