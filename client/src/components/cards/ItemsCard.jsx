@@ -51,7 +51,15 @@ function ItemsCard({ option = 0 }) {
         status: 0,
         category: {},
         supplier: {},
-        blocked: 0
+        blocked: 0,
+        option0: 'min-content 65px 250px 100px 100px 50px 100px 1fr 100px',
+        option1: 'min-content 65px 200px 100px 100px 100px 80px 1fr 100px 100px',
+        option2: 'min-content 250px 1fr 100px',
+        option3: 'min-content 250px 1fr 100px',
+        option4: 'min-content 100px 100px 100px 100px 100px 1fr 100px 100px',
+        option5: 'min-content 100px 100px 100px 100px 100px 1fr 100px 100px',
+        option6: 'min-content 65px 50px 100px 100px 100px 100px 100px 1fr 100px',
+        option7: 'min-content 50px 100px 100px 1fr 100px'
     }
 
     const filterObj = {
@@ -84,13 +92,21 @@ function ItemsCard({ option = 0 }) {
         status: 0,
         category: {},
         supplier: {},
-        blocked: 0
+        blocked: 0,
+        option0: 'min-content 65px 250px 100px 100px 50px 100px 1fr 100px',
+        option1: 'min-content 65px 200px 100px 100px 100px 80px 1fr 100px 100px',
+        option2: 'min-content 250px 1fr 100px',
+        option3: 'min-content 250px 1fr 100px',
+        option4: 'min-content 100px 100px 100px 100px 100px 1fr 100px 100px',
+        option5: 'min-content 100px 100px 100px 100px 100px 1fr 100px 100px',
+        option6: 'min-content 65px 50px 100px 100px 100px 100px 100px 1fr 100px',
+        option7: 'min-content 50px 100px 100px 1fr 100px'
     }
 
     const [chooseSelection, setChooseSelection] = useState('columns');
     const [filter, setFilter] = useState(filterObj)
     const [showFilterOptions, setShowFilterOptions] = useState(false);
-    const [filterOptionsGrid, setFilterOptionsGrid] = useState(option == 0 ? 'min-content 65px 250px 100px 100px 50px 100px 1fr 100px' : option == 1 ? 'min-content 65px 200px 100px 100px 100px 80px 1fr 100px 100px' : option == 2 ? 'min-content 250px 1fr 100px' : option == 3 ? 'min-content 250px 1fr 100px' : option == 4 ? 'min-content 100px 100px 100px 100px 100px 1fr 100px 100px' : option == 5 ? 'min-content 100px 100px 100px 100px 100px 1fr 100px 100px' : option == 6 ? 'min-content 65px 50px 100px 100px 100px 100px 100px 1fr 100px' : option == 7 ? 'min-content 50px 100px 100px 1fr 100px' : 0)
+    const [filterOptionsGrid, setFilterOptionsGrid] = useState(option == 0 ? filterObj.option0 : option == 1 ? filterObj.option1 : option == 2 ? filterObj.option2 : option == 3 ? filterObj.option3 : option == 4 ? filterObj.option4 : option == 5 ? filterObj.option5 : option == 6 ? filterObj.option6 : option == 7 ? filterObj.option7 : 0)
     const [showButtonMoreOptions, setShowButtonMoreOptions] = useState(false);
     const [isAllItemsSelected, setIsAllItemsSelected] = useState(false);
 
@@ -127,6 +143,21 @@ function ItemsCard({ option = 0 }) {
         target.classList.toggle('stockitem__select--selected');
     }
 
+    const handleClearFilter = () => {
+        setFilter(initialFilterObj);
+        setShowFilterOptions(false);
+    }
+
+    const handleFilter = () => {
+        const newColumns = `min-content ${filterObj.columns.image == true ? '65px ' : ''}${filterObj.columns.productName == true ? '200px ' : ''}${filterObj.columns.category == true ? '100px ' : ''}${filterObj.columns.supplier == true ? '100px ' : ''}${filterObj.columns.code == true ? '100px ' : ''}${filterObj.columns.sellPrice == true ? '80px ' : ''}${filterObj.columns.description == true ? '1fr ' : ''}${filterObj.columns.status == true ? '100px ' : ''}100px`;
+        console.log(newColumns)
+
+        filterObj[`option${option}`] = newColumns;
+        console.log(filterObj);
+        setFilter(filterObj)
+
+    }
+
     const handleUncheckColumn = (column) => {
         switch (column) {
             case 'category':
@@ -134,10 +165,10 @@ function ItemsCard({ option = 0 }) {
 
                 document.querySelectorAll('.filter__option-category').forEach((elem) => {
                     if (elem.classList.contains('filter__option--selected')) {
-                        filterObj.columns.category = false;
+                        filterObj.columns.category = true;
                     }
                     else {
-                        filterObj.columns.category = true;
+                        filterObj.columns.category = false;
                     }
                 })
                 break;
@@ -146,10 +177,10 @@ function ItemsCard({ option = 0 }) {
 
                 document.querySelectorAll('.filter__option-img').forEach((elem) => {
                     if (elem.classList.contains('filter__option--selected')) {
-                        filterObj.columns.image = false;
+                        filterObj.columns.image = true;
                     }
                     else {
-                        filterObj.columns.image = true;
+                        filterObj.columns.image = false;
                     }
                 })
                 break;
@@ -158,10 +189,10 @@ function ItemsCard({ option = 0 }) {
 
                 document.querySelectorAll('.filter__option-product-name').forEach((elem) => {
                     if (elem.classList.contains('filter__option--selected')) {
-                        filterObj.columns.productName = false;
+                        filterObj.columns.productName = true;
                     }
                     else {
-                        filterObj.columns.productName = true;
+                        filterObj.columns.productName = false;
                     }
                 })
                 break;
@@ -170,10 +201,10 @@ function ItemsCard({ option = 0 }) {
 
                 document.querySelectorAll('.filter__option-supplier').forEach((elem) => {
                     if (elem.classList.contains('filter__option--selected')) {
-                        filterObj.columns.supplier = false;
+                        filterObj.columns.supplier = true;
                     }
                     else {
-                        filterObj.columns.supplier = true;
+                        filterObj.columns.supplier = false;
                     }
                 })
                 break;
@@ -182,10 +213,10 @@ function ItemsCard({ option = 0 }) {
 
                 document.querySelectorAll('.filter__option-buy-price').forEach((elem) => {
                     if (elem.classList.contains('filter__option--selected')) {
-                        filterObj.columns.buyPrice = false;
+                        filterObj.columns.buyPrice = true;
                     }
                     else {
-                        filterObj.columns.buyPrice = true;
+                        filterObj.columns.buyPrice = false;
                     }
                 })
                 break;
@@ -194,10 +225,10 @@ function ItemsCard({ option = 0 }) {
 
                 document.querySelectorAll('.filter__option-sell-price').forEach((elem) => {
                     if (elem.classList.contains('filter__option--selected')) {
-                        filterObj.columns.buyPrice = false;
+                        filterObj.columns.buyPrice = true;
                     }
                     else {
-                        filterObj.columns.sellPrice = true;
+                        filterObj.columns.sellPrice = false;
                     }
                 })
                 break;
@@ -206,10 +237,10 @@ function ItemsCard({ option = 0 }) {
 
                 document.querySelectorAll('.filter__option-description').forEach((elem) => {
                     if (elem.classList.contains('filter__option--selected')) {
-                        filterObj.columns.description = false;
+                        filterObj.columns.description = true;
                     }
                     else {
-                        filterObj.columns.description = true;
+                        filterObj.columns.description = false;
                     }
                 })
                 break;
@@ -218,10 +249,10 @@ function ItemsCard({ option = 0 }) {
 
                 document.querySelectorAll('.filter__option-status').forEach((elem) => {
                     if (elem.classList.contains('filter__option--selected')) {
-                        filterObj.columns.status = false;
+                        filterObj.columns.status = true;
                     }
                     else {
-                        filterObj.columns.status = true;
+                        filterObj.columns.status = false;
                     }
                 })
                 break;
@@ -230,10 +261,10 @@ function ItemsCard({ option = 0 }) {
 
                 document.querySelectorAll('.filter__option-number').forEach((elem) => {
                     if (elem.classList.contains('filter__option--selected')) {
-                        filterObj.columns.number = false;
+                        filterObj.columns.number = true;
                     }
                     else {
-                        filterObj.columns.number = true;
+                        filterObj.columns.number = false;
                     }
                 })
                 break;
@@ -242,10 +273,10 @@ function ItemsCard({ option = 0 }) {
 
                 document.querySelectorAll('.filter__option-creation-date').forEach((elem) => {
                     if (elem.classList.contains('filter__option--selected')) {
-                        filterObj.columns.creationDate = false;
+                        filterObj.columns.creationDate = true;
                     }
                     else {
-                        filterObj.columns.creationDate = true;
+                        filterObj.columns.creationDate = false;
                     }
                 })
                 break;
@@ -254,10 +285,10 @@ function ItemsCard({ option = 0 }) {
 
                 document.querySelectorAll('.filter__option-order').forEach((elem) => {
                     if (elem.classList.contains('filter__option--selected')) {
-                        filterObj.columns.order = false;
+                        filterObj.columns.order = true;
                     }
                     else {
-                        filterObj.columns.order = true;
+                        filterObj.columns.order = false;
                     }
                 })
                 break;
@@ -266,10 +297,10 @@ function ItemsCard({ option = 0 }) {
 
                 document.querySelectorAll('.filter__option-blocked').forEach((elem) => {
                     if (elem.classList.contains('filter__option--selected')) {
-                        filterObj.columns.blocked = false;
+                        filterObj.columns.blocked = true;
                     }
                     else {
-                        filterObj.columns.blocked = true;
+                        filterObj.columns.blocked = false;
                     }
                 })
                 break;
@@ -278,10 +309,10 @@ function ItemsCard({ option = 0 }) {
 
                 document.querySelectorAll('.filter__option-username').forEach((elem) => {
                     if (elem.classList.contains('filter__option--selected')) {
-                        filterObj.columns.username = false;
+                        filterObj.columns.username = true;
                     }
                     else {
-                        filterObj.columns.username = true;
+                        filterObj.columns.username = false;
                     }
                 })
                 break;
@@ -290,10 +321,10 @@ function ItemsCard({ option = 0 }) {
 
                 document.querySelectorAll('.filter__option-permission').forEach((elem) => {
                     if (elem.classList.contains('filter__option--selected')) {
-                        filterObj.columns.permission = false;
+                        filterObj.columns.permission = true;
                     }
                     else {
-                        filterObj.columns.permission = true;
+                        filterObj.columns.permission = false;
                     }
                 })
                 break;
@@ -302,10 +333,10 @@ function ItemsCard({ option = 0 }) {
 
                 document.querySelectorAll('.filter__option-last-access').forEach((elem) => {
                     if (elem.classList.contains('filter__option--selected')) {
-                        filterObj.columns.lastAccess = false;
+                        filterObj.columns.lastAccess = true;
                     }
                     else {
-                        filterObj.columns.lastAccess = true;
+                        filterObj.columns.lastAccess = false;
                     }
                 })
                 break;
@@ -314,10 +345,22 @@ function ItemsCard({ option = 0 }) {
 
                 document.querySelectorAll('.filter__option-date').forEach((elem) => {
                     if (elem.classList.contains('filter__option--selected')) {
-                        filterObj.columns.date = false;
+                        filterObj.columns.date = true;
                     }
                     else {
-                        filterObj.columns.date = true;
+                        filterObj.columns.date = false;
+                    }
+                })
+                break;
+            case 'code':
+                document.querySelectorAll('.filter__option-code').forEach((elem) => elem.classList.toggle('filter__option--selected'));
+
+                document.querySelectorAll('.filter__option-code').forEach((elem) => {
+                    if (elem.classList.contains('filter__option--selected')) {
+                        filterObj.columns.code = true;
+                    }
+                    else {
+                        filterObj.columns.code = false;
                     }
                 })
                 break;
@@ -325,7 +368,38 @@ function ItemsCard({ option = 0 }) {
     }
 
     const handleSelectFilter = (otherValue) => {
-
+        switch (otherValue) {
+            case 'admin':
+                document.querySelectorAll('.filter__option-others-permissions').forEach((elem) => elem.classList.remove('filter__option-others--selected'));
+                filterObj.permission = 0;
+                document.querySelectorAll('.filter__option-others-admin').forEach((elem) => elem.classList.add('filter__option-others--selected'));
+                break;
+            case 'user':
+                document.querySelectorAll('.filter__option-others-permissions').forEach((elem) => elem.classList.remove('filter__option-others--selected'));
+                filterObj.permission = 1;
+                document.querySelectorAll('.filter__option-others-user').forEach((elem) => elem.classList.add('filter__option-others--selected'));
+                break;
+            case 'in-stock':
+                document.querySelectorAll('.filter__option-others-status-op').forEach((elem) => elem.classList.remove('filter__option-others--selected'));
+                filterObj.status = 0;
+                document.querySelectorAll('.filter__option-others-instock').forEach((elem) => elem.classList.add('filter__option-others--selected'));
+                break;
+            case 'out-stock':
+                document.querySelectorAll('.filter__option-others-status-op').forEach((elem) => elem.classList.remove('filter__option-others--selected'));
+                filterObj.status = 1;
+                document.querySelectorAll('.filter__option-others-outstock').forEach((elem) => elem.classList.add('filter__option-others--selected'));
+                break;
+            case 'blocked':
+                document.querySelectorAll('.filter__option-others-isblocked').forEach((elem) => elem.classList.remove('filter__option-others--selected'));
+                filterObj.blocked = 0;
+                document.querySelectorAll('.filter__option-others-has-blocked').forEach((elem) => elem.classList.add('filter__option-others--selected'));
+                break;
+            case 'no-blocked':
+                document.querySelectorAll('.filter__option-others-isblocked').forEach((elem) => elem.classList.remove('filter__option-others--selected'));
+                filterObj.blocked = 1;
+                document.querySelectorAll('.filter__option-others-no-blocked').forEach((elem) => elem.classList.add('filter__option-others--selected'));
+                break;
+        }
     }
 
     useEffect(() => {
@@ -575,15 +649,49 @@ function ItemsCard({ option = 0 }) {
                                                 <div className="filter__options-others-status">
                                                     <h4>Status</h4>
                                                     <div className="filter__option-others-status">
-                                                        <div className={`filter__option-others filter__option-others-instock ${filter.columns.status == 0 ? 'filter__option-others--selected' : ''}`} onClick={() => handleSelectFilter('in-stock')}>
+                                                        <div className={`filter__option-others filter__option-others-status-op filter__option-others-instock ${filter.status == 0 ? 'filter__option-others--selected' : ''}`} onClick={() => handleSelectFilter('in-stock')}>
                                                             <div className="filter__option-radio">
                                                             </div>
                                                             <span>In Stock</span>
                                                         </div>
-                                                        <div className={`filter__option-others filter__option-others-outstock ${filter.columns.status == 0 ? 'filter__option-others--selected' : ''}`} onClick={() => handleSelectFilter('out-stock')}>
+                                                        <div className={`filter__option-others filter__option-others-status-op filter__option-others-outstock ${filter.status == 1 ? 'filter__option-others--selected' : ''}`} onClick={() => handleSelectFilter('out-stock')}>
                                                             <div className="filter__option-radio">
                                                             </div>
                                                             <span>Out of Stock</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+                                            {(option == 6) &&
+                                                <div className="filter__options-others-status filter__options-others-permission">
+                                                    <h4>Permission</h4>
+                                                    <div className="filter__option-others-status filter__option-others-permission">
+                                                        <div className={`filter__option-others filter__option-others-permissions filter__option-others-admin ${filter.permission == 0 ? 'filter__option-others--selected' : ''}`} onClick={() => handleSelectFilter('admin')}>
+                                                            <div className="filter__option-radio">
+                                                            </div>
+                                                            <span>Admin</span>
+                                                        </div>
+                                                        <div className={`filter__option-others filter__option-others-permissions filter__option-others-user ${filter.permission == 1 ? 'filter__option-others--selected' : ''}`} onClick={() => handleSelectFilter('user')}>
+                                                            <div className="filter__option-radio">
+                                                            </div>
+                                                            <span>User</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+                                            {(option == 6) &&
+                                                <div className="filter__options-others-status filter__options-others-blocked">
+                                                    <h4>Blocked</h4>
+                                                    <div className="filter__option-others-status filter__option-others-blocked">
+                                                        <div className={`filter__option-others filter__option-others-isblocked filter__option-others-has-blocked ${filter.blocked == 0 ? 'filter__option-others--selected' : ''}`} onClick={() => handleSelectFilter('blocked')}>
+                                                            <div className="filter__option-radio">
+                                                            </div>
+                                                            <span>Yes</span>
+                                                        </div>
+                                                        <div className={`filter__option-others filter__option-others-isblocked filter__option-others-no-blocked ${filter.blocked == 1 ? 'filter__option-others--selected' : ''}`} onClick={() => handleSelectFilter('no-blocked')}>
+                                                            <div className="filter__option-radio">
+                                                            </div>
+                                                            <span>No</span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -592,8 +700,8 @@ function ItemsCard({ option = 0 }) {
                                     }
                                 </div>
                                 <div className="filter__buttons">
-                                    <div className="filter__button button button--outlined">Clear</div>
-                                    <div className="filter__button button">Filter</div>
+                                    <div className="filter__button button button--outlined" onClick={handleClearFilter}>Clear</div>
+                                    <div className="filter__button button" onClick={handleFilter}>Filter</div>
                                 </div>
                             </div>
                         </div>
@@ -686,7 +794,7 @@ function ItemsCard({ option = 0 }) {
                             }
                         </div>
                         <div className="stock__items-container">
-                            <div className="stock__item" style={{ gridTemplateColumns: option == 0 ? 'min-content 65px 250px 100px 100px 50px 100px 1fr 100px' : option == 1 ? 'min-content 65px 200px 100px 100px 100px 80px 1fr 100px 100px' : option == 2 ? 'min-content 250px 1fr 100px' : option == 3 ? 'min-content 250px 1fr 100px' : option == 4 ? 'min-content 100px 100px 100px 100px 100px 1fr 100px 100px' : option == 5 ? 'min-content 100px 100px 100px 100px 100px 1fr 100px 100px' : option == 6 ? 'min-content 65px 50px 100px 100px 100px 100px 100px 1fr 100px' : option == 7 ? 'min-content 50px 100px 100px 1fr 100px' : 0 }}>
+                            <div className="stock__item" style={{ gridTemplateColumns: filterOptionsGrid }}>
                                 <div className="stockitem__select" onClick={(e) => handleSelectItem(e)}></div>
                                 {(option != 2 && option != 3 && option != 4 && option != 5 && option != 7) &&
                                     < img src={Tshirt} className='stockitem__img' />

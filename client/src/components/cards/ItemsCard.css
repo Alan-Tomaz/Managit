@@ -272,11 +272,42 @@
     width: 1rem;
 }
 
-/*  */
-
 .filter__option__input {
     display: flex;
     gap: 1rem;
+}
+
+/*  */
+
+.filter__options-others-status {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+
+.filter__option-others-status {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.filter__option-others {
+    cursor: pointer;
+    display: flex;
+    gap: .5rem;
+}
+
+.filter__option-radio {
+    width: 20px;
+    height: 20px;
+    border-radius: 100%;
+    border: 2px solid rgba(0, 0, 0, .3);
+}
+
+.filter__option-others--selected .filter__option-radio {
+    background-color: var(--color-primary);
 }
 
 .filter__buttons {
