@@ -4,7 +4,7 @@ import { RiMoneyDollarCircleLine } from "react-icons/ri";
 import { GrMoney } from "react-icons/gr";
 import { LuBoxes } from "react-icons/lu";
 import { DiDropbox } from "react-icons/di";
-import { IoIosArrowBack, IoIosArrowForward, IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
+import { IoIosArrowBack, IoIosArrowForward, IoIosArrowDown, IoIosArrowUp, IoMdArrowDropup } from "react-icons/io";
 import MdTopProducts from '../cards/MdTopProducts';
 /* CHART */
 import Chart from "chart.js/auto";
@@ -250,10 +250,11 @@ function Dashboard() {
 
                             </div>
                             <div className="chart__time" style={{ display: isShowingChartPopup == false ? "none" : "flex" }}>
-                                <div className='chart-time__options' onClick={() => handleChangeChart(0)}>Last 30 Days</div>
-                                <div className='chart-time__options' onClick={() => handleChangeChart(1)}>Last 90 Days</div>
-                                <div className='chart-time__options' onClick={() => handleChangeChart(2)}>Last 6 Months</div>
-                                <div className='chart-time__options' onClick={() => handleChangeChart(3)}>Last Year</div>
+                                <p className='chart-time__options' onClick={() => handleChangeChart(0)}>Last 30 Days</p>
+                                <p className='chart-time__options' onClick={() => handleChangeChart(1)}>Last 90 Days</p>
+                                <p className='chart-time__options' onClick={() => handleChangeChart(2)}>Last 6 Months</p>
+                                <p className='chart-time__options' onClick={() => handleChangeChart(3)}>Last Year</p>
+                                <IoMdArrowDropup className='chart-time__arrow' />
                             </div>
                         </div>
                     </div>

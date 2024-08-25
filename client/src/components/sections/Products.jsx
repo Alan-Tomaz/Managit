@@ -3,7 +3,7 @@ import ItemsCard from '../cards/ItemsCard'
 
 function Products() {
     return (
-        < >
+        <>
             <ItemsCard option={1} />
         </>
     )

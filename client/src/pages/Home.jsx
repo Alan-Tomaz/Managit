@@ -48,7 +48,7 @@ function Home() {
     const [showNavbarOptions, setShowNavbarOptions] = useState(false);
     const [showNavbarNotifications, setShowNavbarNotifications] = useState(false);
     const [showSearchInput, setShowSearchInput] = useState(false);
-    const [showModal, setShowModal] = useState('create-products');
+    const [showModal, setShowModal] = useState('');
 
     const dispatch = useDispatch();
     const apiUrl = useSelector((state) => state.MiscReducer.apiUrl);
@@ -65,6 +65,7 @@ function Home() {
     const handleChangeSection = (section) => {
         switch (section) {
             case 0:
+
                 navigate("/home/dashboard");
                 handleCloseMoreOptions("dashboard");
                 setSectionDisplay("dashboard");
@@ -291,6 +292,10 @@ function Home() {
                 setIsSidebarStopped(false);
                 setIsSidebarOpen(false)
 
+                /* FIXED */
+                document.querySelectorAll(".home__navbar").forEach((sidebar) => sidebar.classList.toggle("home__navbar-sidebar--open"))
+                document.querySelectorAll(".home__section").forEach((sidebar) => sidebar.classList.toggle("home__section-sidebar--open"))
+                /*  */
                 document.querySelectorAll(".home").forEach((item) => {
                     item.classList.toggle("home__withoutsidebar");
                 })
@@ -336,6 +341,10 @@ function Home() {
                         break;
                 }
 
+                /* FIXED */
+                document.querySelectorAll(".home__navbar").forEach((sidebar) => sidebar.classList.remove("home__navbar-sidebar--open"))
+                document.querySelectorAll(".home__section").forEach((sidebar) => sidebar.classList.remove("home__section-sidebar--open"))
+                /*  */
                 document.querySelectorAll(".home").forEach((item) => {
                     item.classList.remove("home__withoutsidebar");
                 })
