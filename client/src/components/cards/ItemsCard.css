@@ -463,9 +463,21 @@
 }
 
 .stockitem__product--header {
+    display: flex;
+    gap: .5rem;
+    align-items: center;
+    cursor: pointer;
     opacity: .7;
     font-weight: var(--font-semi-bold) !important;
     font-size: 1rem;
+}
+
+.stockitem__product--header__arrow {
+    display: none;
+}
+
+.stockitem__product--header:hover .stockitem__product--header__arrow--show {
+    display: flex;
 }
 
 .stockitem__productsdelete {
