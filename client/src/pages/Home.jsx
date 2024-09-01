@@ -31,6 +31,7 @@ import EditInventories from '../components/cards/EditInventories.jsx';
 import CreateProducts from '../components/cards/CreateProducts.jsx';
 import CreateSupplier from '../components/cards/CreateSupplier.jsx';
 import CreateCategory from '../components/cards/CreateCategory.jsx';
+import NewUser from '../components/cards/NewUser.jsx';
 
 function Home() {
 
@@ -492,6 +493,9 @@ function Home() {
                         {showModal == 'create-supplier' &&
                             <CreateSupplier closeWindow={() => setShowModal('')} />
                         }
+                        {showModal == 'new-user' &&
+                            <NewUser closeWindow={() => setShowModal('')} />
+                        }
                     </div>
                     <aside className='home__sidebar'>
                         <div className="sidebar__logo" onClick={handleCloseSideBar}>
@@ -579,8 +583,8 @@ function Home() {
                                     <IoMdArrowDropdown className='profile__arrow' />
                                 </div>
                                 <div className="profile__options" style={{ display: showNavbarOptions == true ? "flex" : "none" }}>
-                                    <span className="profile__option profile__inventories">Inventories</span>
-                                    <span className="profile__option profile__edit">Edit Profile</span>
+                                    <span className="profile__option profile__inventories" onClick={() => setShowModal('edit-inventories')} >Inventories</span>
+                                    <span className="profile__option profile__edit" onClick={() => setShowModal('edit-profile')}>Edit Profile</span>
                                     <span className="profile__option profile__logout" onClick={logoutUser}>Logout</span>
                                 </div>
                             </div>
@@ -619,31 +623,31 @@ function Home() {
                                 <Dashboard />
                                 :
                                 sectionDisplay == "stock" ?
-                                    <Stock />
+                                    <Stock handleOpenWindow={() => setShowModal('new-order')} />
                                     :
                                     subSectionDisplay == "products" ?
-                                        <Products />
+                                        <Products handleOpenWindow={() => setShowModal('create-products')} />
                                         :
                                         subSectionDisplay == "categories" ?
-                                            <Categories />
+                                            <Categories handleOpenWindow={() => setShowModal('create-category')} />
                                             :
                                             subSectionDisplay == "suppliers" ?
-                                                <Suppliers />
+                                                <Suppliers handleOpenWindow={() => setShowModal('create-supplier')} />
                                                 :
                                                 subSectionDisplay == "purchases" ?
-                                                    <Purchases />
+                                                    <Purchases handleOpenWindow={() => setShowModal('new-order')} />
                                                     :
                                                     subSectionDisplay == "sales" ?
-                                                        <Sales />
+                                                        <Sales handleOpenWindow={() => setShowModal('new-order')} />
                                                         :
                                                         subSectionDisplay == "users" ?
-                                                            <Users />
+                                                            <Users handleOpenWindow={() => setShowModal('new-user')} />
                                                             :
                                                             subSectionDisplay == "log" ?
                                                                 <ActivitiesLog />
                                                                 :
                                                                 subSectionDisplay == "details" ?
-                                                                    <EditDetails />
+                                                                    <EditDetails handleOpenWindow={() => setShowModal('edit-details')} />
                                                                     :
                                                                     <></>
                             }

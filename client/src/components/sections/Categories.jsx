@@ -1,10 +1,10 @@
 import React from 'react';
 import ItemsCard from "../cards/ItemsCard.jsx";
 
-function Categories() {
+function Categories({ handleOpenWindow }) {
     return (
         <>
-            <ItemsCard option={2} />
+            <ItemsCard option={2} handleOpenWindow={handleOpenWindow} />
         </>
     )
 }

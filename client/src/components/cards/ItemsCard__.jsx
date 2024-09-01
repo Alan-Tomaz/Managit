@@ -8,6 +8,8 @@ import { IoIosArrowBack } from "react-icons/io";
 import { IoIosArrowForward } from "react-icons/io";
 import { HiOutlineXMark } from "react-icons/hi2";
 import Tshirt from "../../assets/images/t-shirt.png";
+import LargeWidthImg from "../../assets/images/img_width.jpg";
+import LargeHeightImg from "../../assets/images/img_height.jpg";
 import { MdRemove } from "react-icons/md";
 import { MdArrowDropUp } from "react-icons/md";
 import { IoMdArrowDropup } from "react-icons/io";
@@ -18,7 +20,6 @@ function ItemsCard({ option = 0, handleOpenWindow }) {
 
     const buttonRef = useRef(null);
     const filterRef = useRef(null);
-
 
     const initialFilterObj = {
         columns: {
@@ -72,33 +73,74 @@ function ItemsCard({ option = 0, handleOpenWindow }) {
         category: [{ name: 't-shirt', isShow: true }, { name: 'shoes', isShow: true }, { name: 'jeans', isShow: true }],
         supplier: [{ name: 'abc-outfits', isShow: true }, { name: '007-shoes', isShow: true }, { name: 'planet', isShow: true }],
         blocked: 0,
-        option0: 'min-content 65px 200px 100px 100px 80px 100px 1fr 100px',
+        option0: 'min-content 65px 250px 100px 100px 80px 100px 1fr 100px',
         option1: 'min-content 65px 200px 100px 100px 100px 100px 1fr 100px 100px',
         option2: 'min-content 250px 1fr 100px',
         option3: 'min-content 250px 1fr 100px',
-        option4: 'min-content 50px 150px 100px 100px 100px 1fr 100px 100px',
-        option5: 'min-content 50px 150px 100px 100px 100px 1fr 100px 100px',
+        option4: 'min-content 50px 150px 100px 100px 80px 1fr 100px 100px',
+        option5: 'min-content 50px 150px 100px 100px 80px 1fr 100px 100px',
         option6: 'min-content 65px 50px 150px 150px 150px 150px 100px 1fr 100px',
         option7: 'min-content 50px 150px 150px 1fr 100px'
     }
 
+
+
+    const [filteringColumn, setFilteringColumn] = useState([]);
+    const [chooseSelection, setChooseSelection] = useState('columns');
     const [filter, setFilter] = useState({ ...initialFilterObj })
     const [renderFilter, setRenderFilter] = useState({ ...initialFilterObj })
+    const [renderSupplier, setRenderSupplier] = useState([]);
+    const [suppliers, setSuppliers] = useState([{ name: 'abc-outfits', isShow: true }, { name: '007-shoes', isShow: true }, { name: 'planet', isShow: true }]);
     const [showFilterOptions, setShowFilterOptions] = useState(false);
-    const [showButtonMoreOptions, setShowButtonMoreOptions] = useState(false);
     const [filterOptionsGrid, setFilterOptionsGrid] = useState(option == 0 ? renderFilter.option0 : option == 1 ? renderFilter.option1 : option == 2 ? renderFilter.option2 : option == 3 ? renderFilter.option3 : option == 4 ? renderFilter.option4 : option == 5 ? renderFilter.option5 : option == 6 ? renderFilter.option6 : option == 7 ? renderFilter.option7 : 0)
-    const [chooseSelection, setChooseSelection] = useState('columns');
+    const [showButtonMoreOptions, setShowButtonMoreOptions] = useState(false);
     const [isAllItemsSelected, setIsAllItemsSelected] = useState(false);
-    const [isHidingSupplier, setIsHiddingSupplier] = useState(renderFilter.supplier.some(item => item.isShow == false));
-    const [isHidingCategory, setIsHiddingCategory] = useState(renderFilter.category.some(item => item.isShow == false));
-    const [items, setItems] = useState();
 
+    const [itemsSelected, setItemsSelected] = useState([]);
+
+    const handleExportFile = () => {
+        setShowButtonMoreOptions(false)
+    }
+
+    const handleSelectAllItems = () => {
+        if (isAllItemsSelected == false) {
+            const allItems = document.querySelectorAll('.stockitem__select').forEach((item) => {
+                item.classList.add("stockitem__select--selected")
+            })
+
+            setIsAllItemsSelected(true)
+        } else {
+            const allItems = document.querySelectorAll('.stockitem__select').forEach((item) => {
+                item.classList.remove("stockitem__select--selected")
+            })
+
+            setIsAllItemsSelected(false)
+        }
+    }
+
+    const handleRemoveTag = (tag) => {
+
+    }
+
+    const handleSelectItem = (e) => {
+        const target = e.target;
+        target.classList.toggle('stockitem__select--selected');
+    }
+
+    const handleSearch = (e) => {
+        e.preventDefault();
+        /* setRenderFilter({ ...filter }); */
+    }
 
     const handleClearFilter = () => {
         setFilter({ ...initialFilterObj });
-    }
 
-    const funFilteringColumns = () => {
+/*         setShowFilterOptions(false);
+ */    }
+
+    const handleFilter = () => {
+        const newColumns = `min-content ${filter.columns.image == true ? '65px ' : ''}${filter.columns.number == true ? '50px ' : ''}${filter.columns.username == true ? '150px ' : ''}${filter.columns.permission == true ? '150px ' : ''}${filter.columns.productName == true ? '200px ' : ''}${filter.columns.creationDate == true ? '150px ' : ''}${filter.columns.lastAccess == true ? '150px ' : ''}${option == 2 ? filter.columns.category == true ? '250px ' : '' : filter.columns.category == true ? '100px ' : ''}${option == 3 ? filter.columns.supplier == true ? '250px ' : '' : filter.columns.supplier == true ? '100px ' : ''}${filter.columns.code == true ? '100px ' : ''}${filter.columns.quantity == true ? '80px ' : ''}${filter.columns.sellPrice == true ? '80px ' : ''}${filter.columns.buyPrice == true ? '80px ' : ''}${filter.columns.blocked == true ? '100px ' : ''}${filter.columns.date == true ? '150px ' : ''}${filter.columns.description == true ? '1fr ' : ''}${filter.columns.description == false ? '1fr ' : ''}${filter.columns.order == true ? '100px ' : ''}${filter.columns.status == true ? '100px ' : ''}100px`;
+        setFilter({ ...filter, [`option${option}`]: newColumns });
         const updatedFilteringColumn = []
         if ((option != 2 && option != 3 && option != 4 && option != 5 && option != 7) && filter.columns.image == false) {
             updatedFilteringColumn.push('image');
@@ -148,602 +190,153 @@ function ItemsCard({ option = 0, handleOpenWindow }) {
         if ((option != 6) && filter.columns.description == false) {
             updatedFilteringColumn.push('description');
         }
-        if ((option == 1) && filter.columns.status == false) {
+        if ((option == 4 || option == 5) && filter.columns.status == false) {
             updatedFilteringColumn.push('status');
         }
         if ((option == 4 || option == 5) && filter.columns.order == false) {
             updatedFilteringColumn.push('order');
         }
-        return updatedFilteringColumn;
-    }
+        setFilteringColumn(updatedFilteringColumn)
 
-    const handleFilter = () => {
-        const newColumns = `min-content ${filter.columns.image == true ? '65px ' : ''}${filter.columns.number == true ? '50px ' : ''}${filter.columns.username == true ? '150px ' : ''}${filter.columns.permission == true ? '150px ' : ''}${filter.columns.productName == true ? '200px ' : ''}${filter.columns.creationDate == true ? '150px ' : ''}${filter.columns.lastAccess == true ? '150px ' : ''}${option == 2 ? filter.columns.category == true ? '250px ' : '' : filter.columns.category == true ? '100px ' : ''}${option == 3 ? filter.columns.supplier == true ? '250px ' : '' : filter.columns.supplier == true ? '100px ' : ''}${filter.columns.code == true ? '100px ' : ''}${filter.columns.quantity == true ? '80px ' : ''}${filter.columns.sellPrice == true ? '100px ' : ''}${filter.columns.buyPrice == true ? '100px ' : ''}${filter.columns.blocked == true ? '100px ' : ''}${filter.columns.date == true ? '150px ' : ''}${filter.columns.description == true ? '1fr ' : ''}${filter.columns.description == false ? '1fr ' : ''}${filter.columns.order == true ? '100px ' : ''}${filter.columns.status == true ? '100px ' : ''}100px`;
-        setFilter(prev => ({
-            ...prev,
-            [`option${option}`]: newColumns
-        }));
-        setRenderFilter(prev => {
-            /* Check if has some supplier is hidding */
-            setIsHiddingSupplier(filter.supplier.some(item => item.isShow == false))
-            /* Check if has some category is hidding */
-            setIsHiddingCategory(filter.category.some(item => item.isShow == false))
+        const updatedSuppliers = [...suppliers];
 
-            return { ...filter, filteringColumns: funFilteringColumns(), [`option${option}`]: newColumns }
-        });
-    }
-
-    const handleUncheckSupplier = (index) => {
-        setFilter(prev => {
-            const updatedSupplier = prev.supplier.map((item, i) =>
-                i === index ? { ...item, isShow: !item.isShow } : item
-            );
-            return { ...prev, supplier: updatedSupplier };
-        });
-    };
-    const handleUncheckCategory = (index) => {
-        setFilter(prev => {
-            const updatedCategory = prev.category.map((item, i) =>
-                i === index ? { ...item, isShow: !item.isShow } : item
-            );
-            return { ...prev, category: updatedCategory };
-        });
-    };
-
-    const handleExportFile = () => {
-        setShowButtonMoreOptions(false)
-    }
-
-    const handleSearch = (e) => {
-        e.preventDefault();
-        setRenderFilter(prev => ({
-            ...prev,
-            search: filter.search
-        }));
-    }
-
-    const handleSelectAllItems = () => {
-        if (isAllItemsSelected == false) {
-            const allItems = document.querySelectorAll('.stockitem__select').forEach((item) => {
-                item.classList.add("stockitem__select--selected")
-            })
-
-            setIsAllItemsSelected(true)
-        } else {
-            const allItems = document.querySelectorAll('.stockitem__select').forEach((item) => {
-                item.classList.remove("stockitem__select--selected")
-            })
-
-            setIsAllItemsSelected(false)
-        }
+        setRenderSupplier([...updatedSuppliers]);
+        setRenderFilter({ ...filter, [`option${option}`]: newColumns, filteringColumns: updatedFilteringColumn })
+        setFilterOptionsGrid(newColumns);
     }
 
     const handleChangeOrder = (header) => {
         switch (header) {
             case 'product-name':
-                setFilter(prev => ({
-                    ...prev,
-                    orderFilter: {
-                        ...initialFilterObj.orderFilter,
-                        productName: !filter.orderFilter.productName,
-                        onFiltering: 'Product Name',
-                        onFilteringVar: 'productName'
-                    },
-                }))
+                setFilter({ ...filter, orderFilter: { ...initialFilterObj.orderFilter, productName: !filter.orderFilter.productName, onFiltering: 'Product Name', onFilteringVar: 'productName' } });
                 break;
             case 'category':
-                setFilter(prev => ({
-                    ...prev,
-                    orderFilter: {
-                        ...initialFilterObj.orderFilter,
-                        category: !filter.orderFilter.category,
-                        onFiltering: 'Category',
-                        onFilteringVar: 'category'
-                    },
-                }))
+                setFilter({ ...filter, orderFilter: { ...initialFilterObj.orderFilter, category: !filter.orderFilter.category, onFiltering: 'Category', onFilteringVar: 'category' } });
                 break;
             case 'number':
-                setFilter(prev => ({
-                    ...prev,
-                    orderFilter: {
-                        ...initialFilterObj.orderFilter,
-                        number: !filter.orderFilter.number,
-                        onFiltering: 'Number',
-                        onFilteringVar: 'number'
-                    },
-                }))
+                setFilter({ ...filter, orderFilter: { ...initialFilterObj.orderFilter, number: !filter.orderFilter.number, onFiltering: 'Number', onFilteringVar: 'number' } });
                 break;
             case 'code':
-                setFilter(prev => ({
-                    ...prev,
-                    orderFilter: {
-                        ...initialFilterObj.orderFilter,
-                        code: !filter.orderFilter.code,
-                        onFiltering: 'Code',
-                        onFilteringVar: 'code'
-                    },
-                }))
+                setFilter({ ...filter, orderFilter: { ...initialFilterObj.orderFilter, code: !filter.orderFilter.code, onFiltering: 'Code', onFilteringVar: 'code' } });
                 break;
             case 'blocked':
-                setFilter(prev => ({
-                    ...prev,
-                    orderFilter: {
-                        ...initialFilterObj.orderFilter,
-                        blocked: !filter.orderFilter.blocked,
-                        onFiltering: 'Blocked',
-                        onFilteringVar: 'blocked'
-                    },
-                }))
+                setFilter({ ...filter, orderFilter: { ...initialFilterObj.orderFilter, blocked: !filter.orderFilter.blocked, onFiltering: 'Blocked', onFilteringVar: 'blocked' } });
                 break;
             case 'last-access':
-                setFilter(prev => ({
-                    ...prev,
-                    orderFilter: {
-                        ...initialFilterObj.orderFilter,
-                        lastAccess: !filter.orderFilter.lastAccess,
-                        onFiltering: 'Last Access',
-                        onFilteringVar: 'lastAccess'
-                    },
-                }))
+                setFilter({ ...filter, orderFilter: { ...initialFilterObj.orderFilter, lastAccess: !filter.orderFilter.lastAccess, onFiltering: 'Last Access', onFilteringVar: 'lastAccess' } });
                 break;
             case 'supplier':
-                setFilter(prev => ({
-                    ...prev,
-                    orderFilter: {
-                        ...initialFilterObj.orderFilter,
-                        supplier: !filter.orderFilter.supplier,
-                        onFiltering: 'Supplier',
-                        onFilteringVar: 'supplier'
-                    },
-                }))
+                setFilter({ ...filter, orderFilter: { ...initialFilterObj.orderFilter, supplier: !filter.orderFilter.supplier, onFiltering: 'Supplier', onFilteringVar: 'supplier' } });
                 break;
             case 'username':
-                setFilter(prev => ({
-                    ...prev,
-                    orderFilter: {
-                        ...initialFilterObj.orderFilter,
-                        username: !filter.orderFilter.username,
-                        onFiltering: 'Username',
-                        onFilteringVar: 'username'
-                    },
-                }))
+                setFilter({ ...filter, orderFilter: { ...initialFilterObj.orderFilter, username: !filter.orderFilter.username, onFiltering: 'Username', onFilteringVar: 'username' } });
                 break;
             case 'permission':
-                setFilter(prev => ({
-                    ...prev,
-                    orderFilter: {
-                        ...initialFilterObj.orderFilter,
-                        permission: !filter.orderFilter.permission,
-                        onFiltering: 'Permission',
-                        onFilteringVar: 'permission'
-                    },
-                }))
+                setFilter({ ...filter, orderFilter: { ...initialFilterObj.orderFilter, permission: !filter.orderFilter.permission, onFiltering: 'Permission', onFilteringVar: 'permission' } });
                 break;
             case 'quantity':
-                setFilter(prev => ({
-                    ...prev,
-                    orderFilter: {
-                        ...initialFilterObj.orderFilter,
-                        category: !filter.orderFilter.category,
-                        onFiltering: 'Category',
-                        onFilteringVar: 'category'
-                    },
-                }))
+                setFilter({ ...filter, orderFilter: { ...initialFilterObj.orderFilter, quantity: !filter.orderFilter.quantity, onFiltering: 'Quantity', onFilteringVar: 'quantity' } });
                 break;
             case 'buy-price':
-                setFilter(prev => ({
-                    ...prev,
-                    orderFilter: {
-                        ...initialFilterObj.orderFilter,
-                        buyPrice: !filter.orderFilter.buyPrice,
-                        onFiltering: 'Buy Price',
-                        onFilteringVar: 'buyPrice'
-                    },
-                }))
+                setFilter({ ...filter, orderFilter: { ...initialFilterObj.orderFilter, buyPrice: !filter.orderFilter.buyPrice, onFiltering: 'Buy Price', onFilteringVar: 'buyPrice' } });
                 break;
             case 'sell-price':
-                setFilter(prev => ({
-                    ...prev,
-                    orderFilter: {
-                        ...initialFilterObj.orderFilter,
-                        sellPrice: !filter.orderFilter.sellPrice,
-                        onFiltering: 'Sell Price',
-                        onFilteringVar: 'sellPrice'
-                    },
-                }))
+                setFilter({ ...filter, orderFilter: { ...initialFilterObj.orderFilter, sellPrice: !filter.orderFilter.sellPrice, onFiltering: 'Sell Price', onFilteringVar: 'sellPrice' } });
                 break;
             case 'date':
-                setFilter(prev => ({
-                    ...prev,
-                    orderFilter: {
-                        ...initialFilterObj.orderFilter,
-                        date: !filter.orderFilter.date,
-                        onFiltering: 'Date',
-                        onFilteringVar: 'date'
-                    },
-                }))
+                setFilter({ ...filter, orderFilter: { ...initialFilterObj.orderFilter, date: !filter.orderFilter.date, onFiltering: 'Date', onFilteringVar: 'date' } });
                 break;
             case 'creation-date':
-                setFilter(prev => ({
-                    ...prev,
-                    orderFilter: {
-                        ...initialFilterObj.orderFilter,
-                        creationDate: !filter.orderFilter.creationDate,
-                        onFiltering: 'Creation Date',
-                        onFilteringVar: 'creationDate'
-                    },
-                }))
+                setFilter({ ...filter, orderFilter: { ...initialFilterObj.orderFilter, creationDate: !filter.orderFilter.creationDate, onFiltering: 'Creation Date', onFilteringVar: 'creationDate' } });
                 break;
             case 'description':
-                setFilter(prev => ({
-                    ...prev,
-                    orderFilter: {
-                        ...initialFilterObj.orderFilter,
-                        description: !filter.orderFilter.description,
-                        onFiltering: 'Description',
-                        onFilteringVar: 'description'
-                    },
-                }))
+                setFilter({ ...filter, orderFilter: { ...initialFilterObj.orderFilter, description: !filter.orderFilter.description, onFiltering: 'Description', onFilteringVar: 'description' } });
                 break;
         }
     }
 
-    const handleSelectFilter = (otherValue) => {
-        switch (otherValue) {
-            case 'all-permissions':
-                setFilter(prev => ({
-                    ...prev,
-                    permission: 0
-                }))
-                break;
-            case 'admin':
-                setFilter(prev => ({
-                    ...prev,
-                    permission: 1
-                }))
-                break;
-            case 'user':
-                setFilter(prev => ({
-                    ...prev,
-                    permission: 2
-                }))
-                break;
-            case 'all-stocks':
-                setFilter(prev => ({
-                    ...prev,
-                    status: 0
-                }))
-                break;
-            case 'in-stock':
-                setFilter(prev => ({
-                    ...prev,
-                    status: 1
-                }))
-                break;
-            case 'out-stock':
-                setFilter(prev => ({
-                    ...prev,
-                    status: 2
-                }))
-                break;
-            case 'all-blockeds':
-                setFilter(prev => ({
-                    ...prev,
-                    blocked: 0
-                }))
-                break;
-            case 'blocked':
-                setFilter(prev => ({
-                    ...prev,
-                    blocked: 1
-                }))
-                break;
-            case 'no-blocked':
-                setFilter(prev => ({
-                    ...prev,
-                    blocked: 2
-                }))
-                break;
-        }
+    const handleUncheckCategory = (index) => {
+        /*    const updatedFilter = { ...filter };
+           updatedFilter.category[index].isShow = !updatedFilter.category[index].isShow;
+           setFilter({ ...updatedFilter }); */
     }
 
-    const handleRemoveTag = (tag) => {
-        switch (tag) {
-            case 'search':
-                setFilter(prev => ({
-                    ...prev,
-                    search: ''
-                }))
-                setRenderFilter(prev => ({
-                    ...prev,
-                    search: ''
-                }))
-                break;
-            case 'order':
-                setFilter(prev => ({
-                    ...prev,
-                    orderFilter: {
-                        onFiltering: '',
-                        onFilteringVar: '',
-                        number: true,
-                        username: true,
-                        permission: true,
-                        creationDate: true,
-                        lastAccess: true,
-                        blocked: true,
-                        productName: true,
-                        category: true,
-                        supplier: true,
-                        code: true,
-                        quantity: true,
-                        sellPrice: true,
-                        buyPrice: true,
-                        date: true,
-                        description: true,
-                    }
-                }))
-                break;
-            case 'columns':
-                setFilter(prev => ({
-                    ...prev,
-                    columns: {
-                        image: option == 2 ? false : option == 3 ? false : option == 4 ? false : option == 5 ? false : option == 7 ? false : true,
-                        number: option == 4 ? true : option == 5 ? true : option == 6 ? true : option == 7 ? true : false,
-                        username: option == 6 ? true : option == 7 ? true : false,
-                        permission: option == 6 ? true : false,
-                        creationDate: option == 4 ? true : option == 5 ? true : option == 6 ? true : false,
-                        lastAccess: option == 6 ? true : false,
-                        blocked: option == 6 ? true : false,
-                        productName: option == 1 ? true : option == 0 ? true : false,
-                        category: option == 1 ? true : option == 0 ? true : option == 2 ? true : option == 4 ? true : option == 5 ? true : false,
-                        supplier: option == 1 ? true : option == 3 ? true : option == 4 ? true : option == 5 ? true : false,
-                        code: option == 0 ? true : option == 1 ? true : false,
-                        quantity: option == 0 ? true : false,
-                        sellPrice: option == 0 ? true : option == 1 ? true : option == 5 ? true : false,
-                        buyPrice: option == 4 ? true : false,
-                        date: option == 7 ? true : false,
-                        description: option != 6 ? true : false,
-                        buttons: option == 6 ? true : option == 7 ? true : false,
-                        status: option == 1 ? true : false,
-                        order: option == 4 ? true : option == 5 ? true : false,
-                        delete: option == 7 ? false : true,
-                    },
-                    filteringColumns: [],
-                    [`option${option}`]: initialFilterObj[`option${option}`]
-                }))
-                setRenderFilter(prev => ({
-                    ...prev,
-                    columns: {
-                        image: option == 2 ? false : option == 3 ? false : option == 4 ? false : option == 5 ? false : option == 7 ? false : true,
-                        number: option == 4 ? true : option == 5 ? true : option == 6 ? true : option == 7 ? true : false,
-                        username: option == 6 ? true : option == 7 ? true : false,
-                        permission: option == 6 ? true : false,
-                        creationDate: option == 4 ? true : option == 5 ? true : option == 6 ? true : false,
-                        lastAccess: option == 6 ? true : false,
-                        blocked: option == 6 ? true : false,
-                        productName: option == 1 ? true : option == 0 ? true : false,
-                        category: option == 1 ? true : option == 0 ? true : option == 2 ? true : option == 4 ? true : option == 5 ? true : false,
-                        supplier: option == 1 ? true : option == 3 ? true : option == 4 ? true : option == 5 ? true : false,
-                        code: option == 0 ? true : option == 1 ? true : false,
-                        quantity: option == 0 ? true : false,
-                        sellPrice: option == 0 ? true : option == 1 ? true : option == 5 ? true : false,
-                        buyPrice: option == 4 ? true : false,
-                        date: option == 7 ? true : false,
-                        description: option != 6 ? true : false,
-                        buttons: option == 6 ? true : option == 7 ? true : false,
-                        status: option == 1 ? true : false,
-                        order: option == 4 ? true : option == 5 ? true : false,
-                        delete: option == 7 ? false : true,
-                    },
-                    filteringColumns: [],
-                    [`option${option}`]: initialFilterObj[`option${option}`]
-                }))
-                break;
-            case 'sell-price':
-                setFilter(prev => ({
-                    ...prev,
-                    minSellPrice: 0
-                }))
-                setRenderFilter(prev => ({
-                    ...prev,
-                    minSellPrice: 0
-                }))
-                break;
-            case 'buy-price':
-                setFilter(prev => ({
-                    ...prev,
-                    minBuyPrice: 0
-                }))
-                setRenderFilter(prev => ({
-                    ...prev,
-                    minBuyPrice: 0
-                }))
-                break;
-            case 'quantity':
-                setFilter(prev => ({
-                    ...prev,
-                    minQnt: 0
-                }))
-                setRenderFilter(prev => ({
-                    ...prev,
-                    minQnt: 0
-                }))
-                break;
-            case 'status':
-                setFilter(prev => ({
-                    ...prev,
-                    status: 0
-                }))
-                setRenderFilter(prev => ({
-                    ...prev,
-                    status: 0
-                }))
-                break;
-            case 'permission':
-                setFilter(prev => ({
-                    ...prev,
-                    permission: 0
-                }))
-                setRenderFilter(prev => ({
-                    ...prev,
-                    permission: 0
-                }))
-                break;
-            case 'blocked':
-                setFilter(prev => ({
-                    ...prev,
-                    blocked: 0
-                }))
-                setRenderFilter(prev => ({
-                    ...prev,
-                    blocked: 0
-                }))
-                break;
-            case 'supplier':
-                setFilter(prev => {
-                    const updatedSupplier = prev.supplier.map((item, i) => { return { ...item, isShow: true } });
-                    return { ...prev, supplier: updatedSupplier };
-                });
-                setRenderFilter(prev => {
-                    const updatedSupplier = prev.supplier.map((item, i) => { return { ...item, isShow: true } });
+    const handleUncheckSupplier = (index) => {
+        const updatedSuppliers = [];
+        for (let i = 0; i < suppliers.length; i++) {
+            updatedSuppliers.push(suppliers[i]);
 
-                    /* Check if has some supplier is hidding */
-                    setIsHiddingSupplier(false)
-
-                    return { ...prev, supplier: updatedSupplier };
-                });
-                break;
-            case 'category':
-                setFilter(prev => {
-                    const updatedCategory = prev.category.map((item, i) => { return { ...item, isShow: true } });
-                    return { ...prev, category: updatedCategory };
-                });
-                setRenderFilter(prev => {
-                    const updatedCategory = prev.category.map((item, i) => { return { ...item, isShow: true } });
-
-                    /* Check if has some category is hidding */
-                    setIsHiddingCategory(false)
-
-                    return { ...prev, category: updatedCategory };
-                });
-                break;
         }
-    }
-
-    const handleSelectItem = (e) => {
-        const target = e.target;
-        target.classList.toggle('stockitem__select--selected');
+        updatedSuppliers[index].isShow = !updatedSuppliers[index].isShow
+        setSuppliers(updatedSuppliers);
     }
 
     const handleUncheckColumn = (column) => {
+        const updatedFilteringColumn = [];
         switch (column) {
             case 'category':
+
                 document.querySelectorAll('.filter__option-category').forEach((elem) => {
                     if (elem.classList.contains('filter__option--selected')) {
-                        setFilter(prev => ({
-                            ...prev,
-                            columns: {
-                                ...prev.columns,
-                                category: false
-                            },
-                        }))
+                        /*                         for (let i = 0; i < filteringColumn.length; i++) {
+                                                    updatedFilteringColumn.push(filteringColumn[i]);
+                        
+                                                }
+                                                updatedFilteringColumn.push(column)
+                                                setFilteringColumn(updatedFilteringColumn); */
+                        setFilter({ ...filter, columns: { ...filter.columns, category: false } }); /*  */
                     }
                     else {
-                        setFilter(prev => ({
-                            ...prev,
-                            columns: {
-                                ...prev.columns,
-                                category: true
-                            },
-                        }))
+                        /*        for (let i = 0; i < filteringColumn.length; i++) {
+                                   updatedFilteringColumn.push(filteringColumn[i]);
+                               }
+                               const index = updatedFilteringColumn.indexOf(column)
+                               updatedFilteringColumn.splice(index, 1)
+                               setFilteringColumn(updatedFilteringColumn) */
+                        setFilter({ ...filter, columns: { ...filter.columns, category: true } }); /*  */
                     }
                 })
                 break;
             case 'image':
                 document.querySelectorAll('.filter__option-img').forEach((elem) => {
                     if (elem.classList.contains('filter__option--selected')) {
-                        setFilter(prev => ({
-                            ...prev,
-                            columns: {
-                                ...prev.columns,
-                                image: false
-                            },
-                        }))
+                        setFilter({ ...filter, columns: { ...filter.columns, image: false } });
                     }
                     else {
-                        setFilter(prev => ({
-                            ...prev,
-                            columns: {
-                                ...prev.columns,
-                                image: true
-                            },
-                        }))
+                        setFilter({ ...filter, columns: { ...filter.columns, image: true } });
                     }
                 })
                 break;
             case 'product-name':
+
                 document.querySelectorAll('.filter__option-product-name').forEach((elem) => {
                     if (elem.classList.contains('filter__option--selected')) {
-                        setFilter(prev => ({
-                            ...prev,
-                            columns: {
-                                ...prev.columns,
-                                productName: false
-                            },
-                        }))
+                        setFilter({ ...filter, columns: { ...filter.columns, productName: false } });
                     }
                     else {
-                        setFilter(prev => ({
-                            ...prev,
-                            columns: {
-                                ...prev.columns,
-                                productName: true
-                            },
-                        }))
+                        setFilter({ ...filter, columns: { ...filter.columns, productName: true } });
                     }
                 })
                 break;
             case 'supplier':
+
                 document.querySelectorAll('.filter__option-supplier').forEach((elem) => {
                     if (elem.classList.contains('filter__option--selected')) {
-                        setFilter(prev => ({
-                            ...prev,
-                            columns: {
-                                ...prev.columns,
-                                supplier: false
-                            },
-                        }))
+                        setFilter({ ...filter, columns: { ...filter.columns, supplier: false } });
                     }
                     else {
-                        setFilter(prev => ({
-                            ...prev,
-                            columns: {
-                                ...prev.columns,
-                                supplier: true
-                            },
-                        }))
+                        setFilter({ ...filter, columns: { ...filter.columns, supplier: true } });
                     }
                 })
                 break;
             case 'buy-price':
+
                 document.querySelectorAll('.filter__option-buy-price').forEach((elem) => {
                     if (elem.classList.contains('filter__option--selected')) {
-                        setFilter(prev => ({
-                            ...prev,
-                            columns: {
-                                ...prev.columns,
-                                buyPrice: false
-                            },
-                        }))
+                        setFilter({ ...filter, columns: { ...filter.columns, buyPrice: false } });
                     }
                     else {
-                        setFilter(prev => ({
-                            ...prev,
-                            columns: {
-                                ...prev.columns,
-                                buyPrice: true
-                            },
-                        }))
+                        setFilter({ ...filter, columns: { ...filter.columns, buyPrice: true } });
                     }
                 })
                 break;
@@ -751,293 +344,187 @@ function ItemsCard({ option = 0, handleOpenWindow }) {
 
                 document.querySelectorAll('.filter__option-sell-price').forEach((elem) => {
                     if (elem.classList.contains('filter__option--selected')) {
-                        setFilter(prev => ({
-                            ...prev,
-                            columns: {
-                                ...prev.columns,
-                                sellPrice: false
-                            },
-                        }))
+                        setFilter({ ...filter, columns: { ...filter.columns, sellPrice: false } });
                     }
                     else {
-                        setFilter(prev => ({
-                            ...prev,
-                            columns: {
-                                ...prev.columns,
-                                sellPrice: true
-                            },
-                        }))
+                        setFilter({ ...filter, columns: { ...filter.columns, sellPrice: true } });
                     }
                 })
                 break;
             case 'description':
+
                 document.querySelectorAll('.filter__option-description').forEach((elem) => {
                     if (elem.classList.contains('filter__option--selected')) {
-                        setFilter(prev => ({
-                            ...prev,
-                            columns: {
-                                ...prev.columns,
-                                description: false
-                            },
-                        }))
+                        setFilter({ ...filter, columns: { ...filter.columns, description: false } });
                     }
                     else {
-                        setFilter(prev => ({
-                            ...prev,
-                            columns: {
-                                ...prev.columns,
-                                description: true
-                            },
-                        }))
+                        setFilter({ ...filter, columns: { ...filter.columns, description: true } });
                     }
                 })
                 break;
             case 'status':
+
                 document.querySelectorAll('.filter__option-status').forEach((elem) => {
                     if (elem.classList.contains('filter__option--selected')) {
-                        setFilter(prev => ({
-                            ...prev,
-                            columns: {
-                                ...prev.columns,
-                                status: false
-                            },
-                        }))
+                        setFilter({ ...filter, columns: { ...filter.columns, status: false } });
                     }
                     else {
-                        setFilter(prev => ({
-                            ...prev,
-                            columns: {
-                                ...prev.columns,
-                                status: true
-                            },
-                        }))
+                        setFilter({ ...filter, columns: { ...filter.columns, status: true } });
                     }
                 })
                 break;
             case 'number':
+
                 document.querySelectorAll('.filter__option-number').forEach((elem) => {
                     if (elem.classList.contains('filter__option--selected')) {
-                        setFilter(prev => ({
-                            ...prev,
-                            columns: {
-                                ...prev.columns,
-                                number: false
-                            },
-                        }))
+                        setFilter({ ...filter, columns: { ...filter.columns, number: false } });
                     }
                     else {
-                        setFilter(prev => ({
-                            ...prev,
-                            columns: {
-                                ...prev.columns,
-                                number: true
-                            },
-                        }))
+                        setFilter({ ...filter, columns: { ...filter.columns, number: true } });
                     }
                 })
                 break;
             case 'creation-date':
+
                 document.querySelectorAll('.filter__option-creation-date').forEach((elem) => {
                     if (elem.classList.contains('filter__option--selected')) {
-                        setFilter(prev => ({
-                            ...prev,
-                            columns: {
-                                ...prev.columns,
-                                creationDate: false
-                            },
-                        }))
+                        setFilter({ ...filter, columns: { ...filter.columns, creationDate: false } });
                     }
                     else {
-                        setFilter(prev => ({
-                            ...prev,
-                            columns: {
-                                ...prev.columns,
-                                creationDate: true
-                            },
-                        }))
+                        setFilter({ ...filter, columns: { ...filter.columns, creationDate: true } });
                     }
                 })
                 break;
             case 'order':
+
                 document.querySelectorAll('.filter__option-order').forEach((elem) => {
                     if (elem.classList.contains('filter__option--selected')) {
-                        setFilter(prev => ({
-                            ...prev,
-                            columns: {
-                                ...prev.columns,
-                                order: false
-                            },
-                        }))
+                        setFilter({ ...filter, columns: { ...filter.columns, order: false } });
                     }
                     else {
-                        setFilter(prev => ({
-                            ...prev,
-                            columns: {
-                                ...prev.columns,
-                                order: true
-                            },
-                        }))
+                        setFilter({ ...filter, columns: { ...filter.columns, order: true } });
                     }
                 })
                 break;
             case 'blocked':
+
                 document.querySelectorAll('.filter__option-blocked').forEach((elem) => {
                     if (elem.classList.contains('filter__option--selected')) {
-                        setFilter(prev => ({
-                            ...prev,
-                            columns: {
-                                ...prev.columns,
-                                blocked: false
-                            },
-                        }))
+                        setFilter({ ...filter, columns: { ...filter.columns, blocked: false } });
                     }
                     else {
-                        setFilter(prev => ({
-                            ...prev,
-                            columns: {
-                                ...prev.columns,
-                                blocked: true
-                            },
-                        }))
+                        setFilter({ ...filter, columns: { ...filter.columns, blocked: true } });
                     }
                 })
                 break;
             case 'username':
+
                 document.querySelectorAll('.filter__option-username').forEach((elem) => {
                     if (elem.classList.contains('filter__option--selected')) {
-                        setFilter(prev => ({
-                            ...prev,
-                            columns: {
-                                ...prev.columns,
-                                username: false
-                            },
-                        }))
+                        setFilter({ ...filter, columns: { ...filter.columns, username: false } });
                     }
                     else {
-                        setFilter(prev => ({
-                            ...prev,
-                            columns: {
-                                ...prev.columns,
-                                username: true
-                            },
-                        }))
+                        setFilter({ ...filter, columns: { ...filter.columns, username: true } });
                     }
                 })
                 break;
             case 'permission':
+
                 document.querySelectorAll('.filter__option-permission').forEach((elem) => {
                     if (elem.classList.contains('filter__option--selected')) {
-                        setFilter(prev => ({
-                            ...prev,
-                            columns: {
-                                ...prev.columns,
-                                permission: false
-                            },
-                        }))
+                        setFilter({ ...filter, columns: { ...filter.columns, permission: false } });
                     }
                     else {
-                        setFilter(prev => ({
-                            ...prev,
-                            columns: {
-                                ...prev.columns,
-                                permission: true
-                            },
-                        }))
+                        setFilter({ ...filter, columns: { ...filter.columns, permission: true } });
                     }
                 })
                 break;
             case 'last-access':
+
                 document.querySelectorAll('.filter__option-last-access').forEach((elem) => {
                     if (elem.classList.contains('filter__option--selected')) {
-                        setFilter(prev => ({
-                            ...prev,
-                            columns: {
-                                ...prev.columns,
-                                lastAccess: false
-                            },
-                        }))
+                        setFilter({ ...filter, columns: { ...filter.columns, lastAccess: false } });
                     }
                     else {
-                        setFilter(prev => ({
-                            ...prev,
-                            columns: {
-                                ...prev.columns,
-                                lastAccess: true
-                            },
-                        }))
+                        setFilter({ ...filter, columns: { ...filter.columns, lastAccess: true } });
+
                     }
                 })
                 break;
             case 'date':
+
                 document.querySelectorAll('.filter__option-date').forEach((elem) => {
                     if (elem.classList.contains('filter__option--selected')) {
-                        setFilter(prev => ({
-                            ...prev,
-                            columns: {
-                                ...prev.columns,
-                                date: false
-                            },
-                        }))
+                        setFilter({ ...filter, columns: { ...filter.columns, date: false } });
+
                     }
                     else {
-                        setFilter(prev => ({
-                            ...prev,
-                            columns: {
-                                ...prev.columns,
-                                date: true
-                            },
-                        }))
+                        setFilter({ ...filter, columns: { ...filter.columns, date: true } });
+
                     }
                 })
                 break;
             case 'quantity':
+
                 document.querySelectorAll('.filter__option-qnt').forEach((elem) => {
                     if (elem.classList.contains('filter__option--selected')) {
-                        setFilter(prev => ({
-                            ...prev,
-                            columns: {
-                                ...prev.columns,
-                                quantity: false
-                            },
-                        }))
+                        setFilter({ ...filter, columns: { ...filter.columns, quantity: false } });
+
                     }
                     else {
-                        setFilter(prev => ({
-                            ...prev,
-                            columns: {
-                                ...prev.columns,
-                                quantity: true
-                            },
-                        }))
+                        setFilter({ ...filter, columns: { ...filter.columns, quantity: true } });
+
                     }
                 })
                 break;
             case 'code':
+
                 document.querySelectorAll('.filter__option-code').forEach((elem) => {
                     if (elem.classList.contains('filter__option--selected')) {
-                        setFilter(prev => ({
-                            ...prev,
-                            columns: {
-                                ...prev.columns,
-                                code: false
-                            },
-                        }))
+                        setFilter({ ...filter, columns: { ...filter.columns, code: false } });
+
                     }
                     else {
-                        setFilter(prev => ({
-                            ...prev,
-                            columns: {
-                                ...prev.columns,
-                                code: true
-                            },
-                        }))
+                        setFilter({ ...filter, columns: { ...filter.columns, code: true } });
+
                     }
                 })
                 break;
         }
     }
 
-    /*  */
+    const handleSelectFilter = (otherValue) => {
+        switch (otherValue) {
+            case 'all-permissions':
+                setFilter({ ...filter, permission: 0 });
+                break;
+            case 'admin':
+                setFilter({ ...filter, permission: 1 });
+                break;
+            case 'user':
+                setFilter({ ...filter, permission: 2 });
+                break;
+            case 'all-stocks':
+                setFilter({ ...filter, status: 0 });
+                break;
+            case 'in-stock':
+                setFilter({ ...filter, status: 1 });
+                break;
+            case 'out-stock':
+                setFilter({ ...filter, status: 2 });
+                break;
+            case 'all-blockeds':
+                setFilter({ ...filter, blocked: 0 });
+                break;
+            case 'blocked':
+                setFilter({ ...filter, blocked: 1 });
+                break;
+            case 'no-blocked':
+                setFilter({ ...filter, blocked: 2 });
+                break;
+        }
+    }
+
     useEffect(() => {
         /* CLOSE WINDOW WHEN CLICK OUTSIDE */
         const handleClickOutside = (event) => {
@@ -1055,8 +542,7 @@ function ItemsCard({ option = 0, handleOpenWindow }) {
             document.removeEventListener("mousedown", handleClickOutside);
         };
 
-    }, [buttonRef, filterRef]);
-    /*  */
+    }, []);
 
     return (
         <>
@@ -1077,6 +563,7 @@ function ItemsCard({ option = 0, handleOpenWindow }) {
                                 <h4>Filter options</h4>
                                 <div className="filter__vr"></div>
                                 <div className="filter_choose-selection">
+
                                     <div onClick={() => setChooseSelection('columns')} className={`${chooseSelection == 'columns' ? 'filter_choose-selection--selected' : ''}`}>Columns</div>
                                     {(option == 1 || option == 0 || option == 2 || option == 4 || option == 5) &&
                                         <div onClick={() => setChooseSelection('categories')} className={`${chooseSelection == 'categories' ? 'filter_choose-selection--selected' : ''}`}>Categories</div>
@@ -1245,12 +732,28 @@ function ItemsCard({ option = 0, handleOpenWindow }) {
                                     {chooseSelection == 'categories' &&
                                         <div className="filter__options-columns filter__options-categories">
                                             {filter.category.map((elem, index) => (
-                                                <div key={index} className={`filter__option filter__option-category-${elem.name} ${elem.isShow == true ? 'filter__option--selected' : ''}`} onClick={() => handleUncheckCategory(index)}>
-                                                    <div className="filter__option-checkbox">
-                                                        <FaCheck className='filter__option-check filter__option-category-check filter__option-category--selected' />
+                                                <>
+                                                    <div className={`filter__option filter__option-category-${elem.name} ${elem.isShow == true ? 'filter__option--selected' : ''}`} onClick={() => handleUncheckCategory(index)}>
+                                                        <div className="filter__option-checkbox">
+                                                            <FaCheck className='filter__option-check filter__option-category-check filter__option-category--selected' />
+                                                        </div>
+                                                        <span>{elem.name.toUpperCase()}</span>
                                                     </div>
-                                                    <span>{elem.name.toUpperCase()}</span>
-                                                </div>
+                                                </>
+                                            ))}
+                                        </div>
+                                    }
+                                    {chooseSelection == 'suppliers' &&
+                                        <div className="filter__options-columns filter__options-suppliers">
+                                            {suppliers.map((elem, index) => (
+                                                <>
+                                                    <div className={`filter__option filter__option-supplier-${elem.name} ${elem.isShow == true ? 'filter__option--selected' : ''}`} onClick={() => handleUncheckSupplier(index)}>
+                                                        <div className="filter__option-checkbox">
+                                                            <FaCheck className='filter__option-check filter__option-supplier-check filter__option-supplier--selected' />
+                                                        </div>
+                                                        <span>{elem.name.toUpperCase()}</span>
+                                                    </div>
+                                                </>
                                             ))}
                                         </div>
                                     }
@@ -1355,18 +858,6 @@ function ItemsCard({ option = 0, handleOpenWindow }) {
                                             }
                                         </div>
                                     }
-                                    {chooseSelection == 'suppliers' &&
-                                        <div className="filter__options-columns filter__options-suppliers">
-                                            {filter.supplier.map((elem, index) => (
-                                                <div key={index} className={`filter__option filter__option-supplier-${elem.name} ${elem.isShow == true ? 'filter__option--selected' : ''}`} onClick={() => handleUncheckSupplier(index)}>
-                                                    <div className="filter__option-checkbox">
-                                                        <FaCheck className='filter__option-check filter__option-supplier-check filter__option-supplier--selected' />
-                                                    </div>
-                                                    <span>{elem.name.toUpperCase()}</span>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    }
                                 </div>
                                 <div className="filter__buttons">
                                     <div className="filter__button button button--outlined" onClick={handleClearFilter}>Clear</div>
@@ -1384,7 +875,7 @@ function ItemsCard({ option = 0, handleOpenWindow }) {
                                 <div className="stockmenu__button-export__info-png button" onClick={handleExportFile}>XLSX</div>
                             </div>
                         </div>
-                        <div className="button stockmenu__button" style={{ display: option != 7 ? 'flex' : 'none' }} onClick={handleOpenWindow}>{option == 0 ? "New Order" : option == 1 ? "New Product" : option == 2 ? 'New Category' : option == 3 ? 'New Supplier' : option == 4 ? 'New Order' : option == 5 ? 'New Order' : option == 6 ? 'New User' : 'New Type'}</div>
+                        <div className="button stockmenu__button" style={{ display: option != 7 ? 'flex' : 'none' }} onClick={handleOpenWindow}>{option == 0 ? "der" : option == 1 ? "New Product" : option == 2 ? 'New Category' : option == 3 ? 'New Supplier' : option == 4 ? 'New Order' : option == 5 ? 'New Order' : option == 6 ? 'New User' : 'New Type'}</div>
                     </div>
                 </div>
                 <div className="stock__container">
@@ -1394,77 +885,70 @@ function ItemsCard({ option = 0, handleOpenWindow }) {
                                 <div className="stock__tag">
                                     <span>Search: {renderFilter.search}</span>
                                     <div className="stock__vl"></div>
-                                    <HiOutlineXMark className='stock__tag-mark' onClick={() => handleRemoveTag('search')} />
+                                    <HiOutlineXMark className='stock__tag-mark' onClick={handleRemoveTag('search')} />
                                 </div>
                             }
                             {filter.orderFilter.onFiltering != '' &&
                                 <div className="stock__tag">
                                     <span>{filter.orderFilter.onFiltering}: {filter.orderFilter[filter.orderFilter.onFilteringVar] == true ? 'Ascending' : 'Descending'}</span>
                                     <div className="stock__vl"></div>
-                                    <HiOutlineXMark className='stock__tag-mark' onClick={() => handleRemoveTag('order')} />
+                                    <HiOutlineXMark className='stock__tag-mark' onClick={handleRemoveTag('order')} />
                                 </div>
                             }
                             {renderFilter.filteringColumns.length != 0 &&
                                 <div className="stock__tag">
                                     <span>Not Show Columns: {`${renderFilter.filteringColumns.map((elem) => elem.charAt(0).toUpperCase() + elem.slice(1).replace('-', ' ') + '')}`}</span>
                                     <div className="stock__vl"></div>
-                                    <HiOutlineXMark className='stock__tag-mark' onClick={() => handleRemoveTag('columns')} />
+                                    <HiOutlineXMark className='stock__tag-mark' onClick={handleRemoveTag('order')} />
+                                </div>
+                            }
+                            {
+                                <div className="stock__tag">
+                                    <span>Not Show Suppliers: {`${renderSupplier.map((elem) => { if (elem.isShow == false) { return elem.name.replace('-', ' ').toUpperCase() + '' } })}`}</span>
+                                    <div className="stock__vl"></div>
+                                    <HiOutlineXMark className='stock__tag-mark' onClick={handleRemoveTag('supplier')} />
                                 </div>
                             }
                             {renderFilter.minSellPrice != 0 &&
                                 <div className="stock__tag">
                                     <span>Min Sell Price: US${renderFilter.minSellPrice}</span>
                                     <div className="stock__vl"></div>
-                                    <HiOutlineXMark className='stock__tag-mark' onClick={() => handleRemoveTag('sell-price')} />
+                                    <HiOutlineXMark className='stock__tag-mark' onClick={handleRemoveTag('sell-price')} />
                                 </div>
                             }
                             {renderFilter.minBuyPrice != 0 &&
                                 <div className="stock__tag">
                                     <span>Min Buy Price: US${renderFilter.minBuyPrice}</span>
                                     <div className="stock__vl"></div>
-                                    <HiOutlineXMark className='stock__tag-mark' onClick={() => handleRemoveTag('buy-price')} />
+                                    <HiOutlineXMark className='stock__tag-mark' onClick={handleRemoveTag('buy-price')} />
                                 </div>
                             }
                             {renderFilter.minQnt != 0 &&
                                 <div className="stock__tag">
                                     <span>Min Quantity: {renderFilter.minQnt}</span>
                                     <div className="stock__vl"></div>
-                                    <HiOutlineXMark className='stock__tag-mark' onClick={() => handleRemoveTag('quantity')} />
+                                    <HiOutlineXMark className='stock__tag-mark' onClick={handleRemoveTag('quantity')} />
                                 </div>
                             }
                             {renderFilter.status != 0 &&
                                 <div className="stock__tag">
                                     <span>Status: {renderFilter.status == 1 ? 'In Stock' : 'Out of Stock'}</span>
                                     <div className="stock__vl"></div>
-                                    <HiOutlineXMark className='stock__tag-mark' onClick={() => handleRemoveTag('status')} />
+                                    <HiOutlineXMark className='stock__tag-mark' onClick={handleRemoveTag('status')} />
                                 </div>
                             }
                             {renderFilter.permission != 0 &&
                                 <div className="stock__tag">
                                     <span>Permission: {renderFilter.permission == 1 ? 'Admin' : 'User'}</span>
                                     <div className="stock__vl"></div>
-                                    <HiOutlineXMark className='stock__tag-mark' onClick={() => handleRemoveTag('permission')} />
+                                    <HiOutlineXMark className='stock__tag-mark' onClick={handleRemoveTag('permission')} />
                                 </div>
                             }
                             {renderFilter.blocked != 0 &&
                                 <div className="stock__tag">
                                     <span>Block: {renderFilter.blocked == 1 ? 'Blocked' : 'No Blocked'}</span>
                                     <div className="stock__vl"></div>
-                                    <HiOutlineXMark className='stock__tag-mark' onClick={() => handleRemoveTag('blocked')} />
-                                </div>
-                            }
-                            {isHidingSupplier &&
-                                <div className="stock__tag">
-                                    <span>Not Show Suppliers: {renderFilter.supplier.filter((elem) => elem.isShow === false).map((elem) => elem.name.replace('-', ' ').toUpperCase()).join(', ')}</span>
-                                    <div className="stock__vl"></div>
-                                    <HiOutlineXMark className='stock__tag-mark' onClick={() => handleRemoveTag('supplier')} />
-                                </div>
-                            }
-                            {isHidingCategory &&
-                                <div className="stock__tag">
-                                    <span>Not Show Categories: {renderFilter.category.filter((elem) => elem.isShow === false).map((elem) => elem.name.replace('-', ' ').toUpperCase()).join(', ')}</span>
-                                    <div className="stock__vl"></div>
-                                    <HiOutlineXMark className='stock__tag-mark' onClick={() => handleRemoveTag('category')} />
+                                    <HiOutlineXMark className='stock__tag-mark' onClick={handleRemoveTag('blocked')} />
                                 </div>
                             }
 
@@ -1472,7 +956,7 @@ function ItemsCard({ option = 0, handleOpenWindow }) {
                         <p className="stock__info__content">Total {option == 0 ? "Stock Items" : option == 1 ? "Products" : option == 2 ? 'Categories' : option == 3 ? 'Suppliers' : option == 4 ? 'Purchases' : option == 5 ? 'Sales' : option == 6 ? 'Users' : option == 7 ? 'Logs' : ''}: 67</p>
                     </div>
                     <div className="stock__items">
-                        <div className="stockitems__header stock__item" style={{ gridTemplateColumns: renderFilter[`option${option}`] }}>
+                        <div className="stockitems__header stock__item" style={{ gridTemplateColumns: filterOptionsGrid }}>
                             <div className="stockitem__select" onClick={handleSelectAllItems}></div>
                             {((option != 2 && option != 3 && option != 4 && option != 5 && option != 7) && renderFilter.columns.image != false) &&
                                 <div className=""></div>
@@ -1595,9 +1079,10 @@ function ItemsCard({ option = 0, handleOpenWindow }) {
                             }
 
                             <div className="stockitem__productsdelete button" style={{ display: "none" }}>Delete</div>
+
                         </div>
                         <div className="stock__items-container">
-                            <div className="stock__item" style={{ gridTemplateColumns: renderFilter[`option${option}`] }}>
+                            <div className="stock__item" style={{ gridTemplateColumns: filterOptionsGrid }}>
                                 <div className="stockitem__select" onClick={(e) => handleSelectItem(e)}></div>
                                 {((option != 2 && option != 3 && option != 4 && option != 5 && option != 7) && renderFilter.columns.image != false) &&
                                     < img src={Tshirt} className='stockitem__img' />
@@ -1642,7 +1127,7 @@ function ItemsCard({ option = 0, handleOpenWindow }) {
                                     <p className="stockitem__productsellprice">$24.00</p>
                                 }
                                 {((option == 4) && renderFilter.columns.buyPrice == true) &&
-                                    <p className="stockitem__productsellprice stockitem__productbuyprice">$24.00</p>
+                                    <p className="stockitem__productbuyprice">$24.00</p>
                                 }
                                 {((option != 6) && renderFilter.columns.description == true) &&
                                     <p className="stockitem__productdescription">{`Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus consequuntur praesentium animi quaerat quae perspiciatis, amet voluptates blanditiis corporis facilis eos natus nihil. Dolorem, reiciendis! Commodi, exercitationem nostrum veritatis suscipit et tempora consequuntur odit eaque totam dolorem enim aspernatur quasi fuga eius deleniti possimus dolores expedita aliquam rem ipsam maxime! Rem, accusantium odio quae dolorem expedita voluptatibus, dignissimos illo, reprehenderit numquam facere molestiae excepturi ullam fugiat quos omnis? Earum repellendus explicabo sint voluptatibus, illum ea magni qui laudantium neque doloribus maxime debitis nisi. Dolor deserunt maxime in alias architecto reiciendis doloribus. Incidunt, recusandae facere. Eius saepe iste optio deleniti nostrum.`.slice(0, 30)}...</p>

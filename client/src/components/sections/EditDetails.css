@@ -1,0 +1,56 @@
+.edit-details {
+    min-height: calc(100vh - 110px - 6rem);
+    height: 100%;
+    grid-column: span 12;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.edit-details h2 {
+    font-size: 3rem;
+}
+
+.edit-details__inventory-input-box {
+    width: 100%;
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+.edit-details__inventory-input-box span {
+    padding-left: 1rem;
+    font-size: .95rem;
+    font-weight: var(--font-medium);
+}
+
+.edit-details__password__field {
+    position: relative;
+}
+
+.edit-details__password__show {
+    position: absolute;
+    right: 10px;
+    top: 12px;
+    z-index: 5;
+    font-size: 1.3rem;
+    cursor: pointer;
+}
+
+.edit-details__inventory-input {
+    width: 100%;
+    outline: none;
+    border: none;
+    background-color: rgba(0, 0, 0, 0.05);
+    padding: .8rem;
+    border-radius: 5px;
+    font-size: .95rem;
+}
+
+.edit-details__button {
+    width: 180px;
+    height: 60px;
+    font-size: 1rem;
+}

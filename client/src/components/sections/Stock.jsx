@@ -9,7 +9,7 @@ import { FaMoneyBill1 } from "react-icons/fa6";
 
 ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels);
 
-function Stock() {
+function Stock({ handleOpenWindow }) {
 
     const data = [
         {
@@ -87,7 +87,7 @@ function Stock() {
                 <h3>Stock Info (Per Category)</h3>
                 <DoughnutChartCard options={options} finalData={finalData} />
             </div>
-            <ItemsCard option={0} />
+            <ItemsCard option={0} handleOpenWindow={handleOpenWindow} />
         </>
     )
 }

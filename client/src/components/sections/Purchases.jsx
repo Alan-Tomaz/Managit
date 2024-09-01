@@ -1,10 +1,10 @@
 import React from 'react'
 import ItemsCard from '../cards/ItemsCard'
 
-function Purchases() {
+function Purchases({ handleOpenWindow }) {
     return (
         <>
-            <ItemsCard option={4} />
+            <ItemsCard option={4} handleOpenWindow={handleOpenWindow} />
         </>
     )
 }
