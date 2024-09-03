@@ -1,0 +1,68 @@
+.new-user__title {
+    font-size: 2rem;
+}
+
+.new-user__inputbox__password {
+    grid-column: span 1;
+    margin-bottom: 0;
+}
+
+.newuser__imgbox {
+    width: 180px;
+    height: 180px;
+}
+
+.newuser__input {
+    padding: .8rem;
+    font-size: .96rem;
+}
+
+.newuser__password {
+    padding-right: 40px;
+}
+
+.newuser__input::placeholder {
+    font-size: .9rem;
+}
+
+.newuser__img {
+    width: 180px;
+    height: 180px;
+}
+
+.newuser__edit__img {
+    color: rgba(0, 0, 0, 0.8) !important
+}
+
+.newuser__button {
+    min-width: 160px;
+    min-height: 55px;
+    width: 160px;
+    height: 55px;
+    font-size: 1rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.newuser__inputbox-container {
+    gap: 1.5rem;
+}
+
+.newuser__box {
+    gap: 1.5rem;
+}
+
+.newuser__password__show {
+    font-size: 1.3rem;
+    top: 12px;
+}
+
+/* ============== MEDIA QUERIES =============== */
+
+/* Medium Devices = 1024 */
+
+@media screen and (max-width: 1024px) {}
+
+/* Small Devices = 600 */
+
+@media screen and (max-width:600px) {}

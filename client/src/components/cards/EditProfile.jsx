@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { FaRegEdit } from 'react-icons/fa';
+import React, { useEffect, useRef, useState } from 'react';
+import { FaEye, FaEyeSlash, FaRegEdit } from 'react-icons/fa';
 import { IoClose } from 'react-icons/io5';
 import { MdEditSquare } from "react-icons/md";
 import { FaRegCircleCheck } from "react-icons/fa6";
@@ -11,10 +11,50 @@ import './EditProfile.css';
 
 function EditProfile({ closeWindow }) {
 
+    const showPassword = useRef(null)
+    const showConfirmPassword = useRef(null)
+
+    const [showPasswordButton, setShowPasswordButton] = useState(false);
+    const [showConfirmPasswordButton, setShowConfirmPasswordButton] = useState(false);
+    const [passwordType, setPasswordType] = useState('password');
+    const [confirmPasswordType, setConfirmPasswordType] = useState('password');
+
+
+    const handleShowPassword = (passwordTypeNum) => {
+        switch (passwordTypeNum) {
+            case 0:
+                if (passwordType == "password") {
+                    setPasswordType("text")
+                }
+                else {
+                    setPasswordType("password")
+                }
+                break;
+            case 1:
+                if (confirmPasswordType == "password") {
+                    setConfirmPasswordType("text")
+                }
+                else {
+                    setConfirmPasswordType("password")
+                }
+                break;
+        }
+    }
+
+
     const apiUrl = useSelector((state) => state.MiscReducer.apiUrl);
     const apiPort = useSelector((state) => state.MiscReducer.apiPort);
     const userInfo = useSelector((state) => state.UserReducer.user);
     const imgPaths = `${apiUrl}:${apiPort}/assets/`;
+
+    const [name, setName] = useState('alan');
+    const [email, setEmail] = useState('alan4tomaz8@gmail.com');
+    const [phoneNumber, setPhoneNumber] = useState('31988709707');
+    const [birthDate, setBirthDate] = useState('');
+    const [location, setLocation] = useState('Teste');
+    const [biography, setBiography] = useState('Teste');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
 
     const [showSaveButton1, setShowSaveButton1] = useState(false)
     const [showSaveButton2, setShowSaveButton2] = useState(false)
@@ -30,6 +70,25 @@ function EditProfile({ closeWindow }) {
         setShowSaveButton1(true);
     }
 
+    useEffect(() => {
+        /* CLOSE WINDOW WHEN CLICK OUTSIDE */
+        const handleClickOutside = (event) => {
+            /* SHOW PASSWORD BUTTON */
+            if (showPassword.current && !showPassword.current.contains(event.target)) {
+                setShowPasswordButton(false);
+            }
+            if (showConfirmPassword.current && !showConfirmPassword.current.contains(event.target)) {
+                setShowConfirmPasswordButton(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+
+    }, []);
     return (
         <div className="edit-profile">
             <div className="edit-profile__close-window">
@@ -54,7 +113,7 @@ function EditProfile({ closeWindow }) {
                             <img src={Loading} className='editprofile__loading' style={{ display: showSaveButton2 == 'loading' ? 'inline-bloc' : 'none' }} />
                             <FaRegCircleCheck className='editprofile__edit' style={{ display: showSaveButton2 == true ? 'inline-block' : 'none' }} onClick={() => setShowSaveButton2(false)} />
                         </div>
-                        <input type="text" name="editprofile__name" id="editprofile__name" className="editprofile__input editprofile__name" />
+                        <input type="text" name="editprofile__name" id="editprofile__name" className="editprofile__input editprofile__name" disabled={showSaveButton2 == true ? '' : 'disabled'} value={name} onChange={(e) => setName(e.target.value)} />
                     </div>
                     <div className="editprofile__inputbox">
                         <div className="editprofile__labelbox">
@@ -63,7 +122,7 @@ function EditProfile({ closeWindow }) {
                             <img src={Loading} className='editprofile__loading' style={{ display: showSaveButton3 == 'loading' ? 'inline-block' : 'none' }} />
                             <FaRegCircleCheck className='editprofile__edit' style={{ display: showSaveButton3 == true ? 'inline-block' : 'none' }} onClick={() => setShowSaveButton3(false)} />
                         </div>
-                        <input type="text" name="editprofile__phonenumber" id="editprofile__phonenumber" className="editprofile__input editprofile__phonenumber" />
+                        <input type="text" name="editprofile__phonenumber" id="editprofile__phonenumber" className="editprofile__input editprofile__phonenumber" disabled={showSaveButton3 == true ? '' : 'disabled'} value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} />
                     </div>
                 </div>
                 <div className="editprofile__row"></div>
@@ -75,7 +134,7 @@ function EditProfile({ closeWindow }) {
                             <img src={Loading} className='editprofile__loading' style={{ display: showSaveButton4 == 'loading' ? 'inline-block' : 'none' }} />
                             <FaRegCircleCheck className='editprofile__edit' style={{ display: showSaveButton4 == true ? 'inline-block' : 'none' }} onClick={() => setShowSaveButton4(false)} />
                         </div>
-                        <input type="text" name="editprofile__email" id="editprofile__email" className="editprofile__input editprofile__email" />
+                        <input type="text" name="editprofile__email" id="editprofile__email" className="editprofile__input editprofile__email" disabled={showSaveButton4 == true ? '' : 'disabled'} value={email} onChange={(e) => setEmail(e.target.value)} />
                     </div>
                     <div className="editprofile__inputbox">
                         <div className="editprofile__labelbox">
@@ -84,7 +143,7 @@ function EditProfile({ closeWindow }) {
                             <img src={Loading} className='editprofile__loading' style={{ display: showSaveButton5 == 'loading' ? 'inline-block' : 'none' }} />
                             <FaRegCircleCheck className='editprofile__edit' style={{ display: showSaveButton5 == true ? 'inline-block' : 'none' }} onClick={() => setShowSaveButton5(false)} />
                         </div>
-                        <input type="date" name="editprofile__birthdate" id="editprofile__birthdate" className="editprofile__input editprofile__birthdate" />
+                        <input type="date" name="editprofile__birthdate" id="editprofile__birthdate" className="editprofile__input editprofile__birthdate" disabled={showSaveButton5 == true ? '' : 'disabled'} value={birthDate} onChange={(e) => setBirthDate(e.target.value)} />
                     </div>
                 </div>
                 <div className="editprofile__inputbox edit-profile__inputbox__location">
@@ -94,7 +153,7 @@ function EditProfile({ closeWindow }) {
                         <img src={Loading} className='editprofile__loading' style={{ display: showSaveButton6 == 'loading' ? 'inline-block' : 'none' }} />
                         <FaRegCircleCheck className='editprofile__edit' style={{ display: showSaveButton6 == true ? 'inline-block' : 'none' }} onClick={() => setShowSaveButton6(false)} />
                     </div>
-                    <input type="text" name="editprofile__location" id="editprofile__location" className="editprofile__input editprofile__location" />
+                    <input type="text" name="editprofile__location" id="editprofile__location" className="editprofile__input editprofile__location" disabled={showSaveButton6 == true ? '' : 'disabled'} value={location} onChange={(e) => setLocation(e.target.value)} />
                 </div>
                 <div className="editprofile__inputbox edit-profile__inputbox__biography">
                     <div className="editprofile__labelbox">
@@ -103,7 +162,7 @@ function EditProfile({ closeWindow }) {
                         <img src={Loading} className='editprofile__loading' style={{ display: showSaveButton7 == 'loading' ? 'inline-block' : 'none' }} />
                         <FaRegCircleCheck className='editprofile__edit' style={{ display: showSaveButton7 == true ? 'inline-block' : 'none' }} onClick={() => setShowSaveButton7(false)} />
                     </div>
-                    <textarea name="editprofile__biography" id="editprofile__biography" className="editprofile__input editprofile__biography" ></textarea>
+                    <textarea name="editprofile__biography" id="editprofile__biography" className="editprofile__input editprofile__biography" disabled={showSaveButton7 == true ? '' : 'disabled'} onChange={(e) => setBiography(e.target.value)}>{biography}</textarea>
                 </div>
                 <div className="editprofile__inputbox edit-profile__inputbox__password">
                     <div className="editprofile__labelbox">
@@ -112,8 +171,25 @@ function EditProfile({ closeWindow }) {
                         <img src={Loading} className='editprofile__loading' style={{ display: showSaveButton8 == 'loading' ? 'inline-block' : 'none' }} />
                         <FaRegCircleCheck className='editprofile__edit' style={{ display: showSaveButton8 == true ? 'inline-block' : 'none' }} onClick={() => setShowSaveButton8(false)} />
                     </div>
-                    <input type="password" name="editprofile__password" id="editprofile__password" className="editprofile__input editprofile__password" />
+                    <div className="editprofile__passbox__container">
+                        <div className="editprofile__passbox">
+                            <div className="editprofile__password__field" ref={showPassword}>
+                                <input type={passwordType} name="editprofile__password" id="editprofile__password" className="editprofile__input editprofile__password" onChange={(e) => setPassword(e.target.value)} onClick={() => setShowPasswordButton(true)} placeholder='Password:' disabled={showSaveButton8 == true ? '' : 'disabled'} />
+                                <FaEye className='editprofile__password__show' onClick={() => handleShowPassword(0)} style={{ display: passwordType == "text" ? showSaveButton8 == true ? "inline-block" : 'none' : "none", visibility: showPasswordButton == true ? showSaveButton8 == true ? "visible" : "hidden" : "hidden" }} />
+                                <FaEyeSlash className='editprofile__password__show' onClick={() => handleShowPassword(0)} style={{ display: passwordType == "password" ? showSaveButton8 == true ? "inline-block" : 'none' : "none", visibility: showPasswordButton == true ? showSaveButton8 == true ? "visible" : 'hidden' : "hidden" }} />
+                            </div>
+                        </div>
+                        <div className="editprofile__row"></div>
+                        <div className="editprofile__passbox">
+                            <div className="editprofile__password__field" ref={showConfirmPassword}>
+                                <input type={confirmPasswordType} name="editprofile__confirmpassword" id="editprofile__confirmpassword" className="editprofile__input editprofile__password" onChange={(e) => setConfirmPassword(e.target.value)} onClick={() => setShowConfirmPasswordButton(true)} placeholder='Confirm Password:' disabled={showSaveButton8 == true ? '' : 'disabled'} />
+                                <FaEye className='editprofile__password__show' onClick={() => handleShowPassword(1)} style={{ display: confirmPasswordType == "text" ? showSaveButton8 == true ? "inline-block" : 'none' : "none", visibility: showConfirmPasswordButton == true ? showSaveButton8 == true ? "visible" : "hidden" : "hidden" }} />
+                                <FaEyeSlash className='editprofile__password__show' onClick={() => handleShowPassword(1)} style={{ display: confirmPasswordType == "password" ? showSaveButton8 == true ? "inline-block" : 'none' : "none", visibility: showConfirmPasswordButton == true ? showSaveButton8 == true ? "visible" : 'hidden' : "hidden" }} />
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
             </div>
         </div>
     )

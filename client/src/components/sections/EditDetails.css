@@ -54,3 +54,29 @@
     height: 60px;
     font-size: 1rem;
 }
+
+.edit-details__inventory-pass {
+    padding-right: 40px;
+}
+
+/* ============== MEDIA QUERIES =============== */
+
+/* Medium Devices = 1024 */
+
+@media screen and (max-width: 1024px) {}
+
+/* Small Devices = 600 */
+
+@media screen and (max-width:600px) {
+    .edit-details h2 {
+        font-size: 2.2rem;
+    }
+
+    .edit-details__inventory-input-box {
+        width: 100%;
+    }
+
+    .edit-details {
+        width: calc(100vw - 70px);
+    }
+}

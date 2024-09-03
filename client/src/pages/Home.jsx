@@ -7,7 +7,7 @@ import { MdOutlineContentPasteSearch } from "react-icons/md";
 import { MdOutlineLocalShipping } from "react-icons/md";
 import { MdOutlineAdminPanelSettings } from "react-icons/md";
 import { FaSearch } from "react-icons/fa";
-import { IoIosNotifications } from "react-icons/io";
+import { IoIosNotifications, IoMdArrowDropup } from "react-icons/io";
 import { useDispatch, useSelector } from 'react-redux';
 import { IoMdArrowDropdown } from "react-icons/io";
 import DefaultView from '../components/DefaultView';
@@ -580,12 +580,14 @@ function Home() {
                                         <img src={`${imgPaths}${userInfo.picturePath}`} alt="profile-image" />
                                     </div>
                                     <span className='profile__name'>{userInfo.name}</span>
-                                    <IoMdArrowDropdown className='profile__arrow' />
+                                    <IoMdArrowDropdown className='profile__arrow' style={{ display: showNavbarOptions == false ? "flex" : "none" }} />
+                                    <IoMdArrowDropup className='profile__arrow' style={{ display: showNavbarOptions == true ? "flex" : "none" }} />
                                 </div>
                                 <div className="profile__options" style={{ display: showNavbarOptions == true ? "flex" : "none" }}>
                                     <span className="profile__option profile__inventories" onClick={() => setShowModal('edit-inventories')} >Inventories</span>
                                     <span className="profile__option profile__edit" onClick={() => setShowModal('edit-profile')}>Edit Profile</span>
                                     <span className="profile__option profile__logout" onClick={logoutUser}>Logout</span>
+                                    <IoMdArrowDropup className='profile__option__arrow' />
                                 </div>
                             </div>
                         </div>
