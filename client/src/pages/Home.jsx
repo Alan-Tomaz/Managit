@@ -33,7 +33,7 @@ import CreateSupplier from '../components/cards/CreateSupplier.jsx';
 import CreateCategory from '../components/cards/CreateCategory.jsx';
 import NewUser from '../components/cards/NewUser.jsx';
 
-function Home() {
+function Home({ showToastMessage }) {
 
     const { choosenSection, choosenSubSection } = useParams();
 
@@ -470,7 +470,7 @@ function Home() {
     return (
         <>
             {userInfo != null ? (
-                <main className='home' onLoad={() => { if (innerWidth <= 600) { handleCloseSideBar() } }}>
+                <main className='home' onLoad={() => { if (innerWidth <= 600) { handleCloseSideBar() } }} >
                     <div className="modal__window" style={{ display: showModal != '' ? 'flex' : 'none' }} >
                         {showModal == 'new-order' &&
                             <NewOrder closeWindow={() => setShowModal('')} />
@@ -547,7 +547,7 @@ function Home() {
                         )}
                         <p className="credits" >Created By <a href="https://github.com/Alan-Tomaz" target='_blank'>Alan Tomaz</a></p>
                     </aside>
-                    <nav className='home__navbar'>
+                    <nav className='home__navbar' >
                         <div className="navbar__search" style={{ visibility: showSearchInput == true ? "visible" : "hidden", opacity: showSearchInput == true ? "1" : "0" }}>
                             <input type="text" name="" id="" placeholder='Search:' className="input__search" />
                         </div>

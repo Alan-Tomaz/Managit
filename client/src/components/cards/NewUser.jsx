@@ -2,24 +2,67 @@ import React, { useEffect, useRef, useState } from 'react';
 import { FaEye, FaEyeSlash, FaRegEdit } from 'react-icons/fa';
 import { IoClose } from 'react-icons/io5';
 import { MdEditSquare } from "react-icons/md";
-import { FaRegCircleCheck } from "react-icons/fa6";
-import { FaCheckCircle } from "react-icons/fa";
 import Loading from '../../assets/images/loading.svg';
 import LoadingWhite from '../../assets/images/loading-white.svg';
+import { US, BR } from "country-flag-icons/react/3x2";
 import UserImg from '../../assets/images/user.png';
 import './EditProfile.css';
 import './NewUser.css';
+import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
 
 function NewUser({ closeWindow }) {
 
     const showPassword = useRef(null)
     const showConfirmPassword = useRef(null)
+    const countryListRef = useRef(null);
 
     const [showPasswordButton, setShowPasswordButton] = useState(false);
     const [showConfirmPasswordButton, setShowConfirmPasswordButton] = useState(false);
+    const [isCountryListOpen, setIsCountryListOpen] = useState(false);
     const [passwordType, setPasswordType] = useState('password');
+    const [countryCode, setCountryCode] = useState(1);
+    const [countries, setCountries] = useState([<li key={1} id='newuser-country-item-1' className='register__input__contry-item newuser__input__contry-item' onClick={() => handleChangeCountry(1)}><div className="register__input__contry-img newuser__input__contry-img"><US className='register__input__country-flag newuser__input__country-flag' /><span className='register__input__country-text newuser__input__country-text' id='newuser__country-1'>United States</span></div><span className='register__input__country-text newuser__input__country-text'>+1</span></li>, <li key={2} className='register__input__contry-item newuser__input__contry-item' id='newuser-country-item-2' onClick={() => handleChangeCountry(55)}><div className="register__input__contry-img newuser__input__contry-img"><BR className='register__input__country-flag newuser__input__country-flag' /><span className='register__input__country-text newuser__input__country-text' id='newuser__country-2'>Brazil</span></div><span className='register__input__country-text newuser__input__country-text'>+55</span></li>]);
     const [confirmPasswordType, setConfirmPasswordType] = useState('password');
+    const [birthInputType, setBirthInputType] = useState('text');
 
+
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState('');
+    const [birthDate, setBirthDate] = useState('');
+    const [location, setLocation] = useState('');
+    const [biography, setBiography] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+
+    const handleChangeDateInput = (e, type) => {
+        const input = e.target;
+
+        switch (type) {
+            case "focus":
+                setBirthInputType("date");
+                break;
+            case "blur":
+                if (input.value.length == 0) {
+                    setBirthInputType("text");
+                }
+                break;
+            case "double_click":
+                input.showPicker();
+                break;
+        }
+
+    }
+
+    const handleChangeCountry = (code) => {
+        setCountryCode(code);
+        setIsCountryListOpen(false);
+        setPhoneNumber("");
+    }
+
+    const handleSearchCountry = () => {
+
+    }
 
     const handleShowPassword = (passwordTypeNum) => {
         switch (passwordTypeNum) {
@@ -43,14 +86,6 @@ function NewUser({ closeWindow }) {
     }
 
 
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [phoneNumber, setPhoneNumber] = useState('');
-    const [birthDate, setBirthDate] = useState('');
-    const [location, setLocation] = useState('');
-    const [biography, setBiography] = useState('');
-    const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
 
     const handleSelectFile = () => {
         document.getElementById('editprofile__input__file').click();
@@ -65,6 +100,9 @@ function NewUser({ closeWindow }) {
             }
             if (showConfirmPassword.current && !showConfirmPassword.current.contains(event.target)) {
                 setShowConfirmPasswordButton(false);
+            }
+            if (countryListRef.current && !countryListRef.current.contains(event.target)) {
+                setIsCountryListOpen(false);
             }
         };
 
@@ -90,27 +128,41 @@ function NewUser({ closeWindow }) {
             </div>
             <div className="editprofile__inputbox-container newuser__inputbox-container">
                 <div className="editprofile__box newuser__box">
-                    <div className="editprofile__inputbox">
+                    <div className="editprofile__inputbox ">
                         <input type="text" name="editprofile__name" id="editprofile__name" className="editprofile__input newuser__input editprofile__name" value={name} onChange={(e) => setName(e.target.value)} placeholder='Name:' />
                     </div>
-                    <div className="editprofile__inputbox newuser__box">
-                        <input type="text" name="editprofile__phonenumber" id="editprofile__phonenumber" className="editprofile__input newuser__input editprofile__phonenumber" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} placeholder='Phone Number:' />
+                    <div className="editprofile__inputbox ">
+                        <div className="register__input-phonenumber newuser__input-phonenumber" ref={countryListRef} >
+                            <div className="register__input__country-selected newuser__input__country-selected" onClick={() => setIsCountryListOpen(!isCountryListOpen)}>
+                                <US style={{ display: countryCode == "1" ? "flex" : "none" }} className='register__input__country-flag newuser__country-flag' />
+                                <BR style={{ display: countryCode == "55" ? "flex" : "none" }} className='register__input__country-flag newuser__country-flag' />
+                                <IoIosArrowDown className='register__input__country-arrow newuser__input__country-arrow' style={{ display: isCountryListOpen ? "none" : "inline-block" }} />
+                                <IoIosArrowUp className='register__input__country-arrow newuser__input__country-arrow' style={{ display: isCountryListOpen ? "inline-block" : "none" }} />
+                            </div>
+                            <input type="text" name="editprofile__phonenumber" id="editprofile__phonenumber" className="editprofile__input newuser__input editprofile__phonenumber" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} placeholder='Phone Number:' />
+                            <div className="register__input__countries newuser__input__countries" style={{ visibility: isCountryListOpen ? "visible" : "hidden", opacity: isCountryListOpen ? "1" : "0" }}>
+                                <input type="text" className='register__input__country-search register__input newuser__input__country-search' onChange={handleSearchCountry} />
+                                <ul className="register__input__contry-list newuser__input__contry-list">
+                                    {countries}
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div className="editprofile__row"></div>
-                <div className="editprofile__box">
-                    <div className="editprofile__inputbox newuser__box">
+                <div className="editprofile__box newuser__box">
+                    <div className="editprofile__inputbox ">
                         <input type="text" name="editprofile__email" id="editprofile__email" className="editprofile__input newuser__input editprofile__email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder='Email:' />
                     </div>
-                    <div className="editprofile__inputbox newuser__box">
-                        <input type="date" name="editprofile__birthdate" id="editprofile__birthdate" className="editprofile__input newuser__input editprofile__birthdate" value={birthDate} onChange={(e) => setBirthDate(e.target.value)} />
+                    <div className="editprofile__inputbox ">
+                        <input type={birthInputType} name="editprofile__birthdate" id="editprofile__birthdate" className="editprofile__input newuser__input editprofile__birthdate" placeholder='Birth Date:' onClick={(e) => handleChangeDateInput(e, 'focus')} onBlur={(e) => handleChangeDateInput(e, 'blur')} onDoubleClick={(e) => handleChangeDateInput(e, 'double_click')} />
                     </div>
                 </div>
                 <div className="editprofile__inputbox edit-profile__inputbox__location">
                     <input type="text" name="editprofile__location" id="editprofile__location" className="editprofile__input newuser__input editprofile__location" value={location} onChange={(e) => setLocation(e.target.value)} placeholder='Location' />
                 </div>
                 <div className="editprofile__inputbox edit-profile__inputbox__biography">
-                    <textarea name="editprofile__biography" id="editprofile__biography" className="editprofile__input newuser__input editprofile__biography" placeholder='Description:' onChange={(e) => setBiography(e.target.value)}>{biography}</textarea>
+                    <textarea name="editprofile__biography" id="editprofile__biography" className="editprofile__input newuser__input editprofile__biography newuser__biography" placeholder='Description:' onChange={(e) => setBiography(e.target.value)}>{biography}</textarea>
                 </div>
                 <div className="editprofile__inputbox edit-profile__inputbox__password new-user__inputbox__password">
                     <div className="editprofile__passbox">

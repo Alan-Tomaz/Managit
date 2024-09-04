@@ -13,7 +13,9 @@
 }
 
 .newuser__input {
-    padding: .8rem;
+    padding: 0rem;
+    height: 46px;
+    padding: 0 .8rem;
     font-size: .96rem;
 }
 
@@ -23,6 +25,10 @@
 
 .newuser__input::placeholder {
     font-size: .9rem;
+}
+
+.newuser__biography {
+    padding: .8rem;
 }
 
 .newuser__img {
@@ -54,7 +60,11 @@
 
 .newuser__password__show {
     font-size: 1.3rem;
-    top: 12px;
+    top: 13px;
+}
+
+.newuser__input-phonenumber:hover {
+    background-color: var(--bg-color);
 }
 
 /* ============== MEDIA QUERIES =============== */
