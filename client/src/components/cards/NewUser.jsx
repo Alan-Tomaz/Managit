@@ -21,7 +21,7 @@ function NewUser({ closeWindow }) {
     const [isCountryListOpen, setIsCountryListOpen] = useState(false);
     const [passwordType, setPasswordType] = useState('password');
     const [countryCode, setCountryCode] = useState(1);
-    const [countries, setCountries] = useState([<li key={1} id='newuser-country-item-1' className='register__input__contry-item newuser__input__contry-item' onClick={() => handleChangeCountry(1)}><div className="register__input__contry-img newuser__input__contry-img"><US className='register__input__country-flag newuser__input__country-flag' /><span className='register__input__country-text newuser__input__country-text' id='newuser__country-1'>United States</span></div><span className='register__input__country-text newuser__input__country-text'>+1</span></li>, <li key={2} className='register__input__contry-item newuser__input__contry-item' id='newuser-country-item-2' onClick={() => handleChangeCountry(55)}><div className="register__input__contry-img newuser__input__contry-img"><BR className='register__input__country-flag newuser__input__country-flag' /><span className='register__input__country-text newuser__input__country-text' id='newuser__country-2'>Brazil</span></div><span className='register__input__country-text newuser__input__country-text'>+55</span></li>]);
+    const [countries, setCountries] = useState([<li key={1} id='newuser__country-item-1' className='register__input__contry-item newuser__input__contry-item' onClick={() => handleChangeCountry(1)}><div className="register__input__contry-img newuser__input__contry-img"><US className='register__input__country-flag newuser__input__country-flag' /><span className='register__input__country-text newuser__input__country-text' id='newuser__country-1'>United States</span></div><span className='register__input__country-text newuser__input__country-text'>+1</span></li>, <li key={2} className='register__input__contry-item newuser__input__contry-item' id='newuser__country-item-2' onClick={() => handleChangeCountry(55)}><div className="register__input__contry-img newuser__input__contry-img"><BR className='register__input__country-flag newuser__input__country-flag' /><span className='register__input__country-text newuser__input__country-text' id='newuser__country-2'>Brazil</span></div><span className='register__input__country-text newuser__input__country-text'>+55</span></li>]);
     const [confirmPasswordType, setConfirmPasswordType] = useState('password');
     const [birthInputType, setBirthInputType] = useState('text');
 
@@ -54,13 +54,54 @@ function NewUser({ closeWindow }) {
 
     }
 
+    const handlePhoneNumber = (e) => {
+        /* FORMATTING PHONE NUMBER */
+        const newPhoneNumber = e.target.value.replace(/[^\d]/g, '');
+        const phoneNumberLength = newPhoneNumber.length;
+        switch (countryCode) {
+            case 1:
+                if (phoneNumberLength < 4) {
+                    setPhoneNumber(newPhoneNumber);
+                }
+                else if (phoneNumberLength < 7) {
+                    setPhoneNumber(`(${newPhoneNumber.slice(0, 3)}) ${newPhoneNumber.slice(3)}`);
+                }
+                else {
+                    setPhoneNumber(`(${newPhoneNumber.slice(0, 3)}) ${newPhoneNumber.slice(3, 6)}-${newPhoneNumber.slice(6, 10)}`);
+                }
+                break;
+            case 55:
+                if (phoneNumberLength < 3) {
+                    setPhoneNumber(newPhoneNumber);
+                }
+                else if (phoneNumberLength < 4) {
+                    setPhoneNumber(`(${newPhoneNumber.slice(0, 2)}) ${newPhoneNumber.slice(2, 3)}`);
+                }
+                else if (phoneNumberLength < 8) {
+                    setPhoneNumber(`(${newPhoneNumber.slice(0, 2)}) ${newPhoneNumber.slice(2, 3)} ${newPhoneNumber.slice(3)}`);
+                }
+                else {
+                    setPhoneNumber(`(${newPhoneNumber.slice(0, 2)}) ${newPhoneNumber.slice(2, 3)} ${newPhoneNumber.slice(3, 7)}-${newPhoneNumber.slice(7, 11)}`);
+                }
+                break;
+        }
+    }
+
     const handleChangeCountry = (code) => {
         setCountryCode(code);
         setIsCountryListOpen(false);
         setPhoneNumber("");
     }
 
-    const handleSearchCountry = () => {
+    const handleSearchCountry = (e) => {
+        const searchValue = e.target.value.toLowerCase();
+
+        countries.map((country, index) => {
+            const countryName = document.getElementById(`newuser__country-${index + 1}`).innerHTML.toLowerCase();
+            const countryItem = document.getElementById(`newuser__country-item-${index + 1}`);
+            const isMatched = countryName.includes(searchValue)
+            countryItem.classList.toggle('hide', !isMatched)
+        })
 
     }
 
@@ -139,7 +180,7 @@ function NewUser({ closeWindow }) {
                                 <IoIosArrowDown className='register__input__country-arrow newuser__input__country-arrow' style={{ display: isCountryListOpen ? "none" : "inline-block" }} />
                                 <IoIosArrowUp className='register__input__country-arrow newuser__input__country-arrow' style={{ display: isCountryListOpen ? "inline-block" : "none" }} />
                             </div>
-                            <input type="text" name="editprofile__phonenumber" id="editprofile__phonenumber" className="editprofile__input newuser__input editprofile__phonenumber" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} placeholder='Phone Number:' />
+                            <input type="text" name="editprofile__phonenumber" id="editprofile__phonenumber" className="editprofile__input newuser__input editprofile__phonenumber" value={phoneNumber} onChange={(e) => handlePhoneNumber(e)} placeholder='Phone Number:' />
                             <div className="register__input__countries newuser__input__countries" style={{ visibility: isCountryListOpen ? "visible" : "hidden", opacity: isCountryListOpen ? "1" : "0" }}>
                                 <input type="text" className='register__input__country-search register__input newuser__input__country-search' onChange={handleSearchCountry} />
                                 <ul className="register__input__contry-list newuser__input__contry-list">

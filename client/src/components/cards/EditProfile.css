@@ -193,6 +193,15 @@
     padding-right: 40px;
 }
 
+.editprofile__input-phonenumber:hover {
+    background-color: var(--bg-color);
+}
+
+.editprofile__input__country--enabled:hover {
+    cursor: initial;
+}
+
+
 /* ============== MEDIA QUERIES =============== */
 
 /* Medium Devices = 1024 */
