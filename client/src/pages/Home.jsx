@@ -32,6 +32,7 @@ import CreateProducts from '../components/cards/CreateProducts.jsx';
 import CreateSupplier from '../components/cards/CreateSupplier.jsx';
 import CreateCategory from '../components/cards/CreateCategory.jsx';
 import NewUser from '../components/cards/NewUser.jsx';
+import RemoveItem from '../components/cards/RemoveItem.jsx';
 
 function Home({ showToastMessage }) {
 
@@ -496,6 +497,9 @@ function Home({ showToastMessage }) {
                         {showModal == 'new-user' &&
                             <NewUser closeWindow={() => setShowModal('')} />
                         }
+                        {showModal == 'remove-item' &&
+                            <RemoveItem closeWindow={() => setShowModal('')} />
+                        }
                     </div>
                     <aside className='home__sidebar'>
                         <div className="sidebar__logo" onClick={handleCloseSideBar}>
@@ -625,25 +629,25 @@ function Home({ showToastMessage }) {
                                 <Dashboard />
                                 :
                                 sectionDisplay == "stock" ?
-                                    <Stock handleOpenWindow={() => setShowModal('new-order')} />
+                                    <Stock handleOpenWindow={() => setShowModal('new-order')} handleRemoveItem={() => setShowModal('remove-item')} />
                                     :
                                     subSectionDisplay == "products" ?
-                                        <Products handleOpenWindow={() => setShowModal('create-products')} />
+                                        <Products handleOpenWindow={() => setShowModal('create-products')} hanndleRemoveItem={() => setShowModal('remove-item')} />
                                         :
                                         subSectionDisplay == "categories" ?
-                                            <Categories handleOpenWindow={() => setShowModal('create-category')} />
+                                            <Categories handleOpenWindow={() => setShowModal('create-category')} handleRemoveItem={() => setShowModal('remove-item')} />
                                             :
                                             subSectionDisplay == "suppliers" ?
-                                                <Suppliers handleOpenWindow={() => setShowModal('create-supplier')} />
+                                                <Suppliers handleOpenWindow={() => setShowModal('create-supplier')} handleRemoveItem={() => setShowModal('remove-item')} />
                                                 :
                                                 subSectionDisplay == "purchases" ?
-                                                    <Purchases handleOpenWindow={() => setShowModal('new-order')} />
+                                                    <Purchases handleOpenWindow={() => setShowModal('new-order')} handleRemoveItem={() => setShowModal('remove-item')} />
                                                     :
                                                     subSectionDisplay == "sales" ?
-                                                        <Sales handleOpenWindow={() => setShowModal('new-order')} />
+                                                        <Sales handleOpenWindow={() => setShowModal('new-order')} handleRemoveItem={() => setShowModal('remove-item')} />
                                                         :
                                                         subSectionDisplay == "users" ?
-                                                            <Users handleOpenWindow={() => setShowModal('new-user')} />
+                                                            <Users handleOpenWindow={() => setShowModal('new-user')} handleRemoveItem={() => setShowModal('remove-item')} />
                                                             :
                                                             subSectionDisplay == "log" ?
                                                                 <ActivitiesLog />

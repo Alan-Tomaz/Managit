@@ -14,7 +14,7 @@ import { IoMdArrowDropup } from "react-icons/io";
 import { MdModeEditOutline } from "react-icons/md";
 import { FaCheck } from "react-icons/fa";
 
-function ItemsCard({ option = 0, handleOpenWindow }) {
+function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem }) {
 
     const buttonRef = useRef(null);
     const filterRef = useRef(null);
@@ -1660,8 +1660,8 @@ function ItemsCard({ option = 0, handleOpenWindow }) {
                                 }
                                 {(option != 7) &&
                                     <div className="stockitem__productoptions">
-                                        <div className="stockitem__productremove"><MdModeEditOutline /></div>
-                                        <div className="stockitem__productremove" ><MdRemove /></div>
+                                        <div className="stockitem__productremove" ><MdModeEditOutline /></div>
+                                        <div className="stockitem__productremove" onClick={handleRemoveItem}><MdRemove /></div>
                                     </div>
                                 }
                             </div>
