@@ -172,6 +172,45 @@
 .filter__options {
     width: 100%;
     margin: 1rem 0;
+    max-height: 500px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+/* SCROLL BAR STYLE */
+.filter__options::-webkit-scrollbar {
+    width: 4px;
+}
+
+.filter__options::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, .8);
+    border-radius: 10px;
+}
+
+.filter__options::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.filter__options::-webkit-scrollbar-button {
+    display: none;
+}
+
+/* FOR FIREFOX */
+
+@-moz-document url-prefix() {
+    .filter__options {
+        scrollbar-width: thin;
+        scrollbar-color: rgba(0, 0, 0, .8) transparent;
+    }
+
+    .filter__options::-moz-scrollbar-thumb {
+        background-color: #888;
+        border-radius: 10px;
+    }
+
+    .filter__options::-moz-scrollbar-button {
+        display: none;
+    }
 }
 
 .filter__options-columns {
@@ -578,6 +617,18 @@
     border-radius: 0px;
 }
 
+.stock__page--select {
+    background-color: var(--bg-color);
+    color: var(--text);
+    font-weight: var(--font-bold);
+    border: none;
+}
+
+.stock__page--select:hover {
+    background-color: var(--bg-color);
+    cursor: initial;
+}
+
 .stock__page-back,
 .stock__page-next {
     cursor: pointer;
@@ -616,6 +667,23 @@
 /* Small Devices = 600 */
 
 @media screen and (max-width:600px) {
+
+    .filter__options {
+        max-height: 300px;
+    }
+
+    .filter__options-columns {
+        display: flex;
+        flex-direction: column;
+        align-items: baseline;
+    }
+
+    .filter__option-others-status {
+        display: flex;
+        flex-direction: column;
+        align-items: baseline;
+        gap: 1rem;
+    }
 
     .stockmenu__filter-selection {
         width: 260px;
