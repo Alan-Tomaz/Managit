@@ -13,11 +13,18 @@ import { MdArrowDropUp } from "react-icons/md";
 import { IoMdArrowDropup } from "react-icons/io";
 import { MdModeEditOutline } from "react-icons/md";
 import { FaCheck } from "react-icons/fa";
+import axios from 'axios';
+import { useSelector } from 'react-redux';
 
-function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem }) {
+function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
 
     const buttonRef = useRef(null);
     const filterRef = useRef(null);
+
+    const apiUrl = useSelector((state) => state.MiscReducer.apiUrl);
+    const apiPort = useSelector((state) => state.MiscReducer.apiPort);
+
+    const userInfo = useSelector((state) => state.UserReducer);
 
 
     const initialFilterObj = {
@@ -93,6 +100,26 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem }) {
     const [isHidingCategory, setIsHiddingCategory] = useState(renderFilter.category.some(item => item.isShow == false));
     const [items, setItems] = useState();
 
+    /* Items */
+    const [categories, setCategories] = useState([]);
+
+    /* Get Items */
+    const handleGetCategories = () => {
+        const headers = {
+            'Authorization': `Bearer ${userInfo.token}`
+        }
+
+        axios.get(`${apiUrl}:${apiPort}/category/`, ({
+            headers
+        }))
+            .then((data) => {
+                setCategories(data.data.categories);
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+    }
+    /*  */
 
     const handleClearFilter = () => {
         setFilter({ ...initialFilterObj });
@@ -1058,6 +1085,14 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem }) {
     }, [buttonRef, filterRef]);
     /*  */
 
+    useEffect(() => {
+        switch (option) {
+            case 2:
+                handleGetCategories();
+                break;
+        }
+    }, [reload])
+
     return (
         <>
             <div className='card card--bg card__stock'>
@@ -1384,7 +1419,7 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem }) {
                                 <div className="stockmenu__button-export__info-png button" onClick={handleExportFile}>XLSX</div>
                             </div>
                         </div>
-                        <div className="button stockmenu__button" style={{ display: option != 7 ? 'flex' : 'none' }} onClick={handleOpenWindow}>{option == 0 ? "New Order" : option == 1 ? "New Product" : option == 2 ? 'New Category' : option == 3 ? 'New Supplier' : option == 4 ? 'New Order' : option == 5 ? 'New Order' : option == 6 ? 'New User' : 'New Type'}</div>
+                        <div className="button stockmenu__button" style={{ display: option != 7 ? 'flex' : 'none' }} onClick={() => option == 2 ? handleOpenWindow('create-category', '', 0, '') : handleOpenWindow()}>{option == 0 ? "New Order" : option == 1 ? "New Product" : option == 2 ? 'New Category' : option == 3 ? 'New Supplier' : option == 4 ? 'New Order' : option == 5 ? 'New Order' : option == 6 ? 'New User' : 'New Type'}</div>
                     </div>
                 </div>
                 <div className="stock__container">
@@ -1645,13 +1680,11 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem }) {
                                     <p className="stockitem__productsellprice stockitem__productbuyprice">$24.00</p>
                                 }
                                 {((option != 6) && renderFilter.columns.description == true) &&
-                                    <p className="stockitem__productdescription">{`Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus consequuntur praesentium animi quaerat quae perspiciatis, amet voluptates blanditiis corporis facilis eos natus nihil. Dolorem, reiciendis! Commodi, exercitationem nostrum veritatis suscipit et tempora consequuntur odit eaque totam dolorem enim aspernatur quasi fuga eius deleniti possimus dolores expedita aliquam rem ipsam maxime! Rem, accusantium odio quae dolorem expedita voluptatibus, dignissimos illo, reprehenderit numquam facere molestiae excepturi ullam fugiat quos omnis? Earum repellendus explicabo sint voluptatibus, illum ea magni qui laudantium neque doloribus maxime debitis nisi. Dolor deserunt maxime in alias architecto reiciendis doloribus. Incidunt, recusandae facere. Eius saepe iste optio deleniti nostrum.`.slice(0, 30)}...</p>
+                                    <p className="stockitem__productdescription">{`Lorem, ipsum dolor sit amet consectetur adipisicing elit. Natus, praesentium voluptates! Soluta quis maiores iste veniam! Suscipit`.slice(0, 125)}...</p>
                                 }
-                                {/*  */}
                                 {((option == 6 || option == 7) || renderFilter.columns.description == false) &&
                                     <div></div>
                                 }
-                                {/*  */}
                                 {((option == 1) && renderFilter.columns.status == true) &&
                                     <div className="stockitem__productstatus stockitem__productstatus--active">Active</div>
                                 }
@@ -1665,6 +1698,21 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem }) {
                                     </div>
                                 }
                             </div>
+                            {option == 2 &&
+                                <>
+                                    {categories.map((item, index) => (
+                                        <div className="stock__item" style={{ gridTemplateColumns: renderFilter[`option${option}`] }} key={index}>
+                                            <div className="stockitem__select" onClick={(e) => handleSelectItem(e)}></div>
+                                            <p className="stockitem__productcategory">{item.categoryName}</p>
+                                            <p className="stockitem__productdescription">{item.description.length > 125 ? `${item.description.slice(0, 125)}...` : item.description}</p>
+                                            <div className="stockitem__productoptions">
+                                                <div className="stockitem__productremove" onClick={() => handleOpenWindow('create-category', item, 1, item._id)}><MdModeEditOutline /></div>
+                                                <div className="stockitem__productremove" onClick={() => handleRemoveItem(item.categoryName, 2, item._id)}><MdRemove /></div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </>
+                            }
                         </div>
                     </div>
                 </div >

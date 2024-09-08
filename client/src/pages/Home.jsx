@@ -51,6 +51,8 @@ function Home({ showToastMessage }) {
     const [showNavbarNotifications, setShowNavbarNotifications] = useState(false);
     const [showSearchInput, setShowSearchInput] = useState(false);
     const [showModal, setShowModal] = useState('');
+    const [itemInfo, setItemInfo] = useState({ item: '', option: -1, id: 0 });
+    const [updateTrigger, setUpdateTrigger] = useState(false);
 
     const dispatch = useDispatch();
     const apiUrl = useSelector((state) => state.MiscReducer.apiUrl);
@@ -61,6 +63,21 @@ function Home({ showToastMessage }) {
     const navigate = useNavigate();
 
     const imgPaths = `${apiUrl}:${apiPort}/assets/`;
+
+    /* POPUPS */
+    const triggerUpdate = () => {
+        setUpdateTrigger(prev => !prev);
+    };
+
+    const handleCreateItem = (updateType, item, option, id) => {
+        setShowModal(updateType);
+        setItemInfo({ item: item, option: option, id: id });
+    }
+
+    const handleRemoveItem = (item, option, id) => {
+        setShowModal('remove-item');
+        setItemInfo({ item: item, option: option, id: id });
+    }
 
 
     /* ASIDE */
@@ -489,7 +506,7 @@ function Home({ showToastMessage }) {
                             <CreateProducts closeWindow={() => setShowModal('')} />
                         }
                         {showModal == 'create-category' &&
-                            <CreateCategory closeWindow={() => setShowModal('')} showToastMessage={showToastMessage} />
+                            <CreateCategory closeWindow={() => setShowModal('')} item={itemInfo.item} option={itemInfo.option} id={itemInfo.id} showToastMessage={showToastMessage} setReload={triggerUpdate} />
                         }
                         {showModal == 'create-supplier' &&
                             <CreateSupplier closeWindow={() => setShowModal('')} />
@@ -498,7 +515,7 @@ function Home({ showToastMessage }) {
                             <NewUser closeWindow={() => setShowModal('')} />
                         }
                         {showModal == 'remove-item' &&
-                            <RemoveItem closeWindow={() => setShowModal('')} />
+                            <RemoveItem closeWindow={() => setShowModal('')} item={itemInfo.item} option={itemInfo.option} id={itemInfo.id} showToastMessage={showToastMessage} setReload={triggerUpdate} />
                         }
                     </div>
                     <aside className='home__sidebar'>
@@ -635,7 +652,7 @@ function Home({ showToastMessage }) {
                                         <Products handleOpenWindow={() => setShowModal('create-products')} hanndleRemoveItem={() => setShowModal('remove-item')} />
                                         :
                                         subSectionDisplay == "categories" ?
-                                            <Categories handleOpenWindow={() => setShowModal('create-category')} handleRemoveItem={() => setShowModal('remove-item')} />
+                                            <Categories handleOpenWindow={handleCreateItem} handleRemoveItem={handleRemoveItem} reload={updateTrigger} />
                                             :
                                             subSectionDisplay == "suppliers" ?
                                                 <Suppliers handleOpenWindow={() => setShowModal('create-supplier')} handleRemoveItem={() => setShowModal('remove-item')} />

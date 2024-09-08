@@ -4,32 +4,97 @@ import Category from '../models/Category.js';
 export const createCategory = async (req, res) => {
     try {
         const {
+            categoryName,
             categoryDesc
         } = req.body
-        const categoryName = `${req.body.categoryName[0].toUpperCase()}${req.body.categoryName.slice(1)}`;
-        console.log(categoryName);
 
         if ((categoryName == undefined || categoryName == '') || (categoryDesc == undefined || categoryDesc == '')) {
-            res.status(401).json({ status: 401, msg: "Fill All Fields!" });
+            res.status(401).json({ error: "Fill All Fields!" });
         } else {
+            const newCategoryName = `${categoryName[0].toUpperCase()}${categoryName.slice(1)}`;
+
             const newCategory = new Category({
-                categoryName,
+                categoryName: newCategoryName,
                 description: categoryDesc
             })
 
-            const categoryFinded = await Category.findOne({ categoryName: categoryName });
+            const categoryFinded = await Category.findOne({ categoryName: newCategoryName });
 
             if (categoryFinded) {
-                res.status(401).json({ status: 401, msg: "Category Already Exists" });
+                res.status(401).json({ error: "Category Already Exists" });
             } else {
                 const savedCategory = await newCategory.save()
                 console.log(savedCategory);
-                res.status(201).json({ status: 201 });
+                res.status(201).json({ category: savedCategory });
             }
         }
 
     } catch (error) {
         console.log(error.message)
         res.status(500).json({ error: 'Something Wrong Ocurred. Try Again Later' })
+    }
+}
+
+/* GET CATEGORIES */
+export const getCategories = async (req, res) => {
+    try {
+        const categories = await Category.find();
+        res.status(200).json({ categories });
+    } catch (error) {
+        console.log(error.message)
+        res.status(500).json({ error: "Something Wrong Ocurred. Try Again Later" });
+    }
+}
+
+/* DELETE CATEGORY */
+export const deleteCategory = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const result = await Category.findByIdAndDelete(id);
+
+        if (!result) {
+            return res.status(404).json({ error: "Category not Found" });
+        } else {
+            return res.status(200).json({ msg: "Category Successfully Deleted" });
+        }
+
+    } catch (error) {
+        console.log(error.message)
+        res.status(500).json({ error: "Something Wrong Ocurred. Try Again Later" });
+    }
+}
+
+/* UPDATE CATEGORY */
+export const updateCategory = async (req, res) => {
+    try {
+        const {
+            categoryName,
+            categoryDesc
+        } = req.body
+
+        const { id } = req.params;
+
+        if ((categoryName == '' || categoryName == undefined) || (categoryDesc == '' || categoryDesc == undefined)) {
+            return res.status(401).send({ error: "Fill All Fields" })
+        }
+        else {
+            const newCategoryName = `${categoryName[0].toUpperCase()}${categoryName.slice(1)}`;
+
+            const categoryFinded = await Category.findOne({ categoryName: newCategoryName });
+
+            if (categoryFinded && categoryFinded._id != id) {
+                res.status(401).json({ error: "Category Already Exists" });
+            } else {
+                const result = await Category.findByIdAndUpdate(id, { categoryName: newCategoryName, description: categoryDesc });
+                if (!result) {
+                    return res.status(404).json({ error: "Category Not Found" })
+                } else {
+                    return res.status(200).send({ category: result })
+                }
+            }
+        }
+    } catch (error) {
+        console.log(error.message)
+        res.status(500).json({ error: "Something Wrong Ocurred. Try Again Later" });
     }
 }
