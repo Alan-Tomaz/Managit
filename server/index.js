@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
 import authRoutes from "./routes/auth.js";
+import categoryRoutes from './routes/category.js';
 import { register } from "./controllers/auth.js";
 import multer from "multer";
 import path from "path";
@@ -50,6 +51,7 @@ app.post('/auth/register', upload.single('picture'), register);
 app.get("/", (req, res) => res.status(200).json({ status: 200, msg: "Hello World!" }));
 app.post("/", (req, res) => res.status(200).json({ status: 200, msg: "Hello World!" }));
 app.use("/auth", authRoutes);
+app.use('/category', categoryRoutes)
 
 /* MONGOOSE SETUP */
 /* Server PORT */

@@ -489,7 +489,7 @@ function Home({ showToastMessage }) {
                             <CreateProducts closeWindow={() => setShowModal('')} />
                         }
                         {showModal == 'create-category' &&
-                            <CreateCategory closeWindow={() => setShowModal('')} />
+                            <CreateCategory closeWindow={() => setShowModal('')} showToastMessage={showToastMessage} />
                         }
                         {showModal == 'create-supplier' &&
                             <CreateSupplier closeWindow={() => setShowModal('')} />

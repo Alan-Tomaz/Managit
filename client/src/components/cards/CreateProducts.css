@@ -194,6 +194,18 @@
     margin-top: 1rem;
 }
 
+.create-products__error {
+    color: var(--delete);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.create-products__error img {
+    width: 25px;
+    height: 25px;
+}
+
 /* CREATE CATEGORY */
 
 .create-category {
@@ -211,6 +223,12 @@
 
 .create-category__button {
     margin-top: 1rem;
+}
+
+.create-categories__form {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
 }
 
 /* ============== MEDIA QUERIES =============== */
