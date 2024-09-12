@@ -111,31 +111,24 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
             'Authorization': `Bearer ${userInfo.token}`
         }
 
-        const notShowCategoriesFilter = renderFilter.category.filter(item => item.isShow == false);
-        const newNotShowCategoriesFilter = notShowCategoriesFilter.map((item) => {
-            return item.name;
-        })
         const filteringObj = {
             search: renderFilter.search,
-            categories: newNotShowCategoriesFilter,
             page: page,
             limit: limit
         }
 
         const url = new URL(`${apiUrl}:${apiPort}/category/`);
         url.search = new URLSearchParams(filteringObj)
-        console.log(url)
-        /* let url = `?${renderFilter.search != '' ? `search=${renderFilter.search}&` : ''}page=${page}&limit=${limit}`; */
 
-        axios.get(`${apiUrl}:${apiPort}/category/`, ({
+        axios.get(`${url}`, ({
             headers
         }))
             .then((data) => {
-                setItems(data.data.categories);
-                const newFilterCategories = data.data.categories.map((item) => {
+                setItems(data.data.categoriesData);
+                const newFilterCategories = data.data.categoriesData.map((item) => {
                     return { _id: item._id, name: item.categoryName, isShow: true };
                 })
-                const filterCategories = data.data.categories.map((item) => {
+                const filterCategories = data.data.categoriesData.map((item) => {
                     const oldCategory = filter.category.filter(item2 => item2._id == item._id);
                     if (oldCategory.length > 0) {
                         return { _id: item._id, name: item.categoryName, isShow: oldCategory[0].isShow }
@@ -143,7 +136,6 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                         return { _id: item._id, name: item.categoryName, isShow: true };
                     }
                 })
-                /* Update initialFIlterObj */
                 setInitialFilterObj(prev => ({
                     ...prev,
                     category: [...newFilterCategories]
@@ -1141,7 +1133,7 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                 handleGetCategories();
                 break;
         }
-    }, [reload])
+    }, [reload, page])
 
     return (
         <>
@@ -1776,15 +1768,15 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
             </div >
             <div className="stock__pages card--bg">
                 {page > 1 &&
-                    <div className="stock__page stock__page-back"><IoIosArrowBack /></div>
+                    <div className="stock__page stock__page-back" onClick={() => setPage(page - 1)}><IoIosArrowBack /></div>
                 }
                 {[...Array(totalPages)].map((elem, index) => (
                     <>
-                        <div key={index + 1} className={`stock__page button ${index + 1 == page ? 'stock__page--select' : ''}`} >{index + 1}</div>
+                        <div key={index + 1} className={`stock__page button ${index + 1 == page ? 'stock__page--select' : ''}`} onClick={() => setPage(index + 1)}>{index + 1}</div>
                     </>
                 ))}
                 {page < totalPages &&
-                    <div className="stock__page stock__page-next"><IoIosArrowForward /></div>
+                    <div className="stock__page stock__page-next" onClick={() => setPage(page + 1)}><IoIosArrowForward /></div>
                 }
             </div>
         </>

@@ -38,8 +38,28 @@ export const createCategory = async (req, res) => {
 /* GET CATEGORIES */
 export const getCategories = async (req, res) => {
     try {
-        const categories = await Category.find();
-        res.status(200).json({ categories });
+
+        const { page = 1, limit = 10, search, categories } = req.query;
+
+        const filters = {};
+
+        if (categories) {
+            const excludedCategories = categories.split(',');
+
+            filters.categoryName = { $nin: excludedCategories }
+        }
+
+        if (search) {
+            filters.categoryName = { ...filters.categoryName, $regex: search, $options: 'i' };
+        }
+
+        console.log(filters);
+
+        const categoriesData = await Category.find(filters).skip((page - 1) * limit).limit(parseInt(limit));
+
+        const totalCategories = await Category.countDocuments(filters);
+
+        res.status(200).json({ categoriesData, totalCategories });
     } catch (error) {
         console.log(error.message)
         res.status(500).json({ error: "Something Wrong Ocurred. Try Again Later" });
