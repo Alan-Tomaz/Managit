@@ -43,19 +43,13 @@ export const getCategories = async (req, res) => {
 
         const filters = {};
 
-        if (categories) {
-            const excludedCategories = categories.split(',');
-
-            filters.categoryName = { $nin: excludedCategories }
-        }
-
         if (search) {
             filters.categoryName = { ...filters.categoryName, $regex: search, $options: 'i' };
         }
 
-        console.log(filters);
-
         const categoriesData = await Category.find(filters).skip((page - 1) * limit).limit(parseInt(limit));
+
+        console.log(categoriesData)
 
         const totalCategories = await Category.countDocuments(filters);
 
