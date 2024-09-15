@@ -100,11 +100,12 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
     const [isHidingSupplier, setIsHiddingSupplier] = useState(renderFilter.supplier.some(item => item.isShow == false));
     const [isHidingCategory, setIsHiddingCategory] = useState(renderFilter.category.some(item => item.isShow == false));
     const [page, setPage] = useState(1);
-    const [limit, setLimit] = useState(5);
+    const [limit, setLimit] = useState(30);
     const [totalPages, setTotalPages] = useState(1);
     const [loading, setLoading] = useState('')
 
     /* Items */
+    const [defaultItems, setDefaultItems] = useState([]);
     const [items, setItems] = useState([]);
 
     /* Get Items */
@@ -152,8 +153,17 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                     }))
 
                     setRenderFilter(prev => {
-                        return { ...prev, category: [...filterCategories] }
+                        /* Check if has some supplier is hidding */
+                        /*                         setIsHiddingSupplier(filter.supplier.some(item => item.isShow == false))
+                         */                        /* Check if has some category is hidding */
+                        setIsHiddingCategory(filterCategories.some(item => item.isShow == false))
+
+                        return {
+                            ...prev,
+                            category: [...filterCategories]
+                        }
                     })
+                    setDefaultItems(data.data.categoriesData);
                     setItems(data.data.categoriesData);
                 }
                 /* setTotalPages(data.data.totalItems / limit); */
@@ -163,6 +173,7 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
             })
     }
     /*  */
+
 
     const handleClearFilter = () => {
         setFilter({ ...initialFilterObj });
@@ -178,6 +189,14 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
         }
         return true;
 
+    }
+
+    const sortAlphabetical = (arr, getter, order = 'asc') => {
+        return arr.sort(
+            order === 'desc'
+                ? (a, b) => getter(b).localeCompare(getter(a))
+                : (a, b) => getter(a).localeCompare(getter(b))
+        );
     }
 
     const funFilteringColumns = () => {
@@ -251,13 +270,13 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
             /* Check if has some category is hidding */
             setIsHiddingCategory(filter.category.some(item => item.isShow == false))
 
-            return { ...filter, filteringColumns: funFilteringColumns(), [`option${option}`]: newColumns, search: filter.search, category: filter.category }
+            return { ...filter, filteringColumns: funFilteringColumns(), [`option${option}`]: newColumns, /* category: filter.category */ }
         });
-        switch (option) {
-            case 2:
-                handleGetCategories();
-                break;
-        }
+        /*      switch (option) {
+                 case 2:
+                     handleGetCategories();
+                     break;
+             } */
 
     }
 
@@ -284,7 +303,17 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
 
     const handleSearch = (e) => {
         e.preventDefault();
-        handleFilter();
+
+        setRenderFilter(prev => {
+
+            return { ...filter, search: filter.search }
+        });
+
+        switch (option) {
+            case 2:
+                handleGetCategories();
+                break;
+        }
     }
 
     const handleSelectAllItems = () => {
@@ -317,6 +346,11 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                 }))
                 break;
             case 'category':
+                if (filter.orderFilter.category == false) {
+                    setItems(sortAlphabetical([...items], g => g.categoryName));
+                } else {
+                    setItems(sortAlphabetical([...items], g => g.categoryName, 'desc'));
+                }
                 setFilter(prev => ({
                     ...prev,
                     orderFilter: {
@@ -326,6 +360,7 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                         onFilteringVar: 'category'
                     },
                 }))
+
                 break;
             case 'number':
                 setFilter(prev => ({
@@ -460,6 +495,11 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                 }))
                 break;
             case 'description':
+                if (filter.orderFilter.description == false) {
+                    setItems(sortAlphabetical([...items], g => g.description));
+                } else {
+                    setItems(sortAlphabetical([...items], g => g.description, 'desc'));
+                }
                 setFilter(prev => ({
                     ...prev,
                     orderFilter: {
@@ -545,6 +585,7 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                 }))
                 break;
             case 'order':
+                setItems(defaultItems)
                 setFilter(prev => ({
                     ...prev,
                     orderFilter: {
@@ -1691,72 +1732,74 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                         </div>
                         {loading == '' ?
                             <div className="stock__items-container">
-                                <div className="stock__item" style={{ gridTemplateColumns: renderFilter[`option${option}`] }}>
-                                    <div className="stockitem__select" onClick={(e) => handleSelectItem(e)}></div>
-                                    {((option != 2 && option != 3 && option != 4 && option != 5 && option != 7) && renderFilter.columns.image != false) &&
-                                        < img src={Tshirt} className='stockitem__img' />
-                                    }
-                                    {((option == 4 || option == 5 || option == 6 || option == 7) && renderFilter.columns.number == true) &&
-                                        <p className="stockitem__productnumber">1</p>
-                                    }
-                                    {((option == 6 || option == 7) && renderFilter.columns.username == true) &&
-                                        <p className="stockitem__username">John Roger</p>
-                                    }
-                                    {((option == 6) && renderFilter.columns.permission == true) &&
-                                        <p className="stockitem__userpermission">Administrator</p>
-                                    }
-                                    {((option == 4 || option == 5 || option == 6) && renderFilter.columns.creationDate == true) &&
-                                        <p className="stockitem__productcreationdate">July 1, 2024</p>
-                                    }
-                                    {((option == 1 || option == 0) && renderFilter.columns.productName == true) &&
-                                        <p className="stockitem__productname">Example Example Example</p>
-                                    }
-                                    {((option == 1 || option == 0 || option == 2 || option == 4 || option == 5) && renderFilter.columns.category == true) &&
-                                        <p className="stockitem__productcategory">CATEGORY</p>
-                                    }
-                                    {((option == 7) && renderFilter.columns.date == true) &&
-                                        <p className="stockitem__logdate">July 1, 2024</p>
-                                    }
-                                    {((option == 1 || option == 3 || option == 4 || option == 5) && renderFilter.columns.supplier == true) &&
-                                        < div className="stockitem__productsupplier stockitem__productsupplier--active">Dress Store</div>
-                                    }
-                                    {((option == 0 || option == 1) && renderFilter.columns.code == true) &&
-                                        <p className="stockitem__productcode">Code</p>
-                                    }
-                                    {((option == 0) && renderFilter.columns.quantity == true) &&
-                                        <p className="stockitem__productqnt">17</p>
-                                    }
-                                    {((option == 6) && renderFilter.columns.lastAccess == true) &&
-                                        <p className="stockitem__userlastaccess">July 6, 2024</p>
-                                    }
-                                    {((option == 6) && renderFilter.columns.blocked == true) &&
-                                        <p className="stockitem__userblocked">Yes</p>
-                                    }
-                                    {((option == 0 || option == 1 || option == 5) && renderFilter.columns.sellPrice == true) &&
-                                        <p className="stockitem__productsellprice">$24.00</p>
-                                    }
-                                    {((option == 4) && renderFilter.columns.buyPrice == true) &&
-                                        <p className="stockitem__productsellprice stockitem__productbuyprice">$24.00</p>
-                                    }
-                                    {((option != 6) && renderFilter.columns.description == true) &&
-                                        <p className="stockitem__productdescription">{`Lorem, ipsum dolor sit amet consectetur adipisicing elit. Natus, praesentium voluptates! Soluta quis maiores iste veniam! Suscipit`.slice(0, 125)}...</p>
-                                    }
-                                    {((option == 6 || option == 7) || renderFilter.columns.description == false) &&
-                                        <div></div>
-                                    }
-                                    {((option == 1) && renderFilter.columns.status == true) &&
-                                        <div className="stockitem__productstatus stockitem__productstatus--active">Active</div>
-                                    }
-                                    {((option == 4 || option == 5) && renderFilter.columns.order == true) &&
-                                        <div className="stockitem__productorder stockitem__productorder"></div>
-                                    }
-                                    {(option != 7) &&
-                                        <div className="stockitem__productoptions">
-                                            <div className="stockitem__productremove" ><MdModeEditOutline /></div>
-                                            <div className="stockitem__productremove" onClick={handleRemoveItem}><MdRemove /></div>
-                                        </div>
-                                    }
-                                </div>
+                                {option != 2 &&
+                                    <div className="stock__item" style={{ gridTemplateColumns: renderFilter[`option${option}`] }}>
+                                        <div className="stockitem__select" onClick={(e) => handleSelectItem(e)}></div>
+                                        {((option != 2 && option != 3 && option != 4 && option != 5 && option != 7) && renderFilter.columns.image != false) &&
+                                            < img src={Tshirt} className='stockitem__img' />
+                                        }
+                                        {((option == 4 || option == 5 || option == 6 || option == 7) && renderFilter.columns.number == true) &&
+                                            <p className="stockitem__productnumber">1</p>
+                                        }
+                                        {((option == 6 || option == 7) && renderFilter.columns.username == true) &&
+                                            <p className="stockitem__username">John Roger</p>
+                                        }
+                                        {((option == 6) && renderFilter.columns.permission == true) &&
+                                            <p className="stockitem__userpermission">Administrator</p>
+                                        }
+                                        {((option == 4 || option == 5 || option == 6) && renderFilter.columns.creationDate == true) &&
+                                            <p className="stockitem__productcreationdate">July 1, 2024</p>
+                                        }
+                                        {((option == 1 || option == 0) && renderFilter.columns.productName == true) &&
+                                            <p className="stockitem__productname">Example Example Example</p>
+                                        }
+                                        {((option == 1 || option == 0 || option == 2 || option == 4 || option == 5) && renderFilter.columns.category == true) &&
+                                            <p className="stockitem__productcategory">CATEGORY</p>
+                                        }
+                                        {((option == 7) && renderFilter.columns.date == true) &&
+                                            <p className="stockitem__logdate">July 1, 2024</p>
+                                        }
+                                        {((option == 1 || option == 3 || option == 4 || option == 5) && renderFilter.columns.supplier == true) &&
+                                            < div className="stockitem__productsupplier stockitem__productsupplier--active">Dress Store</div>
+                                        }
+                                        {((option == 0 || option == 1) && renderFilter.columns.code == true) &&
+                                            <p className="stockitem__productcode">Code</p>
+                                        }
+                                        {((option == 0) && renderFilter.columns.quantity == true) &&
+                                            <p className="stockitem__productqnt">17</p>
+                                        }
+                                        {((option == 6) && renderFilter.columns.lastAccess == true) &&
+                                            <p className="stockitem__userlastaccess">July 6, 2024</p>
+                                        }
+                                        {((option == 6) && renderFilter.columns.blocked == true) &&
+                                            <p className="stockitem__userblocked">Yes</p>
+                                        }
+                                        {((option == 0 || option == 1 || option == 5) && renderFilter.columns.sellPrice == true) &&
+                                            <p className="stockitem__productsellprice">$24.00</p>
+                                        }
+                                        {((option == 4) && renderFilter.columns.buyPrice == true) &&
+                                            <p className="stockitem__productsellprice stockitem__productbuyprice">$24.00</p>
+                                        }
+                                        {((option != 6) && renderFilter.columns.description == true) &&
+                                            <p className="stockitem__productdescription">{`Lorem, ipsum dolor sit amet consectetur adipisicing elit. Natus, praesentium voluptates! Soluta quis maiores iste veniam! Suscipit`.slice(0, 125)}...</p>
+                                        }
+                                        {((option == 6 || option == 7) || renderFilter.columns.description == false) &&
+                                            <div></div>
+                                        }
+                                        {((option == 1) && renderFilter.columns.status == true) &&
+                                            <div className="stockitem__productstatus stockitem__productstatus--active">Active</div>
+                                        }
+                                        {((option == 4 || option == 5) && renderFilter.columns.order == true) &&
+                                            <div className="stockitem__productorder stockitem__productorder"></div>
+                                        }
+                                        {(option != 7) &&
+                                            <div className="stockitem__productoptions">
+                                                <div className="stockitem__productremove" ><MdModeEditOutline /></div>
+                                                <div className="stockitem__productremove" onClick={handleRemoveItem}><MdRemove /></div>
+                                            </div>
+                                        }
+                                    </div>
+                                }
                                 {items.length > 0 ?
                                     <>
                                         {option == 2 &&

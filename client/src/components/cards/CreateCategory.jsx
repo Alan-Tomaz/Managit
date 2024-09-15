@@ -7,6 +7,8 @@ import Loading from '../../assets/images/loading.svg';
 
 function CreateCategory({ closeWindow, item, option, id, showToastMessage, setReload }) {
 
+    console.log({ closeWindow, item, option, id })
+
     const [categoryName, setCategoryName] = useState(option == 1 ? item.categoryName : '');
     const [categoryDesc, setCategoryDesc] = useState(option == 1 ? item.description : '');
     const [reqError, setReqError] = useState('');
@@ -81,14 +83,14 @@ function CreateCategory({ closeWindow, item, option, id, showToastMessage, setRe
                     <IoClose onClick={closeWindow} />
                 </div>
                 <h2>{option == 0 ? 'Create Category' : option == 1 ? `Update Category` : ''}</h2>
-                <form className='create-products__form product__form create-categories__form' onSubmit={(e) => handleCreateCategory(e)}>
+                <form className='create-products__form product__form create-categories__form' onSubmit={(e) => option == 0 ? handleCreateCategory(e) : option == 1 ? handleUpdateCategory(e) : ''}>
                     <input type="text" name="product__name" id="product__name" className="create-products__input product__name" placeholder='Category Name:' onChange={(e) => setCategoryName(e.target.value)} value={categoryName} />
                     <textarea name="product__description" id="product__description" className='create-products__input product__description' placeholder='Category Description' onChange={(e) => setCategoryDesc(e.target.value)}>{categoryDesc}</textarea>
                 </form>
                 <div className="create-products__error">
                     {reqError == '' ? '' : reqError}
                 </div>
-                <button className="button  create-category__button" onClick={option == 0 ? handleCreateCategory : option == 1 ? handleUpdateCategory : ''}>{option == 0 ? 'Create Category' : option == 1 ? 'Update Category' : ''}</button>
+                <button className="button  create-category__button" onClick={(e) => option == 0 ? handleCreateCategory(e) : option == 1 ? handleUpdateCategory(e) : ''}>{option == 0 ? 'Create Category' : option == 1 ? 'Update Category' : ''}</button>
             </div >
         </div>
     )

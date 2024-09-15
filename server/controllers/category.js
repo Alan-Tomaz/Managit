@@ -47,7 +47,10 @@ export const getCategories = async (req, res) => {
             filters.categoryName = { ...filters.categoryName, $regex: search, $options: 'i' };
         }
 
-        const categoriesData = await Category.find(filters).skip((page - 1) * limit).limit(parseInt(limit));
+        const categoriesData = await Category.find(filters)
+            .sort({ categoryName: 1 })
+            .skip((page - 1) * limit)
+            .limit(parseInt(limit));
 
         console.log(categoriesData)
 
