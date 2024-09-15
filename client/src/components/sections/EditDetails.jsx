@@ -74,7 +74,7 @@ function EditDetails() {
             <div className="edit-details__inventory-input-box edit-details__inventory-input-confirmpassbox">
                 <span>Confirm Password:</span>
                 <div className="edit-details__password__field" ref={showConfirmPassword}>
-                    <input type={confirmPasswordType} name="edit-details__inventory-pass" id="edit-details__inventory-pass" className="edit-details__inventory-input  edit-details__inventory-pass" onChange={(e) => setConfirmPassword(e.target.value)} onClick={() => setShowConfirmPasswordButton(true)} />
+                    <input type={confirmPasswordType} name="edit-details__inventory-confirmpass" id="edit-details__inventory-confirmpass" className="edit-details__inventory-input  edit-details__inventory-pass" onChange={(e) => setConfirmPassword(e.target.value)} onClick={() => setShowConfirmPasswordButton(true)} />
                     <FaEye className='edit-details__password__show' onClick={() => handleShowPassword(1)} style={{ display: confirmPasswordType == "text" ? "inline-block" : "none", visibility: showConfirmPasswordButton == true ? "visible" : "hidden" }} />
                     <FaEyeSlash className='edit-details__password__show' onClick={() => handleShowPassword(1)} style={{ display: confirmPasswordType == "password" ? "inline-block" : "none", visibility: showConfirmPasswordButton == true ? "visible" : "hidden" }} />
                 </div>

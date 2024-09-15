@@ -100,16 +100,17 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
     const [isHidingSupplier, setIsHiddingSupplier] = useState(renderFilter.supplier.some(item => item.isShow == false));
     const [isHidingCategory, setIsHiddingCategory] = useState(renderFilter.category.some(item => item.isShow == false));
     const [page, setPage] = useState(1);
-    const [limit, setLimit] = useState(30);
+    const [limit, setLimit] = useState(5);
     const [totalPages, setTotalPages] = useState(1);
     const [loading, setLoading] = useState('')
 
     /* Items */
+    const [totalItems, setTotalItems] = useState(0)
     const [defaultItems, setDefaultItems] = useState([]);
     const [items, setItems] = useState([]);
 
     /* Get Items */
-    const handleGetCategories = () => {
+    const handleGetCategories = (searchParam) => {
         setLoading(<img src={Loading} alt='Loading' className='stock__loading' />)
 
         const headers = {
@@ -117,7 +118,7 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
         }
 
         const filteringObj = {
-            search: filter.search,
+            search: searchParam ? searchParam : filter.search,
             page: page,
             limit: limit
         }
@@ -129,8 +130,14 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
             headers
         }))
             .then((data) => {
-                setLoading('')
-                if (!checkEqualArray(items, data.data.categoriesData)) {
+
+                const requestedItems = data.data.categoriesData;
+
+                requestedItems.forEach(elem => {
+                    elem.isSelected = false;
+                });
+
+                if (!checkEqualArray(items, requestedItems)) {
                     const newFilterCategories = data.data.categoriesData.map((item) => {
                         return { _id: item._id, name: item.categoryName, isShow: true };
                     })
@@ -163,10 +170,13 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                             category: [...filterCategories]
                         }
                     })
-                    setDefaultItems(data.data.categoriesData);
-                    setItems(data.data.categoriesData);
+
+                    setDefaultItems(requestedItems);
+                    setItems(requestedItems);
+                    setTotalItems(data.data.totalCategories);
                 }
-                /* setTotalPages(data.data.totalItems / limit); */
+                setLoading('')
+                setTotalPages(Math.ceil(data.data.totalCategories / limit));
             })
             .catch((err) => {
                 console.log(err);
@@ -174,6 +184,14 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
     }
     /*  */
 
+    /* Delete Many Items */
+    const handleDeleteManyItems = () => {
+        const itemsToDelete = items.filter((item) => item.isSelected == true);
+        const idsToDelete = itemsToDelete.map((item) => item._id);
+
+        handleRemoveItem(itemsToDelete, 10, idsToDelete);
+    }
+    /*  */
 
     const handleClearFilter = () => {
         setFilter({ ...initialFilterObj });
@@ -303,9 +321,9 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
 
     const handleSearch = (e) => {
         e.preventDefault();
-
+        setPage(1);
+        handleRemoveTag("order");
         setRenderFilter(prev => {
-
             return { ...filter, search: filter.search }
         });
 
@@ -318,16 +336,32 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
 
     const handleSelectAllItems = () => {
         if (isAllItemsSelected == false) {
-            const allItems = document.querySelectorAll('.stockitem__select').forEach((item) => {
-                item.classList.add("stockitem__select--selected")
-            })
-
+            setDefaultItems(prev =>
+                prev.map(item => {
+                    return { ...item, isSelected: true }
+                }
+                )
+            )
+            setItems(prev =>
+                prev.map(item => {
+                    return { ...item, isSelected: true }
+                }
+                )
+            )
             setIsAllItemsSelected(true)
         } else {
-            const allItems = document.querySelectorAll('.stockitem__select').forEach((item) => {
-                item.classList.remove("stockitem__select--selected")
-            })
-
+            setDefaultItems(prev =>
+                prev.map(item => {
+                    return { ...item, isSelected: false }
+                }
+                )
+            )
+            setItems(prev =>
+                prev.map(item => {
+                    return { ...item, isSelected: false }
+                }
+                )
+            )
             setIsAllItemsSelected(false)
         }
     }
@@ -335,7 +369,7 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
     const handleChangeOrder = (header) => {
         switch (header) {
             case 'product-name':
-                setFilter(prev => ({
+                setFilter(prerev => ({
                     ...prev,
                     orderFilter: {
                         ...initialFilterObj.orderFilter,
@@ -756,9 +790,17 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
         }
     }
 
-    const handleSelectItem = (e) => {
-        const target = e.target;
-        target.classList.toggle('stockitem__select--selected');
+    const handleSelectItem = (id) => {
+        setDefaultItems(prev =>
+            prev.map(item =>
+                item._id == id ? { ...item, isSelected: !item.isSelected } : item
+            )
+        )
+        setItems(prev =>
+            prev.map(item =>
+                item._id == id ? { ...item, isSelected: !item.isSelected } : item
+            )
+        )
     }
 
     const handleUncheckColumn = (column) => {
@@ -1163,6 +1205,17 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
         }
     }
 
+    useEffect(() => {
+        if (items.some((elem) => elem.isSelected == false)) {
+            if (isAllItemsSelected == true);
+            setIsAllItemsSelected(false);
+        } else {
+            if (items.length > 0) {
+                setIsAllItemsSelected(true);
+            }
+        }
+    }, [items])
+
     /*  */
     useEffect(() => {
         /* CLOSE WINDOW WHEN CLICK OUTSIDE */
@@ -1185,10 +1238,24 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
     /*  */
 
     useEffect(() => {
-        switch (option) {
-            case 2:
-                handleGetCategories();
-                break;
+        handleRemoveTag("order");
+
+        if (renderFilter.search != filter.search) {
+            setFilter(prev => {
+                return { ...prev, search: renderFilter.search }
+            });
+
+            switch (option) {
+                case 2:
+                    handleGetCategories(renderFilter.search);
+                    break;
+            }
+        } else {
+            switch (option) {
+                case 2:
+                    handleGetCategories();
+                    break;
+            }
         }
     }, [reload, page])
 
@@ -1512,10 +1579,11 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                     <div className="stockmenu__buttons">
                         <div className="stockmenu__button-export" ref={buttonRef}>
                             <div className="button button--outlined stockmenu__button" onClick={() => setShowButtonMoreOptions(!showButtonMoreOptions)}>Export <IoIosArrowDown className='stockmenu__button--outlined-icon' style={{ display: showButtonMoreOptions == false ? "inline-block" : "none" }} /><IoIosArrowUp className='stockmenu__button--outlined-icon' style={{ display: showButtonMoreOptions == true ? "inline-block" : "none" }} /></div>
-                            <MdArrowDropUp className='stockmenu__button-export-icon' style={{ display: showButtonMoreOptions == true ? "flex" : "none" }} />
                             <div className="stockmenu__button-export__info" style={{ display: showButtonMoreOptions == true ? "flex" : "none" }}>
                                 <div className="stockmenu__button-export__info-png button" onClick={handleExportFile}>PNG</div>
                                 <div className="stockmenu__button-export__info-png button" onClick={handleExportFile}>XLSX</div>
+                                <div className="stockmenu__button-export__info-png button" onClick={handleExportFile}>PDF</div>
+                                <MdArrowDropUp className='stockmenu__button-export-icon' style={{ display: showButtonMoreOptions == true ? "flex" : "none" }} />
                             </div>
                         </div>
                         <div className="button stockmenu__button" style={{ display: option != 7 ? 'flex' : 'none' }} onClick={() => option == 2 ? handleOpenWindow('create-category', '', 0, '') : handleOpenWindow()}>{option == 0 ? "New Order" : option == 1 ? "New Product" : option == 2 ? 'New Category' : option == 3 ? 'New Supplier' : option == 4 ? 'New Order' : option == 5 ? 'New Order' : option == 6 ? 'New User' : 'New Type'}</div>
@@ -1603,11 +1671,11 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                             }
 
                         </div>
-                        <p className="stock__info__content">Total {option == 0 ? "Stock Items" : option == 1 ? "Products" : option == 2 ? 'Categories' : option == 3 ? 'Suppliers' : option == 4 ? 'Purchases' : option == 5 ? 'Sales' : option == 6 ? 'Users' : option == 7 ? 'Logs' : ''}: 67</p>
+                        <p className="stock__info__content">Total {option == 0 ? "Stock Items" : option == 1 ? "Products" : option == 2 ? 'Categories' : option == 3 ? 'Suppliers' : option == 4 ? 'Purchases' : option == 5 ? 'Sales' : option == 6 ? 'Users' : option == 7 ? 'Logs' : ''}: {totalItems}</p>
                     </div>
                     <div className="stock__items">
                         <div className="stockitems__header stock__item" style={{ gridTemplateColumns: renderFilter[`option${option}`] }}>
-                            <div className="stockitem__select" onClick={handleSelectAllItems}></div>
+                            <div className={`stockitem__select ${isAllItemsSelected == true ? 'stockitem__select--selected' : ''}`} onClick={handleSelectAllItems}></div>
                             {((option != 2 && option != 3 && option != 4 && option != 5 && option != 7) && renderFilter.columns.image != false) &&
                                 <div className=""></div>
                             }
@@ -1728,7 +1796,7 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                                 <p className="stockitem__productorder--header stockitem__product--header">Order</p>
                             }
 
-                            <div className="stockitem__productsdelete button" style={{ display: "none" }}>Delete</div>
+                            <div className="stockitem__productsdelete button" style={{ display: items.some((elem) => elem.isSelected == true) ? 'flex' : 'none' }} onClick={handleDeleteManyItems}>Delete</div>
                         </div>
                         {loading == '' ?
                             <div className="stock__items-container">
@@ -1802,31 +1870,37 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                                 }
                                 {items.length > 0 ?
                                     <>
-                                        {option == 2 &&
+                                        {renderFilter.category.some(item => item.isShow == true) ?
                                             <>
-                                                {items.map((item, index) => (
+                                                {option == 2 &&
                                                     <>
-                                                        {renderFilter.category[index].isShow == true &&
-                                                            <div className="stock__item" style={{ gridTemplateColumns: renderFilter[`option${option}`] }} key={index}>
-                                                                <div className="stockitem__select" onClick={(e) => handleSelectItem(e)}></div>
-                                                                {renderFilter.columns.category == true &&
-                                                                    <p className="stockitem__productcategory">{item.categoryName}</p>
+                                                        {items.map((item, index) => (
+                                                            <>
+                                                                {renderFilter.category[index].isShow == true &&
+                                                                    <div className='stock__item' style={{ gridTemplateColumns: renderFilter[`option${option}`] }} key={index}>
+                                                                        <div className={`stockitem__select ${item.isSelected == true ? 'stockitem__select--selected' : ''}`} onClick={() => handleSelectItem(item._id)}></div>
+                                                                        {renderFilter.columns.category == true &&
+                                                                            <p className="stockitem__productcategory">{item.categoryName}</p>
+                                                                        }
+                                                                        {renderFilter.columns.description == true &&
+                                                                            <p className="stockitem__productdescription">{item.description.length > 125 ? `${item.description.slice(0, 125)}...` : item.description}</p>
+                                                                        }
+                                                                        {renderFilter.columns.description == false &&
+                                                                            <div></div>
+                                                                        }
+                                                                        <div className="stockitem__productoptions">
+                                                                            <div className="stockitem__productremove" onClick={() => handleOpenWindow('create-category', item, 1, item._id)}><MdModeEditOutline /></div>
+                                                                            <div className="stockitem__productremove" onClick={() => handleRemoveItem(item, 2, item._id)}><MdRemove /></div>
+                                                                        </div>
+                                                                    </div>
                                                                 }
-                                                                {renderFilter.columns.description == true &&
-                                                                    <p className="stockitem__productdescription">{item.description.length > 125 ? `${item.description.slice(0, 125)}...` : item.description}</p>
-                                                                }
-                                                                {renderFilter.columns.description == false &&
-                                                                    <div></div>
-                                                                }
-                                                                <div className="stockitem__productoptions">
-                                                                    <div className="stockitem__productremove" onClick={() => handleOpenWindow('create-category', item, 1, item._id)}><MdModeEditOutline /></div>
-                                                                    <div className="stockitem__productremove" onClick={() => handleRemoveItem(item.categoryName, 2, item._id)}><MdRemove /></div>
-                                                                </div>
-                                                            </div>
-                                                        }
+                                                            </>
+                                                        ))}
                                                     </>
-                                                ))}
-                                            </>
+                                                }
+                                            </> :
+                                            <p className='stock__result'>No More {option == 0 ? 'Orders' : option == 1 ? 'Products' : option == 2 ? 'Categories' : option == 3 ? 'Suppliers' : option == 4 ? 'Purchases' : option == 5 ? 'Sales' : option == 6 ? 'Users' : option == 7 ? 'Logs' : ''} To Show</p>
+
                                         }
                                     </>
                                     :
@@ -1843,10 +1917,14 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                 {page > 1 &&
                     <div className="stock__page stock__page-back" onClick={() => setPage(page - 1)}><IoIosArrowBack /></div>
                 }
-                {[...Array(totalPages)].map((elem, index) => (
-                    <>
-                        <div key={index + 1} className={`stock__page button ${index + 1 == page ? 'stock__page--select' : ''}`} onClick={() => setPage(index + 1)}>{index + 1}</div>
-                    </>
+                {totalPages > 0 && Array.from({ length: totalPages }, (_, index) => (
+                    <div
+                        key={index + 1}
+                        className={`stock__page button ${index + 1 === page ? 'stock__page--select' : ''}`}
+                        onClick={() => setPage(index + 1)}
+                    >
+                        {index + 1}
+                    </div>
                 ))}
                 {page < totalPages &&
                     <div className="stock__page stock__page-next" onClick={() => setPage(page + 1)}><IoIosArrowForward /></div>

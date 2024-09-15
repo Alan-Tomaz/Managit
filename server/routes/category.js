@@ -1,5 +1,5 @@
 import express from 'express';
-import { createCategory, deleteCategory, getCategories, updateCategory } from '../controllers/category.js';
+import { createCategory, deleteCategory, deleteManyCategories, getCategories, updateCategory } from '../controllers/category.js';
 import { verifyToken } from '../middlewares/auth.js'
 
 const router = express.Router();
@@ -9,9 +9,11 @@ const router = express.Router();
 router.post("/add", verifyToken, createCategory);
 /* Get Categories */
 router.get("/", verifyToken, getCategories);
-/* Remove Category */
-router.delete("/remove/:id", verifyToken, deleteCategory)
 /* Update Category Content */
 router.put("/update/:id", verifyToken, updateCategory)
+/* Remove Many Categories */
+router.delete("/remove/many", verifyToken, deleteManyCategories)
+/* Remove Category */
+router.delete("/remove/:id", verifyToken, deleteCategory)
 
 export default router;

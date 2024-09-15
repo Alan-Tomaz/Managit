@@ -13,7 +13,6 @@ import { IoMdArrowDropdown } from "react-icons/io";
 import DefaultView from '../components/DefaultView';
 import NotificationItem from "../assets/images/notification_item.png";
 import { useNavigate, useParams } from 'react-router-dom';
-import { IoClose } from "react-icons/io5";
 import { logout } from "../state/User/UserSlice.js";
 import Dashboard from "../components/sections/Dashboard.jsx";
 import Stock from "../components/sections/Stock.jsx";
@@ -35,6 +34,8 @@ import NewUser from '../components/cards/NewUser.jsx';
 import RemoveItem from '../components/cards/RemoveItem.jsx';
 
 function Home({ showToastMessage }) {
+
+    const mainRef = useRef(null)
 
     const { choosenSection, choosenSubSection } = useParams();
 
@@ -485,10 +486,28 @@ function Home({ showToastMessage }) {
         navigate('/')
     }
 
+    useEffect(() => {
+
+        if (innerWidth <= 600) {
+            const element = mainRef.current;
+
+            if (element) {
+                element.addEventListener('load', handleCloseSideBar());
+            }
+
+            // Cleanup: remover o event listener quando o componente for desmontado
+            return () => {
+                if (element) {
+                    element.removeEventListener('load', handleCloseSideBar());
+                }
+            };
+        }
+    }, [])
+
     return (
         <>
             {userInfo != null ? (
-                <main className='home' onLoad={() => { if (innerWidth <= 600) { handleCloseSideBar() } }} >
+                <main className='home' ref={mainRef}>
                     <div className="modal__window" style={{ display: showModal != '' ? 'flex' : 'none' }} >
                         {showModal == 'new-order' &&
                             <NewOrder closeWindow={() => setShowModal('')} />

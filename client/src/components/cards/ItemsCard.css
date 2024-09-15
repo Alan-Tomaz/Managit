@@ -175,6 +175,7 @@
     max-height: 500px;
     overflow-y: auto;
     overflow-x: hidden;
+    max-height: 300px;
 }
 
 /* SCROLL BAR STYLE */
@@ -391,9 +392,10 @@
     font-size: 3rem;
     left: 87%;
     transform: translate(-50%);
-    top: 38px;
-    z-index: 1;
+    top: -28px;
+    z-index: -100;
     color: var(--color-primary);
+    transition: none;
 }
 
 .stockmenu__button-export__info {
@@ -411,7 +413,11 @@
     border: none;
 }
 
-.stockmenu__button-export__info-png:not(:last-child) {
+.stockmenu__button-export__info .stockmenu__button-export__info-png:first-child:hover~.stockmenu__button-export-icon {
+    color: var(--color-primary-variant);
+}
+
+.stockmenu__button-export__info-png:not(:last-of-type) {
     border-bottom: 1px solid var(--bg-color);
     border-bottom-left-radius: initial;
     border-bottom-right-radius: initial;

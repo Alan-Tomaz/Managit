@@ -49,6 +49,7 @@
     left: 68%;
     font-size: 2rem;
     color: rgb(108, 236, 108);
+    z-index: 0;
 }
 
 .new-order__type-selection {
@@ -67,6 +68,7 @@
     width: 100%;
     cursor: pointer;
     text-align: center;
+    z-index: 1010;
 }
 
 .new-order__type-selection__buy {

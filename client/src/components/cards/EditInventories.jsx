@@ -171,13 +171,13 @@ function EditInventories({ closeWindow, showCreateInv = false, showEditInv = tru
                     <button className={"button editinventory__button" + ' ' + (disableButtons == true ? 'button--disable' : '')} onClick={disableButtons == false ? handleShowCreateInventory : ''}>Create a inventory</button>
                     <button className={"button button--outlined editinventory__button" + ' ' + (disableButtons == true ? 'button--outlineddisable' : '')} onClick={disableButtons == false ? handleShowEnterInventory : ''}>Enter in a inventory</button>
                 </div>
-                <div className="modal__window modal__createinventory">
+                {/*    <div className="modal__window modal__createinventory">
                     <IoClose />
                     <h2>Inventories</h2>
                     <input type="text" name="createinvenory__name" id="createinvenory__name" className="createinvenory__name" placeholder='Name:' />
                     <input type="password" name="createinvenory__password" id="createinvenory__password" className="createinvenory__password" placeholder='Password:' />
                     <input type="password" name="createinvenory__confirmpassword" id="createinvenory__confirmpassword" className="createinvenory__confirmpassword" placeholder='Confirm Password:' />
-                </div>
+                </div> */}
             </div>
             <div className="createinventory" style={{ display: showCreateInventory == true ? 'flex' : 'none' }}>
                 <IoClose onClick={handleHideCreateInventory} className='createinventory__close' />

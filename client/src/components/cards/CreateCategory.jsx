@@ -7,8 +7,6 @@ import Loading from '../../assets/images/loading.svg';
 
 function CreateCategory({ closeWindow, item, option, id, showToastMessage, setReload }) {
 
-    console.log({ closeWindow, item, option, id })
-
     const [categoryName, setCategoryName] = useState(option == 1 ? item.categoryName : '');
     const [categoryDesc, setCategoryDesc] = useState(option == 1 ? item.description : '');
     const [reqError, setReqError] = useState('');

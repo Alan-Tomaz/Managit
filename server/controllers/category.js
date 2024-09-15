@@ -10,7 +10,12 @@ export const createCategory = async (req, res) => {
 
         if ((categoryName == undefined || categoryName == '') || (categoryDesc == undefined || categoryDesc == '')) {
             res.status(401).json({ error: "Fill All Fields!" });
-        } else {
+        } else if (categoryName.length > 12) {
+            res.status(401).json({ error: "Category Name Too Long!" });
+        } else if (categoryDesc.length > 50) {
+            res.status(401).json({ error: "Description Too Long!" });
+        }
+        else {
             const newCategoryName = `${categoryName[0].toUpperCase()}${categoryName.slice(1)}`;
 
             const newCategory = new Category({
@@ -52,29 +57,9 @@ export const getCategories = async (req, res) => {
             .skip((page - 1) * limit)
             .limit(parseInt(limit));
 
-        console.log(categoriesData)
-
         const totalCategories = await Category.countDocuments(filters);
 
         res.status(200).json({ categoriesData, totalCategories });
-    } catch (error) {
-        console.log(error.message)
-        res.status(500).json({ error: "Something Wrong Ocurred. Try Again Later" });
-    }
-}
-
-/* DELETE CATEGORY */
-export const deleteCategory = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const result = await Category.findByIdAndDelete(id);
-
-        if (!result) {
-            return res.status(404).json({ error: "Category not Found" });
-        } else {
-            return res.status(200).json({ msg: "Category Successfully Deleted" });
-        }
-
     } catch (error) {
         console.log(error.message)
         res.status(500).json({ error: "Something Wrong Ocurred. Try Again Later" });
@@ -112,6 +97,45 @@ export const updateCategory = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message)
+        res.status(500).json({ error: "Something Wrong Ocurred. Try Again Later" });
+    }
+}
+
+/* DELETE CATEGORY */
+export const deleteCategory = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const result = await Category.findByIdAndDelete(id);
+
+        if (!result) {
+            return res.status(404).json({ error: "Category not Found" });
+        } else {
+            return res.status(200).json({ msg: "Category Successfully Deleted" });
+        }
+
+    } catch (error) {
+        console.log(error.message)
+        res.status(500).json({ error: "Something Wrong Ocurred. Try Again Later" });
+    }
+}
+
+/* DELETE MANY CATEGORIES */
+export const deleteManyCategories = async (req, res) => {
+    try {
+        const { idsToDelete } = req.query;
+
+        const result = await Category.deleteMany({
+            _id: { $in: idsToDelete }
+        });
+
+        if (!result) {
+            return res.status(404).json({ error: "Categories not Found" });
+        } else {
+            return res.status(200).json({ msg: "Categories Successfully Deleted" });
+        }
+
+    } catch (error) {
+        console.log(error);
         res.status(500).json({ error: "Something Wrong Ocurred. Try Again Later" });
     }
 }
