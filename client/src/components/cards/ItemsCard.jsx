@@ -16,9 +16,11 @@ import { FaCheck } from "react-icons/fa";
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import Loading from '../../assets/images/loading.svg';
+import { exportToExcel, exportToImage, exportToPDF } from './ExportFile';
 
 function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
 
+    const imageRef = useRef(null);
     const buttonRef = useRef(null);
     const filterRef = useRef(null);
 
@@ -100,7 +102,7 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
     const [isHidingSupplier, setIsHiddingSupplier] = useState(renderFilter.supplier.some(item => item.isShow == false));
     const [isHidingCategory, setIsHiddingCategory] = useState(renderFilter.category.some(item => item.isShow == false));
     const [page, setPage] = useState(1);
-    const [limit, setLimit] = useState(5);
+    const [limit, setLimit] = useState(20);
     const [totalPages, setTotalPages] = useState(1);
     const [loading, setLoading] = useState('')
 
@@ -315,8 +317,18 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
         });
     };
 
-    const handleExportFile = () => {
-        setShowButtonMoreOptions(false)
+    const handleExportFile = (file) => {
+        switch (file) {
+            case 'png':
+                exportToImage(imageRef);
+                break;
+            case 'xlsx':
+                exportToExcel(items);
+                break;
+            case 'pdf':
+                exportToPDF(imageRef);
+                break;
+        }
     }
 
     const handleSearch = (e) => {
@@ -1580,16 +1592,16 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                         <div className="stockmenu__button-export" ref={buttonRef}>
                             <div className="button button--outlined stockmenu__button" onClick={() => setShowButtonMoreOptions(!showButtonMoreOptions)}>Export <IoIosArrowDown className='stockmenu__button--outlined-icon' style={{ display: showButtonMoreOptions == false ? "inline-block" : "none" }} /><IoIosArrowUp className='stockmenu__button--outlined-icon' style={{ display: showButtonMoreOptions == true ? "inline-block" : "none" }} /></div>
                             <div className="stockmenu__button-export__info" style={{ display: showButtonMoreOptions == true ? "flex" : "none" }}>
-                                <div className="stockmenu__button-export__info-png button" onClick={handleExportFile}>PNG</div>
-                                <div className="stockmenu__button-export__info-png button" onClick={handleExportFile}>XLSX</div>
-                                <div className="stockmenu__button-export__info-png button" onClick={handleExportFile}>PDF</div>
+                                <div className="stockmenu__button-export__info-png button" onClick={() => handleExportFile("png")}>PNG</div>
+                                <div className="stockmenu__button-export__info-png button" onClick={() => handleExportFile("xlsx")}>XLSX</div>
+                                <div className="stockmenu__button-export__info-png button" onClick={() => handleExportFile("pdf")}>PDF</div>
                                 <MdArrowDropUp className='stockmenu__button-export-icon' style={{ display: showButtonMoreOptions == true ? "flex" : "none" }} />
                             </div>
                         </div>
                         <div className="button stockmenu__button" style={{ display: option != 7 ? 'flex' : 'none' }} onClick={() => option == 2 ? handleOpenWindow('create-category', '', 0, '') : handleOpenWindow()}>{option == 0 ? "New Order" : option == 1 ? "New Product" : option == 2 ? 'New Category' : option == 3 ? 'New Supplier' : option == 4 ? 'New Order' : option == 5 ? 'New Order' : option == 6 ? 'New User' : 'New Type'}</div>
                     </div>
                 </div>
-                <div className="stock__container">
+                <div className="stock__container" ref={imageRef}>
                     <div className="stock__info">
                         <div className="stock__tags">
                             {renderFilter.search != '' &&
