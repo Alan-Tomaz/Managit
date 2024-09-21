@@ -528,7 +528,7 @@ function Home({ showToastMessage }) {
                             <CreateCategory closeWindow={() => setShowModal('')} item={itemInfo.item} option={itemInfo.option} id={itemInfo.id} showToastMessage={showToastMessage} setReload={triggerUpdate} />
                         }
                         {showModal == 'create-supplier' &&
-                            <CreateSupplier closeWindow={() => setShowModal('')} />
+                            <CreateSupplier closeWindow={() => setShowModal('')} item={itemInfo.item} option={itemInfo.option} id={itemInfo.id} showToastMessage={showToastMessage} setReload={triggerUpdate} />
                         }
                         {showModal == 'new-user' &&
                             <NewUser closeWindow={() => setShowModal('')} />
@@ -674,7 +674,7 @@ function Home({ showToastMessage }) {
                                             <Categories handleOpenWindow={handleCreateItem} handleRemoveItem={handleRemoveItem} reload={updateTrigger} />
                                             :
                                             subSectionDisplay == "suppliers" ?
-                                                <Suppliers handleOpenWindow={() => setShowModal('create-supplier')} handleRemoveItem={() => setShowModal('remove-item')} />
+                                                <Suppliers handleOpenWindow={handleCreateItem} handleRemoveItem={handleRemoveItem} reload={updateTrigger} />
                                                 :
                                                 subSectionDisplay == "purchases" ?
                                                     <Purchases handleOpenWindow={() => setShowModal('new-order')} handleRemoveItem={() => setShowModal('remove-item')} />

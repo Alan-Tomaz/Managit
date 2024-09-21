@@ -80,7 +80,7 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
         permission: 0,
         status: 0,
         category: [],
-        supplier: [{ name: 'abc-outfits', isShow: true }, { name: '007-shoes', isShow: true }, { name: 'planet', isShow: true }],
+        supplier: [],
         blocked: 0,
         option0: 'min-content 65px 200px 100px 100px 80px 100px 1fr 100px',
         option1: 'min-content 65px 200px 100px 100px 100px 100px 1fr 100px 100px',
@@ -179,6 +179,76 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                 }
                 setLoading('')
                 setTotalPages(Math.ceil(data.data.totalCategories / limit));
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+    }
+    const handleGetSuppliers = (searchParam) => {
+        setLoading(<img src={Loading} alt='Loading' className='stock__loading' />)
+
+        const headers = {
+            'Authorization': `Bearer ${userInfo.token}`
+        }
+
+        const filteringObj = {
+            search: searchParam ? searchParam : filter.search,
+            page: page,
+            limit: limit
+        }
+
+        const url = new URL(`${apiUrl}:${apiPort}/supplier/`);
+        url.search = new URLSearchParams(filteringObj)
+
+        axios.get(`${url}`, ({
+            headers
+        }))
+            .then((data) => {
+
+                const requestedItems = data.data.suppliersData;
+
+                requestedItems.forEach(elem => {
+                    elem.isSelected = false;
+                });
+
+                if (!checkEqualArray(items, requestedItems)) {
+                    const newFilterSuppliers = data.data.suppliersData.map((item) => {
+                        return { _id: item._id, name: item.supplierName, isShow: true };
+                    })
+                    setInitialFilterObj(prev => ({
+                        ...prev,
+                        supplier: [...newFilterSuppliers]
+                    }))
+
+                    const filterSuppliers = data.data.suppliersData.map((item) => {
+                        const oldSupplier = filter.supplier.filter(item2 => item2._id == item._id);
+                        if (oldSupplier.length > 0) {
+                            return { _id: item._id, name: item.supplierName, isShow: oldSupplier[0].isShow }
+                        } else {
+                            return { _id: item._id, name: item.supplierName, isShow: true };
+                        }
+                    })
+                    setFilter(prev => ({
+                        ...prev,
+                        supplier: [...filterSuppliers]
+                    }))
+
+                    setRenderFilter(prev => {
+                        /* Check if has some supplier is hidding */
+                        setIsHiddingSupplier(filterSuppliers.some(item => item.isShow == false))
+
+                        return {
+                            ...prev,
+                            supplier: [...filterSuppliers]
+                        }
+                    })
+
+                    setDefaultItems(requestedItems);
+                    setItems(requestedItems);
+                    setTotalItems(data.data.totalSuppliers);
+                }
+                setLoading('')
+                setTotalPages(Math.ceil(data.data.totalSuppliers / limit));
             })
             .catch((err) => {
                 console.log(err);
@@ -342,6 +412,9 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
         switch (option) {
             case 2:
                 handleGetCategories();
+                break;
+            case 3:
+                handleGetSuppliers();
                 break;
         }
     }
@@ -1261,11 +1334,17 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                 case 2:
                     handleGetCategories(renderFilter.search);
                     break;
+                case 3:
+                    handleGetSuppliers(renderFilter.search);
+                    break;
             }
         } else {
             switch (option) {
                 case 2:
                     handleGetCategories();
+                    break;
+                case 3:
+                    handleGetSuppliers(renderFilter.search);
                     break;
             }
         }
@@ -1598,7 +1677,7 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                                 <MdArrowDropUp className='stockmenu__button-export-icon' style={{ display: showButtonMoreOptions == true ? "flex" : "none" }} />
                             </div>
                         </div>
-                        <div className="button stockmenu__button" style={{ display: option != 7 ? 'flex' : 'none' }} onClick={() => option == 2 ? handleOpenWindow('create-category', '', 0, '') : handleOpenWindow()}>{option == 0 ? "New Order" : option == 1 ? "New Product" : option == 2 ? 'New Category' : option == 3 ? 'New Supplier' : option == 4 ? 'New Order' : option == 5 ? 'New Order' : option == 6 ? 'New User' : 'New Type'}</div>
+                        <div className="button stockmenu__button" style={{ display: option != 7 ? 'flex' : 'none' }} onClick={() => option == 2 ? handleOpenWindow('create-category', '', 0, '') : option == 3 ? handleOpenWindow('create-supplier', '', 0, '') : ""}>{option == 0 ? "New Order" : option == 1 ? "New Product" : option == 2 ? 'New Category' : option == 3 ? 'New Supplier' : option == 4 ? 'New Order' : option == 5 ? 'New Order' : option == 6 ? 'New User' : 'New Type'}</div>
                     </div>
                 </div>
                 <div className="stock__container" ref={imageRef}>
@@ -1812,7 +1891,7 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                         </div>
                         {loading == '' ?
                             <div className="stock__items-container">
-                                {option != 2 &&
+                                {(option != 2 && option != 3) &&
                                     <div className="stock__item" style={{ gridTemplateColumns: renderFilter[`option${option}`] }}>
                                         <div className="stockitem__select" onClick={(e) => handleSelectItem(e)}></div>
                                         {((option != 2 && option != 3 && option != 4 && option != 5 && option != 7) && renderFilter.columns.image != false) &&
@@ -1882,10 +1961,11 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                                 }
                                 {items.length > 0 ?
                                     <>
-                                        {renderFilter.category.some(item => item.isShow == true) ?
+                                        {option == 2 &&
                                             <>
-                                                {option == 2 &&
+                                                {renderFilter.category.some(item => item.isShow == true) ?
                                                     <>
+
                                                         {items.map((item, index) => (
                                                             <>
                                                                 {renderFilter.category[index].isShow == true &&
@@ -1909,10 +1989,43 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                                                             </>
                                                         ))}
                                                     </>
+                                                    :
+                                                    <p className='stock__result'>No More {option == 0 ? 'Orders' : option == 1 ? 'Products' : option == 2 ? 'Categories' : option == 3 ? 'Suppliers' : option == 4 ? 'Purchases' : option == 5 ? 'Sales' : option == 6 ? 'Users' : option == 7 ? 'Logs' : ''} To Show</p>
                                                 }
-                                            </> :
-                                            <p className='stock__result'>No More {option == 0 ? 'Orders' : option == 1 ? 'Products' : option == 2 ? 'Categories' : option == 3 ? 'Suppliers' : option == 4 ? 'Purchases' : option == 5 ? 'Sales' : option == 6 ? 'Users' : option == 7 ? 'Logs' : ''} To Show</p>
+                                            </>
+                                        }
+                                        {option == 3 &&
+                                            <>
+                                                {renderFilter.supplier.some(item => item.isShow == true) ?
+                                                    <>
+                                                        {items.map((item, index) => (
+                                                            <>
+                                                                {renderFilter.supplier[index].isShow == true &&
+                                                                    <div className='stock__item' style={{ gridTemplateColumns: renderFilter[`option${option}`] }} key={index}>
+                                                                        <div className={`stockitem__select ${item.isSelected == true ? 'stockitem__select--selected' : ''}`} onClick={() => handleSelectItem(item._id)}></div>
+                                                                        {renderFilter.columns.supplier == true &&
+                                                                            <p className="stockitem__productcategory">{item.supplierName}</p>
+                                                                        }
+                                                                        {renderFilter.columns.description == true &&
+                                                                            <p className="stockitem__productdescription">{item.description.length > 125 ? `${item.description.slice(0, 125)}...` : item.description}</p>
+                                                                        }
+                                                                        {renderFilter.columns.description == false &&
+                                                                            <div></div>
+                                                                        }
+                                                                        <div className="stockitem__productoptions">
+                                                                            <div className="stockitem__productremove" onClick={() => handleOpenWindow('create-supplier', item, 1, item._id)}><MdModeEditOutline /></div>
+                                                                            <div className="stockitem__productremove" onClick={() => handleRemoveItem(item, 3, item._id)}><MdRemove /></div>
+                                                                        </div>
+                                                                    </div>
+                                                                }
+                                                            </>
+                                                        ))}
 
+                                                    </>
+                                                    :
+                                                    <p className='stock__result'>No More {option == 0 ? 'Orders' : option == 1 ? 'Products' : option == 2 ? 'Categories' : option == 3 ? 'Suppliers' : option == 4 ? 'Purchases' : option == 5 ? 'Sales' : option == 6 ? 'Users' : option == 7 ? 'Logs' : ''} To Show</p>
+                                                }
+                                            </>
                                         }
                                     </>
                                     :

@@ -4,6 +4,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import authRoutes from "./routes/auth.js";
 import categoryRoutes from './routes/category.js';
+import supplierRoutes from './routes/supplier.js';
 import { register } from "./controllers/auth.js";
 import multer from "multer";
 import path from "path";
@@ -52,6 +53,7 @@ app.get("/", (req, res) => res.status(200).json({ status: 200, msg: "Hello World
 app.post("/", (req, res) => res.status(200).json({ status: 200, msg: "Hello World!" }));
 app.use("/auth", authRoutes);
 app.use('/category', categoryRoutes)
+app.use('/supplier', supplierRoutes)
 
 /* MONGOOSE SETUP */
 /* Server PORT */
