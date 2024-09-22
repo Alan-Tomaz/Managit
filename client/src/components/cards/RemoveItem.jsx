@@ -12,8 +12,6 @@ function RemoveItem({ closeWindow, item, option, id, showToastMessage, setReload
 
     const userInfo = useSelector((state) => state.UserReducer);
 
-    console.log(id);
-
     const handleRemoveItem = () => {
         const headers = {
             'Authorization': `Bearer ${userInfo.token}`
@@ -34,8 +32,37 @@ function RemoveItem({ closeWindow, item, option, id, showToastMessage, setReload
                         closeWindow();
                     })
                 break;
+            case 3:
+                axios.delete(`${apiUrl}:${apiPort}/supplier/remove/${id}`, ({
+                    headers
+                }))
+                    .then((data) => {
+                        showToastMessage('success', data.data.msg);
+                        closeWindow();
+                        setReload()
+                    }).catch((err) => {
+                        console.log(err);
+                        showToastMessage('error', err.response.data.error)
+                        closeWindow();
+                    })
+                break;
             case 10:
                 axios.delete(`${apiUrl}:${apiPort}/category/remove/many/`, ({
+                    headers,
+                    params: { idsToDelete: id }
+                }))
+                    .then((data) => {
+                        showToastMessage('success', data.data.msg);
+                        closeWindow();
+                        setReload();
+                    })
+                    .catch((err) => {
+                        showToastMessage('error', err.response.data.error)
+                        closeWindow();
+                    })
+                break;
+            case 11:
+                axios.delete(`${apiUrl}:${apiPort}/supplier/remove/many/`, ({
                     headers,
                     params: { idsToDelete: id }
                 }))

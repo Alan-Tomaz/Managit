@@ -102,7 +102,7 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
     const [isHidingSupplier, setIsHiddingSupplier] = useState(renderFilter.supplier.some(item => item.isShow == false));
     const [isHidingCategory, setIsHiddingCategory] = useState(renderFilter.category.some(item => item.isShow == false));
     const [page, setPage] = useState(1);
-    const [limit, setLimit] = useState(20);
+    const [limit, setLimit] = useState(10);
     const [totalPages, setTotalPages] = useState(1);
     const [loading, setLoading] = useState('')
 
@@ -120,7 +120,7 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
         }
 
         const filteringObj = {
-            search: searchParam ? searchParam : filter.search,
+            search: searchParam == undefined ? filter.search : searchParam,
             page: page,
             limit: limit
         }
@@ -192,10 +192,11 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
         }
 
         const filteringObj = {
-            search: searchParam ? searchParam : filter.search,
+            search: searchParam == undefined ? filter.search : searchParam,
             page: page,
             limit: limit
         }
+
 
         const url = new URL(`${apiUrl}:${apiPort}/supplier/`);
         url.search = new URLSearchParams(filteringObj)
@@ -261,12 +262,20 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
         const itemsToDelete = items.filter((item) => item.isSelected == true);
         const idsToDelete = itemsToDelete.map((item) => item._id);
 
-        handleRemoveItem(itemsToDelete, 10, idsToDelete);
+        switch (option) {
+            case 2:
+                handleRemoveItem(itemsToDelete, 10, idsToDelete);
+                break;
+            case 3:
+                handleRemoveItem(itemsToDelete, 11, idsToDelete);
+                break;
+        }
     }
     /*  */
 
     const handleClearFilter = () => {
         setFilter({ ...initialFilterObj });
+        setItems(defaultItems)
     }
 
     const checkEqualArray = (a, b) => {
@@ -362,12 +371,18 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
 
             return { ...filter, filteringColumns: funFilteringColumns(), [`option${option}`]: newColumns, /* category: filter.category */ }
         });
-        /*      switch (option) {
-                 case 2:
-                     handleGetCategories();
-                     break;
-             } */
-
+        /*  */
+        if (renderFilter.search != filter.search) {
+            switch (option) {
+                case 2:
+                    handleGetCategories();
+                    break;
+                case 3:
+                    handleGetSuppliers();
+                    break;
+            }
+        }
+        /*  */
     }
 
     const handleUncheckSupplier = (index) => {
@@ -526,6 +541,11 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                 }))
                 break;
             case 'supplier':
+                if (filter.orderFilter.supplier == false) {
+                    setItems(sortAlphabetical([...items], g => g.supplierName));
+                } else {
+                    setItems(sortAlphabetical([...items], g => g.supplierName, 'desc'));
+                }
                 setFilter(prev => ({
                     ...prev,
                     orderFilter: {
@@ -1329,7 +1349,6 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
             setFilter(prev => {
                 return { ...prev, search: renderFilter.search }
             });
-
             switch (option) {
                 case 2:
                     handleGetCategories(renderFilter.search);
@@ -1344,7 +1363,7 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                     handleGetCategories();
                     break;
                 case 3:
-                    handleGetSuppliers(renderFilter.search);
+                    handleGetSuppliers();
                     break;
             }
         }
@@ -1677,7 +1696,7 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                                 <MdArrowDropUp className='stockmenu__button-export-icon' style={{ display: showButtonMoreOptions == true ? "flex" : "none" }} />
                             </div>
                         </div>
-                        <div className="button stockmenu__button" style={{ display: option != 7 ? 'flex' : 'none' }} onClick={() => option == 2 ? handleOpenWindow('create-category', '', 0, '') : option == 3 ? handleOpenWindow('create-supplier', '', 0, '') : ""}>{option == 0 ? "New Order" : option == 1 ? "New Product" : option == 2 ? 'New Category' : option == 3 ? 'New Supplier' : option == 4 ? 'New Order' : option == 5 ? 'New Order' : option == 6 ? 'New User' : 'New Type'}</div>
+                        <div className="button stockmenu__button" style={{ display: option != 7 ? 'flex' : 'none' }} onClick={() => option == 1 ? handleOpenWindow('create-products', '', 0, '') : option == 2 ? handleOpenWindow('create-category', '', 0, '') : option == 3 ? handleOpenWindow('create-supplier', '', 0, '') : ""}>{option == 0 ? "New Order" : option == 1 ? "New Product" : option == 2 ? 'New Category' : option == 3 ? 'New Supplier' : option == 4 ? 'New Order' : option == 5 ? 'New Order' : option == 6 ? 'New User' : 'New Type'}</div>
                     </div>
                 </div>
                 <div className="stock__container" ref={imageRef}>

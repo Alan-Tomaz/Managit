@@ -157,37 +157,68 @@
     top: 65px;
     left: 0;
     width: 100%;
-    border-radius: 10px;
+    max-height: 200px;
     z-index: 1000;
 }
 
-.product__category__options p {
+.product__category__options-scroll {
+    overflow-y: auto;
+}
+
+.product__category__options-scroll p {
     padding: .8rem;
     text-align: center;
     cursor: pointer;
     z-index: 1100;
 }
 
-.product__category__options p:last-of-type {
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
-}
 
 .product__category__options p:not(:last-of-type) {
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-}
-
-.product__category__options p:first-of-type {
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
 }
 
 .product__category__options p:hover {
     background-color: rgb(190, 190, 190);
 }
 
-.product__category__options p:hover:first-of-type~.product__category__options-arrow {
+.product__category__options p:last-of-type:hover .product__category__options-arrow {
     color: rgb(190, 190, 190);
+}
+
+/* SCROLL BAR STYLE */
+.product__category__options-scroll::-webkit-scrollbar {
+    width: 2px;
+}
+
+.product__category__options-scroll::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, .8);
+    border-radius: 10px;
+}
+
+.product__category__options-scroll::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.product__category__options-scroll::-webkit-scrollbar-button {
+    display: none;
+}
+
+/* FOR FIREFOX */
+
+@-moz-document url-prefix() {
+    .product__category__options-scroll {
+        scrollbar-width: thin;
+        scrollbar-color: rgba(0, 0, 0, .8) transparent;
+    }
+
+    .product__category__options-scroll::-moz-scrollbar-thumb {
+        background-color: #888;
+        border-radius: 10px;
+    }
+
+    .product__category__options-scroll::-moz-scrollbar-button {
+        display: none;
+    }
 }
 
 .create-products__button {
@@ -229,6 +260,10 @@
     display: flex;
     flex-direction: column;
     margin: 0;
+}
+
+.create-products__loading {
+    width: 200px;
 }
 
 /* ============== MEDIA QUERIES =============== */

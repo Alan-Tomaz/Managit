@@ -522,7 +522,7 @@ function Home({ showToastMessage }) {
                             <EditInventories closeWindow={() => setShowModal('')} showEditInv={false} showCreateInv={true} />
                         }
                         {showModal == 'create-products' &&
-                            <CreateProducts closeWindow={() => setShowModal('')} />
+                            <CreateProducts closeWindow={() => setShowModal('')} item={itemInfo.item} option={itemInfo.option} id={itemInfo.id} showToastMessage={showToastMessage} setReload={triggerUpdate} />
                         }
                         {showModal == 'create-category' &&
                             <CreateCategory closeWindow={() => setShowModal('')} item={itemInfo.item} option={itemInfo.option} id={itemInfo.id} showToastMessage={showToastMessage} setReload={triggerUpdate} />
@@ -668,7 +668,7 @@ function Home({ showToastMessage }) {
                                     <Stock handleOpenWindow={() => setShowModal('new-order')} handleRemoveItem={() => setShowModal('remove-item')} />
                                     :
                                     subSectionDisplay == "products" ?
-                                        <Products handleOpenWindow={() => setShowModal('create-products')} hanndleRemoveItem={() => setShowModal('remove-item')} />
+                                        <Products handleOpenWindow={handleCreateItem} handleRemoveItem={handleRemoveItem} reload={updateTrigger} />
                                         :
                                         subSectionDisplay == "categories" ?
                                             <Categories handleOpenWindow={handleCreateItem} handleRemoveItem={handleRemoveItem} reload={updateTrigger} />
