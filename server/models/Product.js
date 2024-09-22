@@ -8,12 +8,12 @@ const ProductSchema = new mongoose.Schema(
         },
         productSupplier: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "suppliers",
+            ref: "Supplier",
             required: true
         },
         productCategory: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "categories",
+            ref: "Category",
             required: true
         },
         sellPrice: {

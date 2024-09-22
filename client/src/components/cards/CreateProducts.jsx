@@ -10,15 +10,21 @@ import axios from 'axios';
 
 function CreateProducts({ closeWindow, item, option, id, showToastMessage, setReload }) {
 
+    const apiUrl = useSelector((state) => state.MiscReducer.apiUrl);
+    const apiPort = useSelector((state) => state.MiscReducer.apiPort);
+    const userInfo = useSelector((state) => state.UserReducer);
+
     const [productName, setProductName] = useState(option == 1 ? item.productName : '');
-    const [productDesc, setProductDesc] = useState(option == 1 ? item.description : '');
-    const [productCategory, setProductCategory] = useState(option == 1 ? item.productCategory : '');
-    const [productSupplier, setProductSupplier] = useState(option == 1 ? item.productSupplier : '');
+    const [description, setDescription] = useState(option == 1 ? item.description : '');
+    const [productCategory, setProductCategory] = useState(option == 1 ? item.productCategory : null);
+    const [productSupplier, setProductSupplier] = useState(option == 1 ? item.productSupplier : null);
     const [sellPrice, setSellPrice] = useState(option == 1 ? item.sellPrice : '');
     const [picturePath, setPicturePath] = useState(option == 1 ? item.picturePath : '');
+    const [picture, setPicture] = useState()
 
     const [categories, setCategories] = useState([]);
     const [suppliers, setSuppliers] = useState([]);
+    const [isHovered, setIsHovered] = useState(false);
 
     const [showCategories, setShowCategories] = useState(false);
     const [showEmployees, setShowEmployees] = useState(false);
@@ -26,22 +32,22 @@ function CreateProducts({ closeWindow, item, option, id, showToastMessage, setRe
     const [suppliersLoading, setSuppliersLoading] = useState(false);
     const [categoriesPage, setCategoriesPage] = useState(1);
     const [suppliersPage, setSuppliersPage] = useState(1);
+    const [reqError, setReqError] = useState("");
 
     const categorySelectionRef = useRef(null);
     const employeeSelectionRef = useRef(null);
+    const suppliersDivRef = useRef(null);
+    const categoriesDivRef = useRef(null);
 
-    const apiUrl = useSelector((state) => state.MiscReducer.apiUrl);
-    const apiPort = useSelector((state) => state.MiscReducer.apiPort);
-
-    const userInfo = useSelector((state) => state.UserReducer);
-
-    const picture = picturePath != '' ? `${apiUrl}:${apiPort}/assets/${picturePath}` : ProductImg;
+    const [picturePreview, setPicturePreview] = useState(picturePath != '' ? `${apiUrl}:${apiPort}/assets/${picturePath}` : ProductImg);
 
     const handleEditProduct = () => {
         document.getElementById('product__img').click();
     }
 
     const handleGetCategories = () => {
+        if (categoriesLoading) return; // Avoid multiple requests
+
         setCategoriesLoading(true)
 
         const headers = {
@@ -60,11 +66,22 @@ function CreateProducts({ closeWindow, item, option, id, showToastMessage, setRe
             headers
         }))
             .then((data) => {
-                setCategories(prev => [...prev, ...data.data.categoriesData]);
-                if (!productCategory == '') {
-                    setProductCategory(data.data.categoriesData.filter((elem => elem._id == productCategory)))
+                const newCategories = data.data.categoriesData;
+
+                setCategories(prevCategories => {
+
+                    const uniqueCategories = newCategories.filter(category =>
+                        !prevCategories.some(prev => prev._id === category._id)
+                    );
+                    return [...prevCategories, ...uniqueCategories]
+                });
+                if (productCategory && productCategory._id) {
+                    const selectedCategory = newCategories.find((elem => elem._id === productCategory._id))
+                    if (selectedCategory) {
+                        setProductCategory(selectedCategory)
+                    }
                 } else {
-                    setProductCategory(data.data.categoriesData[0])
+                    setProductCategory(newCategories[0])
                 }
                 setCategoriesLoading(false)
             })
@@ -74,6 +91,8 @@ function CreateProducts({ closeWindow, item, option, id, showToastMessage, setRe
     }
 
     const handleGetSuppliers = () => {
+        if (suppliersLoading) return; // Avoid multiple requests
+
         setSuppliersLoading(true)
 
         const headers = {
@@ -92,17 +111,114 @@ function CreateProducts({ closeWindow, item, option, id, showToastMessage, setRe
             headers
         }))
             .then((data) => {
-                setSuppliers(prev => [...prev, ...data.data.suppliersData]);
-                if (!productSupplier == '') {
-                    setProductSupplier(data.data.suppliersData.filter((elem => elem._id == productSupplier)))
+                const newSuppliers = data.data.suppliersData;
+
+                setSuppliers(prevSuppliers => {
+
+                    const uniqueSuppliers = newSuppliers.filter(supplier =>
+                        !prevSuppliers.some(prev => prev._id === supplier._id)
+                    );
+                    return [...prevSuppliers, ...uniqueSuppliers]
+                });
+                if (productSupplier && productSupplier._id) {
+                    const selectedSupplier = newSuppliers.find((elem => elem._id === productSupplier._id))
+                    if (selectedSupplier) {
+                        setProductSupplier(selectedSupplier)
+                    }
                 } else {
-                    setProductSupplier(data.data.suppliersData[0])
-                    console.log(data.data.suppliersData[0])
+                    setProductSupplier(newSuppliers[0])
                 }
+
                 setSuppliersLoading(false)
             })
             .catch((err) => {
                 console.log(err);
+            })
+    }
+
+    const handlePreviewImage = (e) => {
+        const inputTarget = e.target;
+        const file = inputTarget.files[0];
+
+        const fileType = file.name.split('.')[1];
+        const fileSize = (file.size / 1024);
+
+        const supportedFiles = ['jpeg', 'png', 'jpg'];
+
+        if (file && fileSize < 2048 && supportedFiles.includes(fileType)) {
+            const reader = new FileReader();
+
+            reader.addEventListener('load', (e) => {
+                const readerTarget = e.target;
+                setPicturePreview(readerTarget.result);
+                setPicture(file);
+            })
+
+            reader.readAsDataURL(file);
+        }
+    }
+
+    const handleCreateProduct = async (e, values) => {
+        e.preventDefault();
+
+        setReqError(<img src={Loading} />);
+
+        const headers = {
+            'Authorization': `Bearer ${userInfo.token}`
+        }
+
+        const formData = new FormData();
+        for (let value in values) {
+            formData.append(value, values[value]);
+        }
+
+        formData.append("productSupplier", productSupplier._id);
+        formData.append("productCategory", productCategory._id);
+
+        axios.post(`${apiUrl}:${apiPort}/product/add`, formData, {
+            headers
+        })
+            .then((data) => {
+                console.log(data);
+                showToastMessage('success', 'Product Created Successfully');
+                setReload();
+                closeWindow();
+            })
+            .catch((err) => {
+                console.log(err);
+                setReqError(err.response.data.error);
+            })
+    }
+
+    const handleUpdateProduct = async (e, values) => {
+        e.preventDefault();
+
+        setReqError(<img src={Loading} />);
+
+        const headers = {
+            'Authorization': `Bearer ${userInfo.token}`
+        }
+
+        const formData = new FormData();
+        for (let value in values) {
+            formData.append(value, values[value]);
+        }
+
+        formData.append("productSupplier", productSupplier._id);
+        formData.append("productCategory", productCategory._id);
+
+        axios.put(`${apiUrl}:${apiPort}/product/update/${id}`, formData, {
+            headers
+        })
+            .then((data) => {
+                console.log(data);
+                showToastMessage('success', 'Product Updated Successfully');
+                setReload();
+                closeWindow();
+            })
+            .catch((err) => {
+                console.log(err);
+                setReqError(err.response.data.error);
             })
     }
 
@@ -114,16 +230,25 @@ function CreateProducts({ closeWindow, item, option, id, showToastMessage, setRe
         handleGetSuppliers();
     }, [suppliersPage])
 
-    useEffect(() => {
-        const handleScroll = () => {
-            if (window.innerHeight + document.documentElement.scrollTop === document.documentElement.offsetHeight) {
-                setPage(prevPage => prevPage + 1); // Load more items when at the bottom
+    const handleScrollCategories = () => {
+        if (categoriesDivRef.current && !categoriesLoading) {
+            const { scrollTop, scrollHeight, clientHeight } = categoriesDivRef.current;
+            if (scrollTop + clientHeight >= scrollHeight) {
+                // Quando o scroll atinge o fim da div, carrega mais itens
+                setCategoriesPage(prevPage => prevPage + 1);
             }
-        };
+        }
+    };
 
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
+    const handleScrollSuppliers = () => {
+        if (suppliersDivRef.current && !suppliersLoading) {
+            const { scrollTop, scrollHeight, clientHeight } = suppliersDivRef.current;
+            if (scrollTop + clientHeight >= scrollHeight) {
+                // Quando o scroll atinge o fim da div, carrega mais itens
+                setSuppliersPage(prevPage => prevPage + 1);
+            }
+        }
+    };
 
     useEffect(() => {
         /* CLOSE WINDOW WHEN CLICK OUTSIDE */
@@ -155,23 +280,26 @@ function CreateProducts({ closeWindow, item, option, id, showToastMessage, setRe
                         </div>
                         <h2>{option == 0 ? 'Create Product' : option == 1 ? `Update Product` : ''}</h2>
                         <div className="create-products__img-box">
-                            <img src={picture} alt="" className="create-products__img" />
+                            <img src={picturePreview} alt="" className="create-products__img" />
                             <FaRegEdit className='create-products__changeimg' onClick={handleEditProduct} />
-                            <input type="file" name="product__img" id="product__img" className='create-products__img-input' />
+                            <input type="file" name="product__img" id="product__img" className='create-products__img-input' onChange={(e) => handlePreviewImage(e)} />
                         </div>
-                        <form className="create-products__form" onSubmit={(e) => option == 0 ? handleCreateProduct(e) : option == 1 ? handleUpdatProduct(e) : ''}>
+                        <form className="create-products__form" onSubmit={(e) => option == 0 ? handleCreateProduct(e, { productName, sellPrice, description, picture }) : option == 1 ? handleUpdateProduct(e, { productName, sellPrice, description, picture }) : ''}>
                             <input type="text" name="product__name" id="product__name" className="create-products__input product__name" placeholder='Product Name:' onChange={(e) => setProductName(e.target.value)} value={productName} />
                             <div className="product__category" id='product__category' ref={categorySelectionRef} onClick={() => setShowCategories(!showCategories)}>
                                 <span>{String(productCategory.categoryName).toUpperCase()}</span>
                                 <IoMdArrowDropdown style={{ display: showCategories == false ? 'flex' : 'none' }} className='product__category-icon' />
                                 <IoMdArrowDropup style={{ display: showCategories == true ? 'flex' : 'none' }} className='product__category-icon' />
                                 <div className="product__category__options" style={{ display: showCategories == true ? 'flex' : 'none' }}>
-                                    <div className="product__category__options-scroll">
+                                    <div className="product__category__options-scroll" ref={categoriesDivRef} onScroll={handleScrollCategories}>
                                         {categories.map((category, index) =>
-                                            <p onClick={() => setProductCategory(category)} key={index}>{category.categoryName.toUpperCase()}</p>
+                                            <p onClick={() => setProductCategory(category)} key={index} onMouseEnter={() => index === 0 && setIsHovered(true)} onMouseLeave={() => index === 0 && setIsHovered(false)}>{category.categoryName.toUpperCase()}</p>
                                         )}
+                                        {categoriesLoading == true &&
+                                            <p className='product__category__options-scroll__loading'><img src={Loading} /></p>
+                                        }
                                     </div>
-                                    <IoMdArrowDropup className='product__category__options-arrow' />
+                                    <IoMdArrowDropup className='product__category__options-arrow' style={{ color: isHovered ? 'rgb(190, 190, 190)' : 'rgb(221, 221, 221)' }} />
                                 </div>
                             </div>
                             <div className="product__suppliers product__category" id='product__supplier' ref={employeeSelectionRef} onClick={() => setShowEmployees(!showEmployees)}>
@@ -179,17 +307,25 @@ function CreateProducts({ closeWindow, item, option, id, showToastMessage, setRe
                                 <IoMdArrowDropdown style={{ display: showEmployees == false ? 'flex' : 'none' }} className='product__category-icon' />
                                 <IoMdArrowDropup style={{ display: showEmployees == true ? 'flex' : 'none' }} className='product__category-icon' />
                                 <div className="product__suppliers__options product__category__options" style={{ display: showEmployees == true ? 'flex' : 'none' }}>
-                                    {suppliers.map((supplier, index) =>
-                                        <p onClick={() => setProductSupplier(supplier)} key={index}>{supplier.supplierName.toUpperCase()}</p>
-                                    )}
-                                    <IoMdArrowDropup className='product__category__options-arrow' />
+                                    <div className="product__category__options-scroll" ref={suppliersDivRef} onScroll={handleScrollSuppliers}>
+                                        {suppliers.map((supplier, index) =>
+                                            <p onClick={() => setProductSupplier(supplier)} key={index} onMouseEnter={() => index === 0 && setIsHovered(true)} onMouseLeave={() => index === 0 && setIsHovered(false)} >{supplier.supplierName.toUpperCase()}</p>
+                                        )}
+                                        {suppliersLoading == true &&
+                                            <p className='product__category__options-scroll__loading' ><img src={Loading} /></p>
+                                        }
+                                    </div>
+                                    <IoMdArrowDropup className='product__category__options-arrow' style={{ color: isHovered ? 'rgb(190, 190, 190)' : 'rgb(221, 221, 221)' }} />
                                 </div>
                             </div>
                             <div className="product__vl"></div>
                             <input type="number" name="" id="product__sellprice" className="product__sellprice create-products__input" placeholder='Sell Price' onChange={(e) => setSellPrice(e.target.value)} value={sellPrice} />
-                            <textarea name="product__description" id="product__description" className='create-products__input product__description' placeholder='Product Description' onChange={(e) => setProductDesc(e.target.value)}>{productDesc}</textarea>
+                            <textarea name="product__description" id="product__description" className='create-products__input product__description' placeholder='Product Description' onChange={(e) => setDescription(e.target.value)}>{description}</textarea>
                         </form>
-                        <button className="button  create-products__button">{option == 0 ? "Create Product" : option == 1 ? "Update Product" : ''}</button>
+                        <div className="create-products__error">
+                            {reqError == '' ? '' : reqError}
+                        </div>
+                        <button className="button  create-products__button" onClick={(e) => option == 0 ? handleCreateProduct(e, { productName, sellPrice, description, picture }) : option == 1 ? handleUpdateProduct(e, { productName, sellPrice, description, picture }) : ''}>{option == 0 ? "Create Product" : option == 1 ? "Update Product" : ''}</button>
                     </div>
                 </div>
                 :

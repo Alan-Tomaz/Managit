@@ -256,6 +256,123 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
             })
     }
     /*  */
+    const handleGetProducts = (searchParam) => {
+        setLoading(<img src={Loading} alt='Loading' className='stock__loading' />)
+
+        const headers = {
+            'Authorization': `Bearer ${userInfo.token}`
+        }
+
+        const filteringObj = {
+            search: searchParam == undefined ? filter.search : searchParam,
+            page: page,
+            limit: limit
+        }
+
+
+        const url = new URL(`${apiUrl}:${apiPort}/product/`);
+        url.search = new URLSearchParams(filteringObj)
+
+        axios.get(`${url}`, ({
+            headers
+        }))
+            .then((data) => {
+                const requestedItems = data.data.productsData;
+
+                requestedItems.forEach(elem => {
+                    elem.isSelected = false;
+                });
+
+                if (!checkEqualArray(items, requestedItems)) {
+                    const newFilterCategories = requestedItems.map((item) => {
+                        return { _id: item.productCategory._id, name: item.productCategory.categoryName, isShow: true };
+                    })
+                    const newFilterSuppliers = requestedItems.map((item) => {
+                        return { _id: item.productSupplier._id, name: item.productSupplier.categoryName, isShow: true };
+                    })
+                    setInitialFilterObj(prev => ({
+                        ...prev,
+                        category: [...newFilterCategories],
+                        supplier: [...newFilterSuppliers]
+                    }))
+
+                    const filterCategoriesArr = requestedItems.map((item) => {
+                        const oldCategory = filter.category.filter(item2 => item2._id == item.productCategory._id);
+                        if (oldCategory.length > 0) {
+                            return { _id: item.productCategory._id, name: item.productCategory.categoryName, isShow: oldCategory[0].isShow }
+                        } else {
+                            return { _id: item.productCategory._id, name: item.productCategory.categoryName, isShow: true };
+                        }
+                    })
+
+                    const filterSuppliersArr = requestedItems.map((item) => {
+                        const oldSupplier = filter.supplier.filter(item2 => item2._id == item.productSupplier._id);
+                        if (oldSupplier.length > 0) {
+                            return { _id: item.productSupplier._id, name: item.productSupplier.supplierName, isShow: oldSupplier[0].isShow }
+                        } else {
+                            return { _id: item.productSupplier._id, name: item.productSupplier.supplierName, isShow: true };
+                        }
+                    })
+
+                    /* Make Values Uniques */
+                    const seenIdsCategories = new Set();
+                    const seenIdsSuppliers = new Set();
+
+                    const filterCategories = [];
+                    const filterSuppliers = [];
+
+                    filterCategoriesArr.forEach((categoryItem) => {
+                        if (!seenIdsCategories.has(categoryItem._id)) {
+                            seenIdsCategories.add(categoryItem._id);
+                            filterCategories.push(categoryItem);
+                        }
+                    })
+
+                    filterSuppliersArr.forEach((supplierItem) => {
+                        if (!seenIdsSuppliers.has(supplierItem._id)) {
+                            seenIdsSuppliers.add(supplierItem._id);
+                            filterSuppliers.push(supplierItem);
+                        }
+                    })
+                    /*  */
+
+                    setFilter(prev => ({
+                        ...prev,
+                        category: [...filterCategories],
+                        supplier: [...filterSuppliers]
+                    }))
+
+                    setRenderFilter(prev => {
+                        /* Check if has some supplier is hidding */
+                        /*                         setIsHiddingSupplier(filter.supplier.some(item => item.isShow == false))
+                         */                        /* Check if has some category is hidding */
+                        setIsHiddingCategory(filterCategories.some(item => item.isShow == false))
+                        setIsHiddingSupplier(filterSuppliers.some(item => item.isShow == false))
+
+                        return {
+                            ...prev,
+                            category: [...filterCategories],
+                            supplier: [...filterSuppliers]
+                        }
+                    })
+
+                    setDefaultItems(requestedItems);
+                    setItems(requestedItems);
+                    setTotalItems(data.data.totalCategories);
+                }
+
+                setDefaultItems(requestedItems);
+                setItems(requestedItems);
+                setTotalItems(data.data.totalProducts);
+
+                setLoading('')
+                setTotalPages(Math.ceil(data.data.totalProducts / limit));
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+    }
+    /*  */
 
     /* Delete Many Items */
     const handleDeleteManyItems = () => {
@@ -263,6 +380,9 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
         const idsToDelete = itemsToDelete.map((item) => item._id);
 
         switch (option) {
+            case 1:
+                handleRemoveItem(itemsToDelete, 9, idsToDelete);
+                break;
             case 2:
                 handleRemoveItem(itemsToDelete, 10, idsToDelete);
                 break;
@@ -374,6 +494,9 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
         /*  */
         if (renderFilter.search != filter.search) {
             switch (option) {
+                case 1:
+                    handleGetProducts();
+                    break;
                 case 2:
                     handleGetCategories();
                     break;
@@ -408,7 +531,7 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                 exportToImage(imageRef);
                 break;
             case 'xlsx':
-                exportToExcel(items);
+                exportToExcel(items, option);
                 break;
             case 'pdf':
                 exportToPDF(imageRef);
@@ -425,6 +548,9 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
         });
 
         switch (option) {
+            case 1:
+                handleGetProducts();
+                break;
             case 2:
                 handleGetCategories();
                 break;
@@ -1350,6 +1476,9 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                 return { ...prev, search: renderFilter.search }
             });
             switch (option) {
+                case 1:
+                    handleGetProducts(renderFilter.search);
+                    break;
                 case 2:
                     handleGetCategories(renderFilter.search);
                     break;
@@ -1359,6 +1488,9 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
             }
         } else {
             switch (option) {
+                case 1:
+                    handleGetProducts();
+                    break;
                 case 2:
                     handleGetCategories();
                     break;
@@ -1910,7 +2042,7 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                         </div>
                         {loading == '' ?
                             <div className="stock__items-container">
-                                {(option != 2 && option != 3) &&
+                                {(option != 2 && option != 3 && option != 1) &&
                                     <div className="stock__item" style={{ gridTemplateColumns: renderFilter[`option${option}`] }}>
                                         <div className="stockitem__select" onClick={(e) => handleSelectItem(e)}></div>
                                         {((option != 2 && option != 3 && option != 4 && option != 5 && option != 7) && renderFilter.columns.image != false) &&
@@ -1980,6 +2112,57 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                                 }
                                 {items.length > 0 ?
                                     <>
+                                        {option == 1 &&
+                                            <>
+                                                {(renderFilter.category.some(item => item.isShow == true) && renderFilter.supplier.some(item => item.isShow == true)) ?
+                                                    <>
+
+                                                        {items.map((item, index) => (
+                                                            <>
+                                                                {(renderFilter.category.some(elem => { if (elem._id == item.productCategory._id) { return elem.isShow } }) && renderFilter.supplier.some(elem => { if (elem._id == item.productSupplier._id) { return elem.isShow } })) &&
+                                                                    <div className='stock__item' style={{ gridTemplateColumns: renderFilter[`option${option}`] }} key={index}>
+                                                                        <div className={`stockitem__select ${item.isSelected == true ? 'stockitem__select--selected' : ''}`} onClick={() => handleSelectItem(item._id)}></div>
+                                                                        {renderFilter.columns.image == true &&
+                                                                            < img src={`${apiUrl}:${apiPort}/assets/${item.picturePath}`} className='stockitem__img' />
+                                                                        }
+                                                                        {renderFilter.columns.productName == true &&
+                                                                            <p className="stockitem__productname">{item.productName}</p>
+                                                                        }
+                                                                        {renderFilter.columns.category == true &&
+                                                                            <p className="stockitem__productcategory">{item.productCategory.categoryName}</p>
+                                                                        }
+                                                                        {renderFilter.columns.supplier == true &&
+                                                                            <p className="stockitem__productcategory">{item.productSupplier.supplierName}</p>
+                                                                        }
+                                                                        {renderFilter.columns.code &&
+                                                                            <p className="stockitem__productcode">{`${item._id.slice(14).toUpperCase()}`}</p>
+                                                                        }
+                                                                        {renderFilter.columns.sellPrice &&
+                                                                            <p className="stockitem__productsellprice">{item.sellPrice}</p>
+                                                                        }
+                                                                        {renderFilter.columns.description == true &&
+                                                                            <p className="stockitem__productdescription">{item.description.length > 125 ? `${item.description.slice(0, 125)}...` : item.description}</p>
+                                                                        }
+                                                                        {renderFilter.columns.description == false &&
+                                                                            <div></div>
+                                                                        }
+                                                                        {renderFilter.columns.status == true &&
+                                                                            <div className="stockitem__productstatus stockitem__productstatus--active">In Stock</div>
+                                                                        }
+                                                                        <div className="stockitem__productoptions">
+                                                                            <div className="stockitem__productremove" onClick={() => handleOpenWindow('create-products', item, 1, item._id)}><MdModeEditOutline /></div>
+                                                                            <div className="stockitem__productremove" onClick={() => handleRemoveItem(item, 1, item._id)}><MdRemove /></div>
+                                                                        </div>
+                                                                    </div>
+                                                                }
+                                                            </>
+                                                        ))}
+                                                    </>
+                                                    :
+                                                    <p className='stock__result'>No More {option == 0 ? 'Orders' : option == 1 ? 'Products' : option == 2 ? 'Categories' : option == 3 ? 'Suppliers' : option == 4 ? 'Purchases' : option == 5 ? 'Sales' : option == 6 ? 'Users' : option == 7 ? 'Logs' : ''} To Show</p>
+                                                }
+                                            </>
+                                        }
                                         {option == 2 &&
                                             <>
                                                 {renderFilter.category.some(item => item.isShow == true) ?

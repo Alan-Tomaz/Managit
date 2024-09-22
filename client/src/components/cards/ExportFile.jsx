@@ -17,7 +17,8 @@ export const exportToImage = (ref) => {
     html2canvas(clonedDiv, {
         scale: window.devicePixelRatio, // Escalar a captura para a densidade de pixels do dispositivo
         width: clonedDiv.scrollWidth,  // Usar a largura total do elemento
-        height: clonedDiv.scrollHeight // Usar a altura total do elemento
+        height: clonedDiv.scrollHeight, // Usar a altura total do elemento
+        useCORS: true
     }).then((canvas) => {
         const imgData = canvas.toDataURL("image/png");
         const link = document.createElement('a');
@@ -29,11 +30,10 @@ export const exportToImage = (ref) => {
     });
 };
 
-export const exportToExcel = (data) => {
+export const exportToExcel = (data, option) => {
 
     /* New names of columns */
     const columnMapping = {
-        image: "Image",
         number: "Number",
         username: "Username",
         permission: "Permission",
@@ -48,10 +48,16 @@ export const exportToExcel = (data) => {
         sellPrice: "Sell Price",
         buyPrice: "Buy Price",
         date: "Date",
-        description: "Description",
         status: "Status",
-        order: "Order"
+        order: "Order",
+        productSupplier: "Supplier",
+        productCategory: "Category",
+        description: "Description",
     };
+
+    if (option == 1) {
+        columnMapping._id = "Code";
+    }
 
     const transformedData = data.map(item => {
         const newItem = {};
@@ -59,8 +65,22 @@ export const exportToExcel = (data) => {
         // Percorre as chaves do mapeamento e define os novos nomes de coluna
         for (const key in columnMapping) {
             if (item.hasOwnProperty(key)) {
-                const newKey = columnMapping[key]; // Nome personalizado da coluna
-                newItem[newKey] = item[key]; // Valor da propriedade original
+                /*  */
+                if (key == "productCategory") {
+                    const newKey = columnMapping[key]; // Nome personalizado da coluna
+                    newItem[newKey] = item[key].categoryName; // Valor da propriedade original
+                } else if (key == "productSupplier") {
+                    const newKey = columnMapping[key]; // Nome personalizado da coluna
+                    newItem[newKey] = item[key].supplierName; // Valor da propriedade original
+                } else if (key == "_id") {
+                    const newKey = columnMapping[key]; // Nome personalizado da coluna
+                    newItem[newKey] = `${item[key].slice(14).toUpperCase()}`; // Valor da propriedade original
+                }
+                /*  */
+                else {
+                    const newKey = columnMapping[key]; // Nome personalizado da coluna
+                    newItem[newKey] = item[key]; // Valor da propriedade original
+                }
             }
         }
 
@@ -88,7 +108,8 @@ export const exportToPDF = (ref) => {
     html2canvas(clonedDiv, {
         scale: window.devicePixelRatio, // Escalar a captura para a densidade de pixels do dispositivo
         width: clonedDiv.scrollWidth,  // Usar a largura total do elemento
-        height: clonedDiv.scrollHeight // Usar a altura total do elemento
+        height: clonedDiv.scrollHeight, // Usar a altura total do elemento
+        useCORS: true
     }).then((canvas) => {
         const imgData = canvas.toDataURL("image/png");
         const pdf = new jsPDF('p', 'mm', 'a4');

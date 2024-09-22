@@ -21,6 +21,7 @@
     display: flex;
     align-items: center;
     justify-content: end;
+    cursor: pointer;
 }
 
 .create-products__img-box {
@@ -42,6 +43,8 @@
 .create-products__img {
     width: 150px;
     height: 150px;
+    border-radius: 100%;
+    object-fit: cover;
 }
 
 .create-products__changeimg {
@@ -142,6 +145,7 @@
 }
 
 .product__category__options-arrow {
+    z-index: 0;
     position: absolute;
     font-size: 3rem;
     top: -30px;
@@ -163,6 +167,7 @@
 
 .product__category__options-scroll {
     overflow-y: auto;
+    z-index: 1000;
 }
 
 .product__category__options-scroll p {
@@ -172,6 +177,14 @@
     z-index: 1100;
 }
 
+.product__category__options-scroll__loading img {
+    width: 25px;
+}
+
+.product__category__options-scroll__loading:hover {
+    background-color: rgb(221, 221, 221) !important;
+    cursor: initial;
+}
 
 .product__category__options p:not(:last-of-type) {
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
@@ -179,10 +192,6 @@
 
 .product__category__options p:hover {
     background-color: rgb(190, 190, 190);
-}
-
-.product__category__options p:last-of-type:hover .product__category__options-arrow {
-    color: rgb(190, 190, 190);
 }
 
 /* SCROLL BAR STYLE */
