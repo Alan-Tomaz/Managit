@@ -510,7 +510,7 @@ function Home({ showToastMessage }) {
                 <main className='home' ref={mainRef}>
                     <div className="modal__window" style={{ display: showModal != '' ? 'flex' : 'none' }} >
                         {showModal == 'new-order' &&
-                            <NewOrder closeWindow={() => setShowModal('')} />
+                            <NewOrder closeWindow={() => setShowModal('')} item={itemInfo.item} option={itemInfo.option} id={itemInfo.id} showToastMessage={showToastMessage} setReload={triggerUpdate} />
                         }
                         {showModal == 'edit-profile' &&
                             <EditProfile closeWindow={() => setShowModal('')} />
@@ -677,7 +677,7 @@ function Home({ showToastMessage }) {
                                                 <Suppliers handleOpenWindow={handleCreateItem} handleRemoveItem={handleRemoveItem} reload={updateTrigger} />
                                                 :
                                                 subSectionDisplay == "purchases" ?
-                                                    <Purchases handleOpenWindow={() => setShowModal('new-order')} handleRemoveItem={() => setShowModal('remove-item')} />
+                                                    <Purchases handleOpenWindow={handleCreateItem} handleRemoveItem={handleRemoveItem} reload={updateTrigger} />
                                                     :
                                                     subSectionDisplay == "sales" ?
                                                         <Sales handleOpenWindow={() => setShowModal('new-order')} handleRemoveItem={() => setShowModal('remove-item')} />

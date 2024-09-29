@@ -6,6 +6,7 @@ import authRoutes from "./routes/auth.js";
 import categoryRoutes from './routes/category.js';
 import supplierRoutes from './routes/supplier.js';
 import productRoutes from './routes/product.js';
+import orderRoutes from './routes/order.js';
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -30,6 +31,7 @@ app.use("/auth", authRoutes);
 app.use('/category', categoryRoutes)
 app.use('/supplier', supplierRoutes)
 app.use('/product', productRoutes)
+app.use('/order', orderRoutes)
 
 /* MONGOOSE SETUP */
 /* Server PORT */

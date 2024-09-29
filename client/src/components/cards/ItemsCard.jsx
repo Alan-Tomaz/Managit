@@ -102,9 +102,12 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
     const [isHidingSupplier, setIsHiddingSupplier] = useState(renderFilter.supplier.some(item => item.isShow == false));
     const [isHidingCategory, setIsHiddingCategory] = useState(renderFilter.category.some(item => item.isShow == false));
     const [page, setPage] = useState(1);
-    const [limit, setLimit] = useState(10);
+    const [limit, setLimit] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [loading, setLoading] = useState('')
+    const [maxSellPrice, setMaxSellPrice] = useState(100)
+    const [maxQnt, setMaxQnt] = useState(100)
+    const [maxBuyPrice, setMaxBuyPrice] = useState(100)
 
     /* Items */
     const [totalItems, setTotalItems] = useState(0)
@@ -356,15 +359,12 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                         }
                     })
 
-                    setDefaultItems(requestedItems);
-                    setItems(requestedItems);
-                    setTotalItems(data.data.totalCategories);
                 }
 
                 setDefaultItems(requestedItems);
                 setItems(requestedItems);
                 setTotalItems(data.data.totalProducts);
-
+                setMaxSellPrice(getMaxValue(requestedItems, 'sellPrice'))
                 setLoading('')
                 setTotalPages(Math.ceil(data.data.totalProducts / limit));
             })
@@ -416,6 +416,16 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                 ? (a, b) => getter(b).localeCompare(getter(a))
                 : (a, b) => getter(a).localeCompare(getter(b))
         );
+    }
+
+    const getMaxValue = (arr, property) => {
+        let maxValue = Number.MIN_VALUE;
+        for (let i = 0; i < arr.length; i++) {
+            if (arr[i][property] > maxValue) {
+                maxValue = arr[i][property];
+            }
+        }
+        return Math.ceil(maxValue);
     }
 
     const funFilteringColumns = () => {
@@ -481,7 +491,10 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
         const newColumns = `min-content ${filter.columns.image == true ? '65px ' : ''}${filter.columns.number == true ? '50px ' : ''}${filter.columns.username == true ? '150px ' : ''}${filter.columns.permission == true ? '150px ' : ''}${filter.columns.productName == true ? '200px ' : ''}${filter.columns.creationDate == true ? '150px ' : ''}${filter.columns.lastAccess == true ? '150px ' : ''}${option == 2 ? filter.columns.category == true ? '250px ' : '' : filter.columns.category == true ? '100px ' : ''}${option == 3 ? filter.columns.supplier == true ? '250px ' : '' : filter.columns.supplier == true ? '100px ' : ''}${filter.columns.code == true ? '100px ' : ''}${filter.columns.quantity == true ? '80px ' : ''}${filter.columns.sellPrice == true ? '100px ' : ''}${filter.columns.buyPrice == true ? '100px ' : ''}${filter.columns.blocked == true ? '100px ' : ''}${filter.columns.date == true ? '150px ' : ''}${filter.columns.description == true ? '1fr ' : ''}${filter.columns.description == false ? '1fr ' : ''}${filter.columns.order == true ? '100px ' : ''}${filter.columns.status == true ? '100px ' : ''}100px`;
         setFilter(prev => ({
             ...prev,
-            [`option${option}`]: newColumns
+            [`option${option}`]: newColumns,
+            /*  */
+            filteringColumns: funFilteringColumns()
+            /*  */
         }));
         setRenderFilter(prev => {
             /* Check if has some supplier is hidding */
@@ -1703,7 +1716,7 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                                                 <div className="filter__option-value">
                                                     <span>Min Sell Price</span>
                                                     <div className="filter__option__input">
-                                                        <input type="range" name="sell-price" id="sell-price" className='filter__option__range-input filter__option__sellprice-input' value={filter.minSellPrice} onChange={(e) => setFilter({ ...filter, minSellPrice: e.target.value })} min='0' max='110' />
+                                                        <input type="range" name="sell-price" id="sell-price" className='filter__option__range-input filter__option__sellprice-input' value={filter.minSellPrice} onChange={(e) => setFilter({ ...filter, minSellPrice: e.target.value })} min='0' max={maxSellPrice} />
                                                         <span>{filter.minSellPrice}</span>
                                                     </div>
                                                 </div>
@@ -1712,7 +1725,7 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                                                 <div className="filter__option-value">
                                                     <span>Min Buy Price</span>
                                                     <div className="filter__option__input">
-                                                        <input type="range" name="sell-price" id="sell-price" className='filter__option__range-input filter__option__buyprice-input' value={filter.minBuyPrice} onChange={(e) => setFilter({ ...filter, minBuyPrice: e.target.value })} min='0' max='110' />
+                                                        <input type="range" name="sell-price" id="sell-price" className='filter__option__range-input filter__option__buyprice-input' value={filter.minBuyPrice} onChange={(e) => setFilter({ ...filter, minBuyPrice: e.target.value })} min='0' max={maxBuyPrice} />
                                                         <span>{filter.minBuyPrice}</span>
                                                     </div>
                                                 </div>
@@ -1721,7 +1734,7 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                                                 <div className="filter__option-value">
                                                     <span>Min Quantity</span>
                                                     <div className="filter__option__input">
-                                                        <input type="range" name="sell-price" id="sell-price" className='filter__option__range-input filter__option__quantity-input' value={filter.minQnt} onChange={(e) => setFilter({ ...filter, minQnt: e.target.value })} min='0' max='110' />
+                                                        <input type="range" name="sell-price" id="sell-price" className='filter__option__range-input filter__option__quantity-input' value={filter.minQnt} onChange={(e) => setFilter({ ...filter, minQnt: e.target.value })} min='0' max={maxQnt} />
                                                         <span>{filter.minQnt}</span>
                                                     </div>
                                                 </div>
@@ -1828,7 +1841,7 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                                 <MdArrowDropUp className='stockmenu__button-export-icon' style={{ display: showButtonMoreOptions == true ? "flex" : "none" }} />
                             </div>
                         </div>
-                        <div className="button stockmenu__button" style={{ display: option != 7 ? 'flex' : 'none' }} onClick={() => option == 1 ? handleOpenWindow('create-products', '', 0, '') : option == 2 ? handleOpenWindow('create-category', '', 0, '') : option == 3 ? handleOpenWindow('create-supplier', '', 0, '') : ""}>{option == 0 ? "New Order" : option == 1 ? "New Product" : option == 2 ? 'New Category' : option == 3 ? 'New Supplier' : option == 4 ? 'New Order' : option == 5 ? 'New Order' : option == 6 ? 'New User' : 'New Type'}</div>
+                        <div className="button stockmenu__button" style={{ display: option != 7 ? 'flex' : 'none' }} onClick={() => option == 1 ? handleOpenWindow('create-products', '', 0, '') : option == 2 ? handleOpenWindow('create-category', '', 0, '') : option == 3 ? handleOpenWindow('create-supplier', '', 0, '') : option == 4 ? handleOpenWindow('new-order', '', 0, '') : ""}>{option == 0 ? "New Order" : option == 1 ? "New Product" : option == 2 ? 'New Category' : option == 3 ? 'New Supplier' : option == 4 ? 'New Order' : option == 5 ? 'New Order' : option == 6 ? 'New User' : 'New Type'}</div>
                     </div>
                 </div>
                 <div className="stock__container" ref={imageRef}>
@@ -2114,12 +2127,12 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                                     <>
                                         {option == 1 &&
                                             <>
-                                                {(renderFilter.category.some(item => item.isShow == true) && renderFilter.supplier.some(item => item.isShow == true)) ?
+                                                {(renderFilter.category.some(item => item.isShow == true) && renderFilter.supplier.some(item => item.isShow == true) && items.some(item => renderFilter.minSellPrice <= item.sellPrice)) ?
                                                     <>
 
                                                         {items.map((item, index) => (
                                                             <>
-                                                                {(renderFilter.category.some(elem => { if (elem._id == item.productCategory._id) { return elem.isShow } }) && renderFilter.supplier.some(elem => { if (elem._id == item.productSupplier._id) { return elem.isShow } })) &&
+                                                                {(renderFilter.category.some(elem => { if (elem._id == item.productCategory._id) { return elem.isShow } }) && renderFilter.supplier.some(elem => { if (elem._id == item.productSupplier._id) { return elem.isShow } }) && (renderFilter.minSellPrice <= item.sellPrice)) &&
                                                                     <div className='stock__item' style={{ gridTemplateColumns: renderFilter[`option${option}`] }} key={index}>
                                                                         <div className={`stockitem__select ${item.isSelected == true ? 'stockitem__select--selected' : ''}`} onClick={() => handleSelectItem(item._id)}></div>
                                                                         {renderFilter.columns.image == true &&
@@ -2159,7 +2172,7 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                                                         ))}
                                                     </>
                                                     :
-                                                    <p className='stock__result'>No More {option == 0 ? 'Orders' : option == 1 ? 'Products' : option == 2 ? 'Categories' : option == 3 ? 'Suppliers' : option == 4 ? 'Purchases' : option == 5 ? 'Sales' : option == 6 ? 'Users' : option == 7 ? 'Logs' : ''} To Show</p>
+                                                    <p className='stock__result'>No More {option == 0 ? 'Orders' : option == 1 ? 'Products' : option == 2 ? 'Categories' : option == 3 ? 'Suppliers' : option == 4 ? 'Purchases' : option == 5 ? 'Sales' : option == 6 ? 'Users' : option == 7 ? 'Logs' : ''} To Show. Try In The Next Page</p>
                                                 }
                                             </>
                                         }
@@ -2192,7 +2205,7 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                                                         ))}
                                                     </>
                                                     :
-                                                    <p className='stock__result'>No More {option == 0 ? 'Orders' : option == 1 ? 'Products' : option == 2 ? 'Categories' : option == 3 ? 'Suppliers' : option == 4 ? 'Purchases' : option == 5 ? 'Sales' : option == 6 ? 'Users' : option == 7 ? 'Logs' : ''} To Show</p>
+                                                    <p className='stock__result'>No More {option == 0 ? 'Orders' : option == 1 ? 'Products' : option == 2 ? 'Categories' : option == 3 ? 'Suppliers' : option == 4 ? 'Purchases' : option == 5 ? 'Sales' : option == 6 ? 'Users' : option == 7 ? 'Logs' : ''} To Show. Try In The Next Page</p>
                                                 }
                                             </>
                                         }
@@ -2225,7 +2238,7 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
 
                                                     </>
                                                     :
-                                                    <p className='stock__result'>No More {option == 0 ? 'Orders' : option == 1 ? 'Products' : option == 2 ? 'Categories' : option == 3 ? 'Suppliers' : option == 4 ? 'Purchases' : option == 5 ? 'Sales' : option == 6 ? 'Users' : option == 7 ? 'Logs' : ''} To Show</p>
+                                                    <p className='stock__result'>No More {option == 0 ? 'Orders' : option == 1 ? 'Products' : option == 2 ? 'Categories' : option == 3 ? 'Suppliers' : option == 4 ? 'Purchases' : option == 5 ? 'Sales' : option == 6 ? 'Users' : option == 7 ? 'Logs' : ''} To Show. Try In The Next Page</p>
                                                 }
                                             </>
                                         }
