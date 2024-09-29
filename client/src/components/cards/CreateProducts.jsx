@@ -299,7 +299,7 @@ function CreateProducts({ closeWindow, item, option, id, showToastMessage, setRe
                                             <p className='product__category__options-scroll__loading'><img src={Loading} /></p>
                                         }
                                     </div>
-                                    <IoMdArrowDropup className='product__category__options-arrow' style={{ color: isHovered ? 'rgb(190, 190, 190)' : 'rgb(221, 221, 221)' }} />
+                                    <IoMdArrowDropup className='product__category__options-arrow' style={{ color: isHovered ? 'rgb(219, 219, 219)' : 'rgba(88, 88, 88, 0.1)' }} />
                                 </div>
                             </div>
                             <div className="product__suppliers product__category" id='product__supplier' ref={employeeSelectionRef} onClick={() => setShowEmployees(!showEmployees)}>
@@ -315,7 +315,7 @@ function CreateProducts({ closeWindow, item, option, id, showToastMessage, setRe
                                             <p className='product__category__options-scroll__loading' ><img src={Loading} /></p>
                                         }
                                     </div>
-                                    <IoMdArrowDropup className='product__category__options-arrow' style={{ color: isHovered ? 'rgb(190, 190, 190)' : 'rgb(221, 221, 221)' }} />
+                                    <IoMdArrowDropup className='product__category__options-arrow' style={{ color: isHovered ? 'rgb(219, 219, 219)' : 'rgba(88, 88, 88, 0.1)' }} />
                                 </div>
                             </div>
                             <div className="product__vl"></div>

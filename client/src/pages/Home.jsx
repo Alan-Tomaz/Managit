@@ -70,9 +70,9 @@ function Home({ showToastMessage }) {
         setUpdateTrigger(prev => !prev);
     };
 
-    const handleCreateItem = (updateType, item, option, id) => {
+    const handleCreateItem = (updateType, item, option, id, orderTypeParam = null) => {
         setShowModal(updateType);
-        setItemInfo({ item: item, option: option, id: id });
+        setItemInfo({ item: item, option: option, id: id, orderTypeParam: orderTypeParam });
     }
 
     const handleRemoveItem = (item, option, id) => {
@@ -510,7 +510,7 @@ function Home({ showToastMessage }) {
                 <main className='home' ref={mainRef}>
                     <div className="modal__window" style={{ display: showModal != '' ? 'flex' : 'none' }} >
                         {showModal == 'new-order' &&
-                            <NewOrder closeWindow={() => setShowModal('')} item={itemInfo.item} option={itemInfo.option} id={itemInfo.id} showToastMessage={showToastMessage} setReload={triggerUpdate} />
+                            <NewOrder closeWindow={() => setShowModal('')} item={itemInfo.item} option={itemInfo.option} id={itemInfo.id} orderTypeParam={itemInfo.orderTypeParam} showToastMessage={showToastMessage} setReload={triggerUpdate} handleOpenWindow={handleCreateItem} />
                         }
                         {showModal == 'edit-profile' &&
                             <EditProfile closeWindow={() => setShowModal('')} />

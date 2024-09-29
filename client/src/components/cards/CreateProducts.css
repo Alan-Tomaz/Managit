@@ -149,7 +149,7 @@
     position: absolute;
     font-size: 3rem;
     top: -30px;
-    color: rgb(221, 221, 221);
+    color: var(--bg-color);
     left: 68%;
 }
 
@@ -157,7 +157,7 @@
     position: absolute;
     display: flex;
     flex-direction: column;
-    background-color: rgb(221, 221, 221);
+    background-color: var(--bg-color);
     top: 65px;
     left: 0;
     width: 100%;
@@ -175,6 +175,7 @@
     text-align: center;
     cursor: pointer;
     z-index: 1100;
+    font-size: 1rem;
 }
 
 .product__category__options-scroll__loading img {
@@ -187,11 +188,11 @@
 }
 
 .product__category__options p:not(:last-of-type) {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(88, 88, 88, 0.1);
 }
 
 .product__category__options p:hover {
-    background-color: rgb(190, 190, 190);
+    background-color: rgb(219, 219, 219);
 }
 
 /* SCROLL BAR STYLE */

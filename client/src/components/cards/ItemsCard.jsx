@@ -40,7 +40,7 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
             lastAccess: option == 6 ? true : false,
             blocked: option == 6 ? true : false,
             productName: option == 1 ? true : option == 0 ? true : false,
-            category: option == 1 ? true : option == 0 ? true : option == 2 ? true : option == 4 ? true : option == 5 ? true : false,
+            category: option == 1 ? true : option == 0 ? true : option == 2 ? true : false,
             supplier: option == 1 ? true : option == 3 ? true : option == 4 ? true : option == 5 ? true : false,
             code: option == 0 ? true : option == 1 ? true : false,
             quantity: option == 0 ? true : false,
@@ -86,8 +86,8 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
         option1: 'min-content 65px 200px 100px 100px 100px 100px 1fr 100px 100px',
         option2: 'min-content 250px 1fr 100px',
         option3: 'min-content 250px 1fr 100px',
-        option4: 'min-content 50px 150px 100px 100px 100px 1fr 100px 100px',
-        option5: 'min-content 50px 150px 100px 100px 100px 1fr 100px 100px',
+        option4: 'min-content 100px 150px 100px 100px 1fr 120px 100px',
+        option5: 'min-content 100px 150px 100px 100px 1fr 120px 100px',
         option6: 'min-content 65px 50px 150px 150px 150px 150px 100px 1fr 100px',
         option7: 'min-content 50px 150px 150px 1fr 100px'
     });
@@ -102,7 +102,7 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
     const [isHidingSupplier, setIsHiddingSupplier] = useState(renderFilter.supplier.some(item => item.isShow == false));
     const [isHidingCategory, setIsHiddingCategory] = useState(renderFilter.category.some(item => item.isShow == false));
     const [page, setPage] = useState(1);
-    const [limit, setLimit] = useState(1);
+    const [limit, setLimit] = useState(10);
     const [totalPages, setTotalPages] = useState(1);
     const [loading, setLoading] = useState('')
     const [maxSellPrice, setMaxSellPrice] = useState(100)
@@ -372,6 +372,96 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                 console.log(err);
             })
     }
+    const handleGetOrders = (searchParam) => {
+        setLoading(<img src={Loading} alt='Loading' className='stock__loading' />)
+
+        const headers = {
+            'Authorization': `Bearer ${userInfo.token}`
+        }
+
+        const filteringObj = {
+            search: searchParam == undefined ? filter.search : searchParam,
+            page: page,
+            limit: limit
+        }
+
+
+        const url = new URL(`${apiUrl}:${apiPort}/order/`);
+        url.search = new URLSearchParams(filteringObj)
+
+        axios.get(`${url}`, ({
+            headers
+        }))
+            .then((data) => {
+                const requestedItems = data.data.ordersData;
+
+                console.log(requestedItems);
+
+                requestedItems.forEach(elem => {
+                    elem.isSelected = false;
+                });
+
+                if (!checkEqualArray(items, requestedItems)) {
+                    const newFilterSuppliers = requestedItems.map((item) => {
+                        return { _id: item.orderSupplier._id, name: item.orderSupplier.supplierName, isShow: true };
+                    })
+                    setInitialFilterObj(prev => ({
+                        ...prev,
+                        supplier: [...newFilterSuppliers]
+                    }))
+
+                    const filterSuppliersArr = requestedItems.map((item) => {
+                        const oldSupplier = filter.supplier.filter(item2 => item2._id == item.orderSupplier._id);
+                        if (oldSupplier.length > 0) {
+                            return { _id: item.orderSupplier._id, name: item.orderSupplier.supplierName, isShow: oldSupplier[0].isShow }
+                        } else {
+                            return { _id: item.orderSupplier._id, name: item.orderSupplier.supplierName, isShow: true };
+                        }
+                    })
+
+                    /* Make Values Uniques */
+                    const seenIdsSuppliers = new Set();
+
+                    const filterSuppliers = [];
+
+                    filterSuppliersArr.forEach((supplierItem) => {
+                        if (!seenIdsSuppliers.has(supplierItem._id)) {
+                            seenIdsSuppliers.add(supplierItem._id);
+                            filterSuppliers.push(supplierItem);
+                        }
+                    })
+                    /*  */
+
+                    setFilter(prev => ({
+                        ...prev,
+                        supplier: [...filterSuppliers]
+                    }))
+
+                    setRenderFilter(prev => {
+                        /* Check if has some supplier is hidding */
+                        /*                         setIsHiddingSupplier(filter.supplier.some(item => item.isShow == false))
+                         */                        /* Check if has some category is hidding */
+                        setIsHiddingSupplier(filterSuppliers.some(item => item.isShow == false))
+
+                        return {
+                            ...prev,
+                            supplier: [...filterSuppliers]
+                        }
+                    })
+
+                }
+
+                setDefaultItems(requestedItems);
+                setItems(requestedItems);
+                setTotalItems(data.data.totalOrders);
+                setMaxBuyPrice(getMaxValue(requestedItems, 'price'))
+                setLoading('')
+                setTotalPages(Math.ceil(data.data.totalOrders / limit));
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+    }
     /*  */
 
     /* Delete Many Items */
@@ -409,6 +499,20 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
         return true;
 
     }
+
+    const formatDate = (record) => {
+        // Convertendo a data ISO para um objeto Date
+        const createdAt = new Date(record);
+
+        // Formatando a data no formato MM/DD/YYYY (padrão americano)
+        const formattedDate = createdAt.toLocaleDateString("en-US", {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+        });
+
+        return formattedDate;
+    };
 
     const sortAlphabetical = (arr, getter, order = 'asc') => {
         return arr.sort(
@@ -454,7 +558,7 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
         if ((option == 0 || option == 1) && filter.columns.productName == false) {
             updatedFilteringColumn.push('product-name');
         }
-        if ((option == 0 || option == 1 || option == 2 || option == 4) && filter.columns.category == false) {
+        if ((option == 0 || option == 1 || option == 2) && filter.columns.category == false) {
             updatedFilteringColumn.push('category');
         }
         if ((option == 1 || option == 3 || option == 4 || option == 5) && filter.columns.supplier == false) {
@@ -488,7 +592,7 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
     }
 
     const handleFilter = () => {
-        const newColumns = `min-content ${filter.columns.image == true ? '65px ' : ''}${filter.columns.number == true ? '50px ' : ''}${filter.columns.username == true ? '150px ' : ''}${filter.columns.permission == true ? '150px ' : ''}${filter.columns.productName == true ? '200px ' : ''}${filter.columns.creationDate == true ? '150px ' : ''}${filter.columns.lastAccess == true ? '150px ' : ''}${option == 2 ? filter.columns.category == true ? '250px ' : '' : filter.columns.category == true ? '100px ' : ''}${option == 3 ? filter.columns.supplier == true ? '250px ' : '' : filter.columns.supplier == true ? '100px ' : ''}${filter.columns.code == true ? '100px ' : ''}${filter.columns.quantity == true ? '80px ' : ''}${filter.columns.sellPrice == true ? '100px ' : ''}${filter.columns.buyPrice == true ? '100px ' : ''}${filter.columns.blocked == true ? '100px ' : ''}${filter.columns.date == true ? '150px ' : ''}${filter.columns.description == true ? '1fr ' : ''}${filter.columns.description == false ? '1fr ' : ''}${filter.columns.order == true ? '100px ' : ''}${filter.columns.status == true ? '100px ' : ''}100px`;
+        const newColumns = `min-content ${filter.columns.image == true ? '65px ' : ''}${filter.columns.number == true ? '100px ' : ''}${filter.columns.username == true ? '150px ' : ''}${filter.columns.permission == true ? '150px ' : ''}${filter.columns.productName == true ? '200px ' : ''}${filter.columns.creationDate == true ? '150px ' : ''}${filter.columns.lastAccess == true ? '150px ' : ''}${option == 2 ? filter.columns.category == true ? '250px ' : '' : filter.columns.category == true ? '100px ' : ''}${option == 3 ? filter.columns.supplier == true ? '250px ' : '' : filter.columns.supplier == true ? '100px ' : ''}${filter.columns.code == true ? '100px ' : ''}${filter.columns.quantity == true ? '80px ' : ''}${filter.columns.sellPrice == true ? '100px ' : ''}${filter.columns.buyPrice == true ? '100px ' : ''}${filter.columns.blocked == true ? '100px ' : ''}${filter.columns.date == true ? '150px ' : ''}${filter.columns.description == true ? '1fr ' : ''}${filter.columns.description == false ? '1fr ' : ''}${filter.columns.order == true ? '120px ' : ''}${filter.columns.status == true ? '100px ' : ''}100px`;
         setFilter(prev => ({
             ...prev,
             [`option${option}`]: newColumns,
@@ -515,6 +619,9 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                     break;
                 case 3:
                     handleGetSuppliers();
+                    break;
+                case 4:
+                    handleGetOrders();
                     break;
             }
         }
@@ -569,6 +676,9 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                 break;
             case 3:
                 handleGetSuppliers();
+                break;
+            case 4:
+                handleGetOrders();
                 break;
         }
     }
@@ -1498,6 +1608,9 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                 case 3:
                     handleGetSuppliers(renderFilter.search);
                     break;
+                case 4:
+                    handleGetOrders(renderFilter.search);
+                    break;
             }
         } else {
             switch (option) {
@@ -1509,6 +1622,9 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                     break;
                 case 3:
                     handleGetSuppliers();
+                    break;
+                case 4:
+                    handleGetOrders();
                     break;
             }
         }
@@ -1614,7 +1730,7 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                                                     <span>Product Name</span>
                                                 </div>
                                             }
-                                            {(option == 1 || option == 0 || option == 2 || option == 4 || option == 5) &&
+                                            {(option == 1 || option == 0 || option == 2) &&
                                                 <div className={`filter__option filter__option-category ${filter.columns.category == true ? 'filter__option--selected' : ''}`} onClick={() => handleUncheckColumn('category')}>
                                                     <div className="filter__option-checkbox">
                                                         <FaCheck className='filter__option-check filter__option--selected' />
@@ -1841,7 +1957,7 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                                 <MdArrowDropUp className='stockmenu__button-export-icon' style={{ display: showButtonMoreOptions == true ? "flex" : "none" }} />
                             </div>
                         </div>
-                        <div className="button stockmenu__button" style={{ display: option != 7 ? 'flex' : 'none' }} onClick={() => option == 1 ? handleOpenWindow('create-products', '', 0, '') : option == 2 ? handleOpenWindow('create-category', '', 0, '') : option == 3 ? handleOpenWindow('create-supplier', '', 0, '') : option == 4 ? handleOpenWindow('new-order', '', 0, '') : ""}>{option == 0 ? "New Order" : option == 1 ? "New Product" : option == 2 ? 'New Category' : option == 3 ? 'New Supplier' : option == 4 ? 'New Order' : option == 5 ? 'New Order' : option == 6 ? 'New User' : 'New Type'}</div>
+                        <div className="button stockmenu__button" style={{ display: option != 7 ? 'flex' : 'none' }} onClick={() => option == 1 ? handleOpenWindow('create-products', '', 0, '') : option == 2 ? handleOpenWindow('create-category', '', 0, '') : option == 3 ? handleOpenWindow('create-supplier', '', 0, '') : option == 4 ? handleOpenWindow('new-order', '', 0, '', 'buy') : ""}>{option == 0 ? "New Order" : option == 1 ? "New Product" : option == 2 ? 'New Category' : option == 3 ? 'New Supplier' : option == 4 ? 'New Order' : option == 5 ? 'New Order' : option == 6 ? 'New User' : 'New Type'}</div>
                     </div>
                 </div>
                 <div className="stock__container" ref={imageRef}>
@@ -2055,7 +2171,7 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                         </div>
                         {loading == '' ?
                             <div className="stock__items-container">
-                                {(option != 2 && option != 3 && option != 1) &&
+                                {(option != 2 && option != 3 && option != 1 && option != 4) &&
                                     <div className="stock__item" style={{ gridTemplateColumns: renderFilter[`option${option}`] }}>
                                         <div className="stockitem__select" onClick={(e) => handleSelectItem(e)}></div>
                                         {((option != 2 && option != 3 && option != 4 && option != 5 && option != 7) && renderFilter.columns.image != false) &&
@@ -2229,6 +2345,51 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                                                                         }
                                                                         <div className="stockitem__productoptions">
                                                                             <div className="stockitem__productremove" onClick={() => handleOpenWindow('create-supplier', item, 1, item._id)}><MdModeEditOutline /></div>
+                                                                            <div className="stockitem__productremove" onClick={() => handleRemoveItem(item, 3, item._id)}><MdRemove /></div>
+                                                                        </div>
+                                                                    </div>
+                                                                }
+                                                            </>
+                                                        ))}
+
+                                                    </>
+                                                    :
+                                                    <p className='stock__result'>No More {option == 0 ? 'Orders' : option == 1 ? 'Products' : option == 2 ? 'Categories' : option == 3 ? 'Suppliers' : option == 4 ? 'Purchases' : option == 5 ? 'Sales' : option == 6 ? 'Users' : option == 7 ? 'Logs' : ''} To Show. Try In The Next Page</p>
+                                                }
+                                            </>
+                                        }
+                                        {option == 4 &&
+                                            <>
+                                                {renderFilter.supplier.some(item => item.isShow == true) ?
+                                                    <>
+                                                        {items.map((item, index) => (
+                                                            <>
+                                                                {renderFilter.supplier.some(elem => { if (elem._id == item.orderSupplier._id) { return elem.isShow } }) &&
+                                                                    <div className='stock__item' style={{ gridTemplateColumns: renderFilter[`option${option}`] }} key={index}>
+                                                                        <div className={`stockitem__select ${item.isSelected == true ? 'stockitem__select--selected' : ''}`} onClick={() => handleSelectItem(item._id)}></div>
+                                                                        {renderFilter.columns.number == true &&
+                                                                            <p className="stockitem__productnumber">{item._id.slice(14).toUpperCase()}</p>
+                                                                        }
+                                                                        {renderFilter.columns.creationDate == true &&
+                                                                            <p className="stockitem__productcreationdate">{formatDate(item.createdAt)}</p>
+                                                                        }
+                                                                        {renderFilter.columns.supplier == true &&
+                                                                            <p className="stockitem__productcategory">{item.orderSupplier.supplierName}</p>
+                                                                        }
+                                                                        {renderFilter.columns.buyPrice == true &&
+                                                                            <p className="stockitem__productsellprice stockitem__productbuyprice">{item.price}</p>
+                                                                        }
+                                                                        {renderFilter.columns.description == true &&
+                                                                            <p className="stockitem__productdescription">{item.description.length > 125 ? `${item.description.slice(0, 125)}...` : item.description}</p>
+                                                                        }
+                                                                        {renderFilter.columns.description == false &&
+                                                                            <div></div>
+                                                                        }
+                                                                        {renderFilter.columns.order == true &&
+                                                                            <div className={`stockitem__productorder stockitem__productorder stockitem__productstatus ${item.status == "finished" ? "stockitem__productstatus--active" : item.status == "in progress" ? "stockitem__productstatus--waiting" : item.status == "cancelled" ? "stockitem__productstatus--cancelled" : ""}`}>{item.status == "finished" ? "Finished" : item.status == "in progress" ? "In Progress" : item.status == "cancelled" ? "Cancelled" : ""}</div>
+                                                                        }
+                                                                        <div className="stockitem__productoptions">
+                                                                            <div className="stockitem__productremove" onClick={() => handleOpenWindow('new-order', item, 1, item._id)}><MdModeEditOutline /></div>
                                                                             <div className="stockitem__productremove" onClick={() => handleRemoveItem(item, 3, item._id)}><MdRemove /></div>
                                                                         </div>
                                                                     </div>

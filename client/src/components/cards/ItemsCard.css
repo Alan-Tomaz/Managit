@@ -568,7 +568,7 @@
     align-items: center;
     justify-content: center;
     height: 40px;
-    width: 100px;
+    width: 120px;
     border-radius: 50px;
     font-weight: var(--font-medium);
 }
@@ -580,6 +580,16 @@
 .stockitem__productstatus--active {
     background-color: rgba(18, 231, 35, 0.38);
     color: rgba(8, 157, 41, 1);
+}
+
+.stockitem__productstatus--waiting {
+    background-color: rgba(236, 255, 61, 0.822);
+    color: rgb(125, 138, 10);
+}
+
+.stockitem__productstatus--cancelled {
+    background-color: rgba(241, 39, 4, 0.918);
+    color: rgb(129, 1, 1);
 }
 
 .stockitem__productoptions {

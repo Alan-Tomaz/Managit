@@ -32,8 +32,6 @@ export const createOrder = async (req, res) => {
             const productsFinded = await Product.find({ _id: { $in: productsIds } });
             const supplierFinded = await Supplier.findOne({ _id: orderSupplier });
 
-            console.log(productsFinded);
-
             if (productsIds.length <= 0) {
                 res.status(401).json({ error: "Quantity Of Products Is Not Enough" });
             } else if (productsFinded == null || productsFinded.length !== productsIds.length) {
@@ -43,7 +41,12 @@ export const createOrder = async (req, res) => {
             } else {
 
                 if (type == "sale") {
-
+                    for (let i = 0; i < productsFinded.length; i++) {
+                        const productChoosed = products.find(item => item.product == productsFinded[i]._id);
+                        if (productsFinded[i].stock < productChoosed.quantity) {
+                            return res.status(401).json({ error: `Insufficient stock for product: ${productsFinded[i].productName.length > 40 ? productsFinded[i].productName.slice(0, 40) + "..." : productsFinded[i].productName}. Available: ${productsFinded[i].stock}, requested: ${productChoosed.quantity}` });
+                        }
+                    }
                 }
 
                 const newOrder = new Order({
