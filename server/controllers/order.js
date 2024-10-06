@@ -92,9 +92,13 @@ export const createOrder = async (req, res) => {
 export const getOrders = async (req, res) => {
     try {
 
-        const { page = 1, limit = 10, search } = req.query;
+        const { page = 1, limit = 10, search, type } = req.query;
 
         const filters = {};
+
+        if (type != undefined) {
+            filters.type = type;
+        }
 
         if (search) {
             filters.uniqueId = { ...filters.uniqueId, $regex: search, $options: 'i' };
@@ -145,71 +149,148 @@ export const updateOrder = async (req, res) => {
 
             const orderFinded = await Order.findById(id);
 
-            const productsIds = products.filter(item => {
-
-                orderProductFinded = orderFinded.products.find(order => order.product == item.product);
-
-                if (item.quantity > 0) {
-                    return item.product;
-                }
-                else if (item.quantity == 0 && item.product == orderProductFinded.product) {
-                    return item.product;
-                }
-                return false
-            }).map(item => item.product);
-
-            const productsNotEqualZero = products.find(prod => prod.quantity != 0);
-
-            const productsFinded = await Product.find({ _id: { $in: productsIds } });
-            const supplierFinded = await Supplier.findOne({ _id: orderSupplier });
-
-            if (productsIds.length <= 0) {
-                res.status(401).json({ error: "Quantity Of Products Is Not Enough" });
-            } else if (!productsNotEqualZero) {
-                res.status(401).json({ error: "It is not possible to edit an order without a product listome Products Does Not Exists" });
-            } else if (productsFinded == null || productsFinded.length !== productsIds.length) {
-                res.status(401).json({ error: "Some Products Does Not Exists" });
-            } else if (supplierFinded == null) {
-                res.status(401).json({ error: "Supplier Does Not Exists" });
+            if (!orderFinded) {
+                res.status(401).json({ error: "Order Not Found!" });
             } else {
 
-                if (type == "sale") {
+                const productsIds = products.filter(item => {
+                    const orderProductFinded = orderFinded.products.find(order => order.product == item.product);
+
+                    if (item.quantity > 0) {
+                        return item.product;
+                    }
+                    else if (item.quantity == 0 && item.product == orderProductFinded.product) {
+                        return item.product;
+                    }
+                    return false
+                }).map(item => item.product);
+
+                const productsNotEqualZero = products.find(prod => prod.quantity != 0);
+
+                const orderProductNotFind = orderFinded.products.filter(item1 =>
+                    !products.some(item2 => item1.product.toString() === item2.product.toString())
+                );
+
+                console.log(orderProductNotFind);
+
+                const productsFinded = await Product.find({ _id: { $in: productsIds } });
+                const supplierFinded = await Supplier.findOne({ _id: orderSupplier });
+
+                if (productsIds.length <= 0) {
+                    res.status(401).json({ error: "Quantity Of Products Is Not Enough" });
+                } else if (!productsNotEqualZero) {
+                    res.status(401).json({ error: "It is not possible to edit an order without a product list" });
+                } else if (orderFinded.type != type) {
+                    res.status(401).json({ error: "It is not possible to edit an order type" });
+                } else if (productsFinded == null || productsFinded.length !== productsIds.length) {
+                    res.status(401).json({ error: "Some Products Does Not Exists" });
+                } else if (supplierFinded == null) {
+                    res.status(401).json({ error: "Supplier Does Not Exists" });
+                } else {
+
+                    const updateOrder = {
+                        price,
+                        status,
+                        orderSupplier,
+                        products,
+                        description,
+                    };
+
                     for (let i = 0; i < productsFinded.length; i++) {
+                        const orderProductFind = orderFinded.products.find(order => {
+                            if (order.product.toString() == productsFinded[i]._id.toString()) {
+                                return order.product.toString() == productsFinded[i]._id.toString()
+                            }
+                        });
                         const productChoosed = products.find(item => item.product == productsFinded[i]._id);
-                        if (productsFinded[i].stock < productChoosed.quantity) {
-                            return res.status(401).json({ error: `Insufficient stock for product: ${productsFinded[i].productName.length > 40 ? productsFinded[i].productName.slice(0, 40) + "..." : productsFinded[i].productName}. Available: ${productsFinded[i].stock}, requested: ${productChoosed.quantity}` });
+                        if (type === "buy") {
+                            /*    console.log(orderProductFind)
+                               console.log(productChoosed) */
+                            if (orderProductFind) {
+                                const productChoosedDif = orderProductFind.quantity - productChoosed.quantity;
+                                if (orderProductFind.quantity != productChoosed.quantity) {
+                                    if (orderProductFind.quantity > productChoosed.quantity && productsFinded[i].stock - productChoosedDif >= 0 && productsFinded[i].stock - productChoosedDif >= productsFinded[i].stock - orderProductFind.quantity) {
+                                        const updateProduct = await Product.findByIdAndUpdate(productsFinded[i]._id, { stock: productsFinded[i].stock - productChoosedDif });
+                                    } else if (orderProductFind.quantity < productChoosed.quantity) {
+                                        const updateProduct = await Product.findByIdAndUpdate(productsFinded[i]._id, { stock: productsFinded[i].stock + (productChoosed.quantity - orderProductFind.quantity) });
+                                    } else if (orderProductFind.quantity > productChoosed.quantity && productsFinded[i].stock - productChoosedDif < 0) {
+                                        return res.status(401).json({ error: `It is not possible to decrease the stock quantity of a product below 0. Actual Stock for product ${productsFinded[i].productName}: ${productsFinded[i].stock}` });
+                                    } else if (orderProductFind.quantity > productChoosed.quantity && productsFinded[i].stock - productChoosedDif < productsFinded[i].stock - orderProductFind.quantity) {
+                                        return res.status(401).json({ error: `It is not possible to decrease the quantity in stock beyond the quantity added to the purchase order previously.` });
+                                    } else {
+                                        return res.status(401).json({ error: `Invalid Product ${productsFinded[i].productName} values` });
+                                    }
+                                    if (productsFinded[i].status != "in stock" && productChoosed.quantity > orderProductFind.quantity) {
+                                        const updateProductStatus = await Product.findByIdAndUpdate(productsFinded[i]._id, { status: "in stock" })
+                                    } else if (productsFinded[i].status == "in stock" && orderProductFind.quantity >= productChoosedDif && productsFinded[i].stock - productChoosedDif == 0) {
+                                        const updateProductStatus = await Product.findByIdAndUpdate(productsFinded[i]._id, { status: "out of stock" })
+                                    }
+                                }
+                            } else {
+                                const updateProduct = await Product.findByIdAndUpdate(productsFinded[i]._id, { stock: productsFinded[i].stock + productChoosed.quantity });
+                                if (productsFinded[i].status != "in stock" && productChoosed.quantity > 0) {
+                                    const updateProductStatus = await Product.findByIdAndUpdate(productsFinded[i]._id, { status: "in stock" })
+                                }
+                            }
+                        }
+                        if (type === "sale") {
+                            if (orderProductFind) {
+                                const productChoosedDif = orderProductFind.quantity - productChoosed.quantity;
+                                if (orderProductFind.quantity != productChoosed.quantity) {
+                                    if (orderProductFind.quantity > productChoosed.quantity && productsFinded[i].stock + productChoosed.quantity <= productsFinded[i].stock + orderProductFind.quantity) {
+                                        const updateProduct = await Product.findByIdAndUpdate(productsFinded[i]._id, { stock: productsFinded[i].stock + productChoosedDif });
+                                    } else if (orderProductFind.quantity < productChoosed.quantity && productsFinded[i].stock - (productChoosed.quantity - orderProductFind.quantity) >= 0 && productsFinded[i].stock - orderProductFind.quantity >= productsFinded[i].stock - productChoosed.quantity) {
+                                        const updateProduct = await Product.findByIdAndUpdate(productsFinded[i]._id, { stock: productsFinded[i].stock - (productChoosed.quantity - orderProductFind.quantity) });
+                                    } else if (orderProductFind.quantity < productChoosed.quantity && productsFinded[i].stock - (productChoosed.quantity - orderProductFind.quantity) < 0) {
+                                        return res.status(401).json({ error: `Insufficient stock for product: ${productsFinded[i].productName.length > 40 ? productsFinded[i].productName.slice(0, 40) + "..." : productsFinded[i].productName}. Available: ${productsFinded[i].stock}, requested: ${productChoosed.quantity}` });
+                                    } else if (orderProductFind.quantity > productChoosed.quantity && productsFinded[i].stock + productChoosed.quantity > productsFinded[i].stock + orderProductFind.quantity) {
+                                        return res.status(401).json({ error: `It is not possible to increase the quantity in stock beyond the quantity remove to the sale order previously.` });
+                                    } else {
+                                        return res.status(401).json({ error: `Invalid Product ${productsFinded[i].productName} values` });
+                                    }
+                                    if (productsFinded[i].status != "in stock" && orderProductFind.quantity > productChoosed.quantity && productsFinded[i].stock + productChoosed.quantity <= productsFinded[i].stock + orderProductFind.quantity) {
+                                        const updateProductStatus = await Product.findByIdAndUpdate(productsFinded[i]._id, { status: "in stock" })
+                                    } else if (orderProductFind.quantity < productChoosed.quantity && productsFinded[i].stock - (productChoosed.quantity - orderProductFind.quantity) == 0 && productsFinded[i].stock - orderProductFind.quantity >= productsFinded[i].stock - productChoosed.quantity) {
+                                        const updateProductStatus = await Product.findByIdAndUpdate(productsFinded[i]._id, { status: "out of stock" })
+                                    }
+                                }
+                            } else {
+                                const updateProduct = await Product.findByIdAndUpdate(productsFinded[i]._id, { stock: productsFinded[i].stock - productChoosed.quantity });
+                                if (productsFinded[i].stock - productChoosed.quantity == 0) {
+                                    const updateProductStatus = await Product.findByIdAndUpdate(productsFinded[i]._id, { status: "out of stock" })
+                                }
+                            }
                         }
                     }
-                }
+                    for (let j = 0; j < orderProductNotFind.length; j++) {
+                        const searchNotFindedProduct = await Product.findById(orderProductNotFind[j].product);
+                        if (type === "buy") {
+                            if (searchNotFindedProduct.stock - orderProductNotFind[j].quantity >= 0) {
+                                const updateProduct = await Product.findByIdAndUpdate(orderProductNotFind[j].product, { stock: searchNotFindedProduct.stock - orderProductNotFind[j].quantity });
 
-                const newOrder = new Order({
-                    type,
-                    price,
-                    status,
-                    orderSupplier,
-                    products,
-                    description,
-                })
+                                if (searchNotFindedProduct.stock - orderProductNotFind[j].quantity == 0) {
+                                    const updateProductStatus = await Product.findByIdAndUpdate(orderProductNotFind[j].product, { status: "out of stock" })
+                                }
+                            } else {
+                                return res.status(401).json({ error: `Insufficient stock for product: ${searchNotFindedProduct.productName.length > 40 ? searchNotFindedProduct.productName.slice(0, 40) + "..." : searchNotFindedProduct.productName}. Available: ${searchNotFindedProduct.stock}, requested: ${orderProductNotFind[j].quantity}` });
+                            }
+                        }
+                        if (type === "sale") {
+                            if (searchNotFindedProduct.stock + orderProductNotFind[j].quantity > 0) {
+                                const updateProduct = await Product.findByIdAndUpdate(orderProductNotFind[j].product, { stock: searchNotFindedProduct.stock + orderProductNotFind[j].quantity });
 
-                for (let i = 0; i < productsFinded.length; i++) {
-                    const productChoosed = products.find(item => item.product == productsFinded[i]._id);
-                    if (type === "buy") {
-                        const updateProduct = await Product.findByIdAndUpdate(productsFinded[i]._id, { stock: productsFinded[i].stock + productChoosed.quantity });
-                        if (productsFinded[i].status != "in stock" && productChoosed.quantity > 0) {
-                            const updateProductStatus = await Product.findByIdAndUpdate(productsFinded[i]._id, { status: "in stock" })
-                        } else if (productsFinded[i].status == "in stock" && productChoosed.quantity == 0 && productsFinded[i].stock - orderFinded.quantity == 0) {
-                            const updateProductStatus = await Product.findByIdAndUpdate(productsFinded[i]._id, { status: "out of stock" })
+                                if (searchNotFindedProduct.status != "in stock" && searchNotFindedProduct.stock + orderProductNotFind[j].quantity > 0) {
+                                    const updateProductStatus = await Product.findByIdAndUpdate(orderProductNotFind[j].product, { status: "in stock" })
+                                }
+                            } else {
+                                return res.status(401).json({ error: `Insufficient stock for product: ${searchNotFindedProduct.productName.length > 40 ? searchNotFindedProduct.productName.slice(0, 40) + "..." : searchNotFindedProduct.productName}. Available: ${searchNotFindedProduct.stock}, requested: ${orderProductNotFind[j].quantity}` });
+                            }
                         }
                     }
-                    if (type === "sale") {
-                        const updateProduct = await Product.findByIdAndUpdate(productsFinded[i]._id, { stock: productsFinded[i].stock - productChoosed.quantity });
-                        if (productsFinded[i].stock - productChoosed.quantity == 0) {
-                            const updateProductStatus = await Product.findByIdAndUpdate(productsFinded[i]._id, { status: "out of stock" })
-                        }
-                    }
+                    const result = await Order.findByIdAndUpdate(id, updateOrder);
+                    /*   console.log(result); */
+                    res.status(201).json({ order: result });
                 }
-                console.log(savedOrder);
-                res.status(201).json({ order: savedOrder });
             }
         }
     } catch (error) {

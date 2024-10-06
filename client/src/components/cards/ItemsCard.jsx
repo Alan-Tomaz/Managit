@@ -386,6 +386,7 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
 
         const filteringObj = {
             search: searchParam == undefined ? filter.search : searchParam,
+            type: option == 4 ? "buy" : option == 5 ? "sale" : "buy",
             page: page,
             limit: limit
         }

@@ -32,6 +32,7 @@ const ProductSchema = new mongoose.Schema(
         status: {
             type: String,
             required: true,
+            enum: ['in stock', "out of stock"],
             default: "out of stock"
         },
         picturePath: {
