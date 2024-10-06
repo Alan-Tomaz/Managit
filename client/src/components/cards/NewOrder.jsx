@@ -3,7 +3,6 @@ import { IoIosArrowDown, IoIosArrowUp, IoMdArrowDropdown } from "react-icons/io"
 import { IoMdClose } from "react-icons/io";
 import { IoMdArrowDropup } from "react-icons/io";
 import './NewOrder.css';
-import Tshirt from "../../assets/images/t-shirt.png"
 import { FaPlus } from "react-icons/fa6";
 import { MdRemove } from "react-icons/md";
 import axios from 'axios';
@@ -22,17 +21,17 @@ function NewOrder({ handleOpenWindow, closeWindow, item, option, id, showToastMe
     const apiPort = useSelector((state) => state.MiscReducer.apiPort);
     const userInfo = useSelector((state) => state.UserReducer);
 
-    const [price, setPrice] = useState(0)
+    const [price, setPrice] = useState(item ? item.price : 0)
     const [search, setSearch] = useState("");
-    const [description, setDescription] = useState("");
+    const [description, setDescription] = useState(item ? item.description : '');
     const [showOrderTypes, setShowOrderTypes] = useState(false)
     const [showEmployees, setShowEmployees] = useState(false)
     const [showOrderStatus, setShowOrderStatus] = useState(false)
-    const [orderStatus, setOrderStatus] = useState('finished')
+    const [orderStatus, setOrderStatus] = useState(item ? item.status : 'finished')
     const [suppliersLoading, setSuppliersLoading] = useState(false);
     const [productsLoading, setProductsLoading] = useState(false);
-    const [orderSupplier, setOrderSupplier] = useState('abc-outfits');
-    const [choosedProducts, setChoosedProducts] = useState(item ? [...item.products] : []);
+    const [orderSupplier, setOrderSupplier] = useState(item ? item.orderSupplier : '');
+    const [choosedProducts, setChoosedProducts] = useState(item ? item.products.map(i => { return { product: i._id, quantity: i.quantity } }) : []);
     const [suppliers, setSuppliers] = useState([]);
     const [hasMoreProducts, setHasMoreProducts] = useState(false);
     const [products, setProducts] = useState([]);
@@ -226,12 +225,15 @@ function NewOrder({ handleOpenWindow, closeWindow, item, option, id, showToastMe
                 let newProducts = [];
 
                 for (let i = 0; i < productsData.length; i++) {
-                    const newProduct = choosedProducts.find((choosedProduct => choosedProduct.product == productsData[i]._id))
-                    if (!newProduct == undefined) {
-                        productsData[i].quantity = newProduct.quantity;
+                    let newProduct;
+                    if (item) {
+                        newProduct = item.products.find((choosedProduct => choosedProduct.product._id == productsData[i]._id))
+                    }
+                    if (newProduct == undefined) {
+                        productsData[i].quantity = 0;
                         newProducts.push(productsData[i]);
                     } else {
-                        productsData[i].quantity = 0;
+                        productsData[i].quantity = newProduct.quantity;
                         newProducts.push(productsData[i]);
                     }
                 }
@@ -297,14 +299,44 @@ function NewOrder({ handleOpenWindow, closeWindow, item, option, id, showToastMe
             products: choosedProducts
         }
 
-        console.log(choosedProducts)
-
         axios.post(`${apiUrl}:${apiPort}/order/add`, data, {
             headers
         })
             .then((data) => {
                 console.log(data);
                 showToastMessage('success', 'Order Created Successfully');
+                setReload();
+                closeWindow();
+            })
+            .catch((err) => {
+                console.log(err);
+                setReqError(err.response.data.error);
+            })
+    }
+
+    const handleUpdateOrder = () => {
+
+        setReqError(<img src={Loading} />);
+
+        const headers = {
+            'Authorization': `Bearer ${userInfo.token}`
+        }
+
+        const data = {
+            type: orderType,
+            price,
+            status: orderStatus,
+            orderSupplier,
+            description,
+            products: choosedProducts
+        }
+
+        axios.put(`${apiUrl}:${apiPort}/order/update/${id}`, data, {
+            headers
+        })
+            .then((data) => {
+                console.log(data);
+                showToastMessage('success', 'Order Updated Successfully');
                 setReload();
                 closeWindow();
             })

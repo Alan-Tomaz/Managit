@@ -140,8 +140,11 @@ function CreateProducts({ closeWindow, item, option, id, showToastMessage, setRe
         const inputTarget = e.target;
         const file = inputTarget.files[0];
 
-        const fileType = file.name.split('.')[1];
+        let fileType = file.name.split('.');
+        fileType = fileType[fileType.length - 1]
         const fileSize = (file.size / 1024);
+
+        console.log(fileType);
 
         const supportedFiles = ['jpeg', 'png', 'jpg'];
 

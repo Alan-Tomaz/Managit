@@ -1,7 +1,6 @@
 import express from "express";
-import { login, register } from "../controllers/auth.js";
 import { verifyToken } from '../middlewares/auth.js'
-import { createOrder, getOrders } from "../controllers/order.js";
+import { createOrder, getOrders, updateOrder } from "../controllers/order.js";
 
 const router = express.Router();
 
@@ -10,5 +9,7 @@ const router = express.Router();
 router.post("/add", verifyToken, createOrder);
 /* Get Order */
 router.get("/", verifyToken, getOrders);
+/* Update Order */
+router.put("/update/:id", verifyToken, updateOrder);
 
 export default router;

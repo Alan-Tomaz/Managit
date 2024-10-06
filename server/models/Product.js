@@ -29,6 +29,11 @@ const ProductSchema = new mongoose.Schema(
             type: String,
             required: true
         },
+        status: {
+            type: String,
+            required: true,
+            default: "out of stock"
+        },
         picturePath: {
             type: String,
             required: true
