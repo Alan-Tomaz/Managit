@@ -33,11 +33,12 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
     const [initialFilterObj, setInitialFilterObj] = useState({
         columns: {
             image: option == 2 ? false : option == 3 ? false : option == 4 ? false : option == 5 ? false : option == 7 ? false : true,
-            number: option == 4 ? true : option == 5 ? true : option == 6 ? true : option == 7 ? true : false,
+            number: option == 4 ? true : option == 5 ? true : option == 7 ? true : false,
             username: option == 6 ? true : option == 7 ? true : false,
+            email: option == 6 ? true : false,
+            phonenumber: option == 6 ? true : false,
             permission: option == 6 ? true : false,
             creationDate: option == 4 ? true : option == 5 ? true : option == 6 ? true : false,
-            lastAccess: option == 6 ? true : false,
             blocked: option == 6 ? true : false,
             productName: option == 1 ? true : option == 0 ? true : false,
             category: option == 1 ? true : option == 0 ? true : option == 2 ? true : false,
@@ -59,7 +60,8 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
             username: true,
             permission: true,
             creationDate: true,
-            lastAccess: true,
+            phonenumber: true,
+            email: true,
             blocked: true,
             productName: true,
             category: true,
@@ -82,18 +84,19 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
         minBuyPrice: 0,
         minPrice: 0,
         minQnt: 0,
-        permission: 0,
+        permission: -1,
         status: 0,
+        order: 0,
         category: [],
         supplier: [],
-        blocked: 0,
+        blocked: -1,
         option0: 'min-content 65px 200px 100px 100px 80px 100px 1fr 100px',
         option1: 'min-content 65px 200px 100px 100px 100px 1fr 100px 100px',
         option2: 'min-content 250px 1fr 100px',
         option3: 'min-content 250px 1fr 100px',
         option4: 'min-content 150px 150px 100px 100px 1fr 120px 100px',
         option5: 'min-content 150px 150px 100px 100px 1fr 120px 100px',
-        option6: 'min-content 65px 50px 150px 150px 150px 150px 100px 1fr 100px',
+        option6: 'min-content 65px 150px 200px 180px 120px 150px 60px 1fr 100px',
         option7: 'min-content 50px 150px 150px 1fr 100px'
     });
 
@@ -107,7 +110,7 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
     const [isHidingSupplier, setIsHiddingSupplier] = useState(renderFilter.supplier.some(item => item.isShow == false));
     const [isHidingCategory, setIsHiddingCategory] = useState(renderFilter.category.some(item => item.isShow == false));
     const [page, setPage] = useState(1);
-    const [limit, setLimit] = useState(10);
+    const [limit, setLimit] = useState(100);
     const [totalPages, setTotalPages] = useState(1);
     const [loading, setLoading] = useState('')
     const [maxSellPrice, setMaxSellPrice] = useState(100)
@@ -298,11 +301,6 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                     const newFilterSuppliers = requestedItems.map((item) => {
                         return { _id: item.productSupplier._id, name: item.productSupplier.categoryName, isShow: true };
                     })
-                    setInitialFilterObj(prev => ({
-                        ...prev,
-                        category: [...newFilterCategories],
-                        supplier: [...newFilterSuppliers]
-                    }))
 
                     const filterCategoriesArr = requestedItems.map((item) => {
                         const oldCategory = filter.category.filter(item2 => item2._id == item.productCategory._id);
@@ -343,6 +341,12 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                         }
                     })
                     /*  */
+
+                    setInitialFilterObj(prev => ({
+                        ...prev,
+                        category: [...filterCategories],
+                        supplier: [...filterSuppliers]
+                    }))
 
                     setFilter(prev => ({
                         ...prev,
@@ -411,10 +415,6 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                     const newFilterSuppliers = requestedItems.map((item) => {
                         return { _id: item.orderSupplier._id, name: item.orderSupplier.supplierName, isShow: true };
                     })
-                    setInitialFilterObj(prev => ({
-                        ...prev,
-                        supplier: [...newFilterSuppliers]
-                    }))
 
                     const filterSuppliersArr = requestedItems.map((item) => {
                         const oldSupplier = filter.supplier.filter(item2 => item2._id == item.orderSupplier._id);
@@ -438,6 +438,11 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                     })
                     /*  */
 
+                    setInitialFilterObj(prev => ({
+                        ...prev,
+                        supplier: [...filterSuppliers]
+                    }))
+
                     setFilter(prev => ({
                         ...prev,
                         supplier: [...filterSuppliers]
@@ -460,9 +465,54 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                 setDefaultItems(requestedItems);
                 setItems(requestedItems);
                 setTotalItems(data.data.totalOrders);
-                setMaxBuyPrice(getMaxValue(requestedItems, 'price'))
+                if (option == 4) {
+                    setMaxBuyPrice(getMaxValue(requestedItems, 'price'))
+                }
+                if (option == 5) {
+                    setMaxSellPrice(getMaxValue(requestedItems, 'price'))
+                }
                 setLoading('')
                 setTotalPages(Math.ceil(data.data.totalOrders / limit));
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+    }
+    const handleGetUsers = (searchParam) => {
+        setLoading(<img src={Loading} alt='Loading' className='stock__loading' />)
+
+        const headers = {
+            'Authorization': `Bearer ${userInfo.token}`
+        }
+
+        const filteringObj = {
+            search: searchParam == undefined ? filter.search : searchParam,
+            page: page,
+            limit: limit
+        }
+
+        const url = new URL(`${apiUrl}:${apiPort}/user/${userInfo.user._id}`);
+        url.search = new URLSearchParams(filteringObj)
+
+        axios.get(`${url}`, ({
+            headers
+        }))
+            .then((data) => {
+
+                const requestedItems = data.data.usersData;
+
+                requestedItems.forEach(elem => {
+                    elem.isSelected = false;
+                });
+
+                if (!checkEqualArray(items, requestedItems)) {
+
+                    setDefaultItems(requestedItems);
+                    setItems(requestedItems);
+                    setTotalItems(data.data.totalUsers);
+                }
+                setLoading('')
+                setTotalPages(Math.ceil(data.data.totalUsers / limit));
             })
             .catch((err) => {
                 console.log(err);
@@ -487,6 +537,9 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                 break;
             case 4:
                 handleRemoveItem(itemsToDelete, 12, idsToDelete);
+                break;
+            case 5:
+                handleRemoveItem(itemsToDelete, 13, idsToDelete);
                 break;
         }
     }
@@ -567,7 +620,7 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
         if ((option != 2 && option != 3 && option != 4 && option != 5 && option != 7) && filter.columns.image == false) {
             updatedFilteringColumn.push('image');
         }
-        if ((option == 4 && option == 5 && option == 6 && option == 7) && filter.columns.number == false) {
+        if ((option == 4 && option == 5 && option == 7) && filter.columns.number == false) {
             updatedFilteringColumn.push('number');
         }
         if ((option == 6 || option == 7) && filter.columns.username == false) {
@@ -578,9 +631,6 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
         }
         if ((option == 4 || option == 5 || option == 6) && filter.columns.creationDate == false) {
             updatedFilteringColumn.push('creation-date');
-        }
-        if ((option == 6) && filter.columns.lastAccess == false) {
-            updatedFilteringColumn.push('last-access');
         }
         if ((option == 6) && filter.columns.blocked == false) {
             updatedFilteringColumn.push('blocked');
@@ -621,11 +671,17 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
         if ((option == 4 || option == 5) && filter.columns.order == false) {
             updatedFilteringColumn.push('order');
         }
+        if ((option == 6) && filter.columns.phonenumber == false) {
+            updatedFilteringColumn.push('phonenumber');
+        }
+        if ((option == 6) && filter.columns.email == false) {
+            updatedFilteringColumn.push('email');
+        }
         return updatedFilteringColumn;
     }
 
     const handleFilter = () => {
-        const newColumns = `min-content ${filter.columns.image == true ? '65px ' : ''}${filter.columns.number == true ? '150px ' : ''}${filter.columns.username == true ? '150px ' : ''}${filter.columns.permission == true ? '150px ' : ''}${filter.columns.productName == true ? '200px ' : ''}${filter.columns.creationDate == true ? '150px ' : ''}${filter.columns.lastAccess == true ? '150px ' : ''}${option == 2 ? filter.columns.category == true ? '250px ' : '' : filter.columns.category == true ? '100px ' : ''}${option == 3 ? filter.columns.supplier == true ? '250px ' : '' : filter.columns.supplier == true ? '100px ' : ''}${filter.columns.code == true ? '100px ' : ''}${filter.columns.quantity == true ? '80px ' : ''}${filter.columns.sellPrice == true ? '100px ' : ''}${filter.columns.buyPrice == true ? '100px ' : ''}${filter.columns.price == true ? '100px ' : ''}${filter.columns.blocked == true ? '100px ' : ''}${filter.columns.date == true ? '150px ' : ''}${filter.columns.description == true ? '1fr ' : ''}${filter.columns.description == false ? '1fr ' : ''}${filter.columns.order == true ? '120px ' : ''}${filter.columns.status == true ? '100px ' : ''}100px`;
+        const newColumns = `min-content ${filter.columns.image == true ? '65px ' : ''}${filter.columns.number == true ? '150px ' : ''}${filter.columns.username == true ? '150px ' : ''}${filter.columns.email == true ? '200px ' : ''}${filter.columns.phonenumber == true ? '180px ' : ''}${filter.columns.permission == true ? '120px ' : ''}${filter.columns.productName == true ? '200px ' : ''}${filter.columns.creationDate == true ? '150px ' : ''}${filter.columns.lastAccess == true ? '150px ' : ''}${option == 2 ? filter.columns.category == true ? '250px ' : '' : filter.columns.category == true ? '100px ' : ''}${option == 3 ? filter.columns.supplier == true ? '250px ' : '' : filter.columns.supplier == true ? '100px ' : ''}${filter.columns.code == true ? '100px ' : ''}${filter.columns.quantity == true ? '80px ' : ''}${filter.columns.sellPrice == true ? '100px ' : ''}${filter.columns.buyPrice == true ? '100px ' : ''}${filter.columns.price == true ? '100px ' : ''}${filter.columns.blocked == true ? '60px ' : ''}${filter.columns.date == true ? '150px ' : ''}${filter.columns.description == true ? '1fr ' : ''}${filter.columns.description == false ? '1fr ' : ''}${filter.columns.order == true ? '120px ' : ''}${filter.columns.status == true ? '100px ' : ''}100px`;
         setFilter(prev => ({
             ...prev,
             [`option${option}`]: newColumns,
@@ -655,6 +711,12 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                     break;
                 case 4:
                     handleGetOrders();
+                    break;
+                case 5:
+                    handleGetOrders();
+                    break;
+                case 6:
+                    handleGetUsers();
                     break;
             }
         }
@@ -713,6 +775,12 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
             case 4:
                 handleGetOrders();
                 break;
+            case 5:
+                handleGetOrders();
+                break;
+            case 6:
+                handleGetUsers();
+                break;
         }
     }
 
@@ -768,9 +836,17 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                 break;
             case 'category':
                 if (filter.orderFilter.category == false) {
-                    setItems(sortAlphabetical([...items], g => g.categoryName));
+                    if (option == 1) {
+                        setItems(sortAlphabetical([...items], g => g.productCategory.categoryName));
+                    } else {
+                        setItems(sortAlphabetical([...items], g => g.categoryName));
+                    }
                 } else {
-                    setItems(sortAlphabetical([...items], g => g.categoryName, 'desc'));
+                    if (option == 1) {
+                        setItems(sortAlphabetical([...items], g => g.productCategory.categoryName, 'desc'));
+                    } else {
+                        setItems(sortAlphabetical([...items], g => g.categoryName, 'desc'));
+                    }
                 }
                 setFilter(prev => ({
                     ...prev,
@@ -826,22 +902,24 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                     },
                 }))
                 break;
-            case 'last-access':
-                setFilter(prev => ({
-                    ...prev,
-                    orderFilter: {
-                        ...initialFilterObj.orderFilter,
-                        lastAccess: !filter.orderFilter.lastAccess,
-                        onFiltering: 'Last Access',
-                        onFilteringVar: 'lastAccess'
-                    },
-                }))
-                break;
             case 'supplier':
                 if (filter.orderFilter.supplier == false) {
-                    setItems(sortAlphabetical([...items], g => g.supplierName));
+                    if (option == 4 || option == 5) {
+                        setItems(sortAlphabetical([...items], g => g.orderSupplier.supplierName));
+                    } else if (option == 1) {
+                        setItems(sortAlphabetical([...items], g => g.productSupplier.supplierName));
+                    } else {
+                        setItems(sortAlphabetical([...items], g => g.supplierName));
+                    }
                 } else {
-                    setItems(sortAlphabetical([...items], g => g.supplierName, 'desc'));
+
+                    if (option == 4 || option == 5) {
+                        setItems(sortAlphabetical([...items], g => g.orderSupplier.supplierName, 'desc'));
+                    } else if (option == 1) {
+                        setItems(sortAlphabetical([...items], g => g.productSupplier.supplierName, 'desc'));
+                    } else {
+                        setItems(sortAlphabetical([...items], g => g.supplierName, 'desc'));
+                    }
                 }
                 setFilter(prev => ({
                     ...prev,
@@ -1019,22 +1097,46 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
 
     const handleSelectFilter = (otherValue) => {
         switch (otherValue) {
+            case 'all-orders':
+                setFilter(prev => ({
+                    ...prev,
+                    order: 0
+                }))
+                break;
+            case 'in-progress':
+                setFilter(prev => ({
+                    ...prev,
+                    order: 1
+                }))
+                break;
+            case 'finished':
+                setFilter(prev => ({
+                    ...prev,
+                    order: 2
+                }))
+                break;
+            case 'cancelled':
+                setFilter(prev => ({
+                    ...prev,
+                    order: 3
+                }))
+                break;
             case 'all-permissions':
                 setFilter(prev => ({
                     ...prev,
-                    permission: 0
+                    permission: -1
                 }))
                 break;
             case 'admin':
                 setFilter(prev => ({
                     ...prev,
-                    permission: 1
+                    permission: 0
                 }))
                 break;
             case 'user':
                 setFilter(prev => ({
                     ...prev,
-                    permission: 2
+                    permission: 1
                 }))
                 break;
             case 'all-stocks':
@@ -1058,7 +1160,7 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
             case 'all-blockeds':
                 setFilter(prev => ({
                     ...prev,
-                    blocked: 0
+                    blocked: -1
                 }))
                 break;
             case 'blocked':
@@ -1070,7 +1172,7 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
             case 'no-blocked':
                 setFilter(prev => ({
                     ...prev,
-                    blocked: 2
+                    blocked: 0
                 }))
                 break;
         }
@@ -1101,6 +1203,12 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                     case 4:
                         handleGetOrders("");
                         break;
+                    case 5:
+                        handleGetOrders("");
+                        break;
+                    case 6:
+                        handleGetUsers("");
+                        break;
                 }
                 break;
             case 'order':
@@ -1114,7 +1222,6 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                         username: true,
                         permission: true,
                         creationDate: true,
-                        lastAccess: true,
                         blocked: true,
                         productName: true,
                         category: true,
@@ -1126,7 +1233,9 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                         date: true,
                         description: true,
                         order: true,
-                        status: true
+                        status: true,
+                        email: true,
+                        phonenumber: true
                     }
                 }))
                 break;
@@ -1137,9 +1246,10 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                         image: option == 2 ? false : option == 3 ? false : option == 4 ? false : option == 5 ? false : option == 7 ? false : true,
                         number: option == 4 ? true : option == 5 ? true : option == 6 ? true : option == 7 ? true : false,
                         username: option == 6 ? true : option == 7 ? true : false,
+                        email: option == 6 ? true : false,
+                        phonenumber: option == 6 ? true : false,
                         permission: option == 6 ? true : false,
                         creationDate: option == 4 ? true : option == 5 ? true : option == 6 ? true : false,
-                        lastAccess: option == 6 ? true : false,
                         blocked: option == 6 ? true : false,
                         productName: option == 1 ? true : option == 0 ? true : false,
                         category: option == 1 ? true : option == 0 ? true : option == 2 ? true : option == 4 ? true : option == 5 ? true : false,
@@ -1166,8 +1276,9 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                         number: option == 4 ? true : option == 5 ? true : option == 6 ? true : option == 7 ? true : false,
                         username: option == 6 ? true : option == 7 ? true : false,
                         permission: option == 6 ? true : false,
+                        email: option == 6 ? true : false,
+                        phonenumber: option == 6 ? true : false,
                         creationDate: option == 4 ? true : option == 5 ? true : option == 6 ? true : false,
-                        lastAccess: option == 6 ? true : false,
                         blocked: option == 6 ? true : false,
                         productName: option == 1 ? true : option == 0 ? true : false,
                         category: option == 1 ? true : option == 0 ? true : option == 2 ? true : option == 4 ? true : option == 5 ? true : false,
@@ -1256,6 +1367,16 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                 setRenderFilter(prev => ({
                     ...prev,
                     blocked: 0
+                }))
+                break;
+            case 'orders':
+                setFilter(prev => ({
+                    ...prev,
+                    order: 0
+                }))
+                setRenderFilter(prev => ({
+                    ...prev,
+                    order: 0
                 }))
                 break;
             case 'supplier':
@@ -1612,6 +1733,50 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                     }
                 })
                 break;
+            case 'email':
+                document.querySelectorAll('.filter__option-email').forEach((elem) => {
+                    if (elem.classList.contains('filter__option--selected')) {
+                        setFilter(prev => ({
+                            ...prev,
+                            columns: {
+                                ...prev.columns,
+                                email: false
+                            },
+                        }))
+                    }
+                    else {
+                        setFilter(prev => ({
+                            ...prev,
+                            columns: {
+                                ...prev.columns,
+                                email: true
+                            },
+                        }))
+                    }
+                })
+                break;
+            case 'phonenumber':
+                document.querySelectorAll('.filter__option-phonenumber').forEach((elem) => {
+                    if (elem.classList.contains('filter__option--selected')) {
+                        setFilter(prev => ({
+                            ...prev,
+                            columns: {
+                                ...prev.columns,
+                                phonenumber: false
+                            },
+                        }))
+                    }
+                    else {
+                        setFilter(prev => ({
+                            ...prev,
+                            columns: {
+                                ...prev.columns,
+                                phonenumber: true
+                            },
+                        }))
+                    }
+                })
+                break;
             case 'permission':
                 document.querySelectorAll('.filter__option-permission').forEach((elem) => {
                     if (elem.classList.contains('filter__option--selected')) {
@@ -1629,28 +1794,6 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                             columns: {
                                 ...prev.columns,
                                 permission: true
-                            },
-                        }))
-                    }
-                })
-                break;
-            case 'last-access':
-                document.querySelectorAll('.filter__option-last-access').forEach((elem) => {
-                    if (elem.classList.contains('filter__option--selected')) {
-                        setFilter(prev => ({
-                            ...prev,
-                            columns: {
-                                ...prev.columns,
-                                lastAccess: false
-                            },
-                        }))
-                    }
-                    else {
-                        setFilter(prev => ({
-                            ...prev,
-                            columns: {
-                                ...prev.columns,
-                                lastAccess: true
                             },
                         }))
                     }
@@ -1777,6 +1920,12 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                 case 4:
                     handleGetOrders(renderFilter.search);
                     break;
+                case 5:
+                    handleGetOrders(renderFilter.search);
+                    break;
+                case 6:
+                    handleGetUsers(renderFilter.search);
+                    break;
             }
         } else {
             switch (option) {
@@ -1791,6 +1940,12 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                     break;
                 case 4:
                     handleGetOrders();
+                    break;
+                case 5:
+                    handleGetOrders();
+                    break;
+                case 6:
+                    handleGetUsers();
                     break;
             }
         }
@@ -1825,7 +1980,7 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                                     {(option == 0 || option == 1 || option == 4 || option == 5) &&
                                         <div onClick={() => setChooseSelection('values')} className={`${chooseSelection == 'values' ? 'filter_choose-selection--selected' : ''}`} >Values</div>
                                     }
-                                    {(option == 1 || option == 6) &&
+                                    {(option == 1 || option == 6 || option == 5 || option == 4) &&
                                         <div onClick={() => setChooseSelection('others')} className={`${chooseSelection == 'others' ? 'filter_choose-selection--selected' : ''}`} >Others</div>
                                     }
                                 </div>
@@ -1840,7 +1995,7 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                                                     <span>Image</span>
                                                 </div>
                                             }
-                                            {(option == 4 || option == 5 || option == 6 || option == 7) &&
+                                            {(option == 4 || option == 5 || option == 7) &&
                                                 <div className={`filter__option filter__option-number ${filter.columns.number == true ? 'filter__option--selected' : ''}`} onClick={() => handleUncheckColumn('number')}>
                                                     <div className="filter__option-checkbox">
                                                         <FaCheck className='filter__option-check filter__option--selected' />
@@ -1854,6 +2009,22 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                                                         <FaCheck className='filter__option-check filter__option--selected' />
                                                     </div>
                                                     <span>Username</span>
+                                                </div>
+                                            }
+                                            {(option == 6) &&
+                                                <div className={`filter__option filter__option-phonenumber ${filter.columns.phonenumber == true ? 'filter__option--selected' : ''}`} onClick={() => handleUncheckColumn('phonenumber')}>
+                                                    <div className="filter__option-checkbox">
+                                                        <FaCheck className='filter__option-check filter__option--selected' />
+                                                    </div>
+                                                    <span>Phone Number</span>
+                                                </div>
+                                            }
+                                            {(option == 6) &&
+                                                <div className={`filter__option filter__option-email ${filter.columns.email == true ? 'filter__option--selected' : ''}`} onClick={() => handleUncheckColumn('email')}>
+                                                    <div className="filter__option-checkbox">
+                                                        <FaCheck className='filter__option-check filter__option--selected' />
+                                                    </div>
+                                                    <span>Email</span>
                                                 </div>
                                             }
                                             {option == 6 &&
@@ -1870,14 +2041,6 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                                                         <FaCheck className='filter__option-check filter__option--selected' />
                                                     </div>
                                                     <span>Creation Date</span>
-                                                </div>
-                                            }
-                                            {option == 6 &&
-                                                <div className={`filter__option filter__option-last-access ${filter.columns.lastAccess == true ? 'filter__option--selected' : ''}`} onClick={() => handleUncheckColumn('last-access')}>
-                                                    <div className="filter__option-checkbox">
-                                                        <FaCheck className='filter__option-check filter__option--selected' />
-                                                    </div>
-                                                    <span>Last Access</span>
                                                 </div>
                                             }
                                             {option == 6 &&
@@ -2056,21 +2219,48 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                                                     </div>
                                                 </div>
                                             }
-                                            {(option == 6) &&
-                                                <div className="filter__options-others-status filter__options-others-permission">
-                                                    <h4>Permission</h4>
-                                                    <div className="filter__option-others-status filter__option-others-permission">
-                                                        <div className={`filter__option-others filter__option-others-permissions filter__option-others-all ${filter.permission == 0 ? 'filter__option-others--selected' : ''}`} onClick={() => handleSelectFilter('all-permissions')}>
+                                            {(option == 4 || option == 5) &&
+                                                <div className="filter__options-others-status filter__options-others-order">
+                                                    <h4>Order</h4>
+                                                    <div className="filter__option-others-status filter__option-others-order">
+                                                        <div className={`filter__option-others filter__option-others-orders filter__option-others-all ${filter.order == 0 ? 'filter__option-others--selected' : ''}`} onClick={() => handleSelectFilter('all-orders')}>
                                                             <div className="filter__option-radio">
                                                             </div>
                                                             <span>All</span>
                                                         </div>
-                                                        <div className={`filter__option-others filter__option-others-permissions filter__option-others-admin ${filter.permission == 1 ? 'filter__option-others--selected' : ''}`} onClick={() => handleSelectFilter('admin')}>
+                                                        <div className={`filter__option-others filter__option-others-orders filter__option-others-all ${filter.order == 1 ? 'filter__option-others--selected' : ''}`} onClick={() => handleSelectFilter('in-progress')}>
+                                                            <div className="filter__option-radio">
+                                                            </div>
+                                                            <span>In Progress</span>
+                                                        </div>
+                                                        <div className={`filter__option-others filter__option-others-orders filter__option-others-admin ${filter.order == 2 ? 'filter__option-others--selected' : ''}`} onClick={() => handleSelectFilter('finished')}>
+                                                            <div className="filter__option-radio">
+                                                            </div>
+                                                            <span>Finished</span>
+                                                        </div>
+                                                        <div className={`filter__option-others filter__option-others-orders filter__option-others-user ${filter.order == 3 ? 'filter__option-others--selected' : ''}`} onClick={() => handleSelectFilter('cancelled')}>
+                                                            <div className="filter__option-radio">
+                                                            </div>
+                                                            <span>Cancelled</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+                                            {(option == 6) &&
+                                                <div className="filter__options-others-status filter__options-others-permission">
+                                                    <h4>Permission</h4>
+                                                    <div className="filter__option-others-status filter__option-others-permission">
+                                                        <div className={`filter__option-others filter__option-others-permissions filter__option-others-all ${filter.permission == -1 ? 'filter__option-others--selected' : ''}`} onClick={() => handleSelectFilter('all-permissions')}>
+                                                            <div className="filter__option-radio">
+                                                            </div>
+                                                            <span>All</span>
+                                                        </div>
+                                                        <div className={`filter__option-others filter__option-others-permissions filter__option-others-admin ${filter.permission == 0 ? 'filter__option-others--selected' : ''}`} onClick={() => handleSelectFilter('admin')}>
                                                             <div className="filter__option-radio">
                                                             </div>
                                                             <span>Admin</span>
                                                         </div>
-                                                        <div className={`filter__option-others filter__option-others-permissions filter__option-others-user ${filter.permission == 2 ? 'filter__option-others--selected' : ''}`} onClick={() => handleSelectFilter('user')}>
+                                                        <div className={`filter__option-others filter__option-others-permissions filter__option-others-user ${filter.permission == 1 ? 'filter__option-others--selected' : ''}`} onClick={() => handleSelectFilter('user')}>
                                                             <div className="filter__option-radio">
                                                             </div>
                                                             <span>User</span>
@@ -2082,20 +2272,20 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                                                 <div className="filter__options-others-status filter__options-others-blocked">
                                                     <h4>Blocked</h4>
                                                     <div className="filter__option-others-status filter__option-others-blocked">
-                                                        <div className={`filter__option-others filter__option-others-isblocked filter__option-others-all ${filter.blocked == 0 ? 'filter__option-others--selected' : ''}`} onClick={() => handleSelectFilter('all-blockeds')}>
+                                                        <div className={`filter__option-others filter__option-others-isblocked filter__option-others-all ${filter.blocked == -1 ? 'filter__option-others--selected' : ''}`} onClick={() => handleSelectFilter('all-blockeds')}>
                                                             <div className="filter__option-radio">
                                                             </div>
                                                             <span>All</span>
+                                                        </div>
+                                                        <div className={`filter__option-others filter__option-others-isblocked filter__option-others-no-blocked ${filter.blocked == 0 ? 'filter__option-others--selected' : ''}`} onClick={() => handleSelectFilter('no-blocked')}>
+                                                            <div className="filter__option-radio">
+                                                            </div>
+                                                            <span>No</span>
                                                         </div>
                                                         <div className={`filter__option-others filter__option-others-isblocked filter__option-others-has-blocked ${filter.blocked == 1 ? 'filter__option-others--selected' : ''}`} onClick={() => handleSelectFilter('blocked')}>
                                                             <div className="filter__option-radio">
                                                             </div>
                                                             <span>Yes</span>
-                                                        </div>
-                                                        <div className={`filter__option-others filter__option-others-isblocked filter__option-others-no-blocked ${filter.blocked == 2 ? 'filter__option-others--selected' : ''}`} onClick={() => handleSelectFilter('no-blocked')}>
-                                                            <div className="filter__option-radio">
-                                                            </div>
-                                                            <span>No</span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -2132,7 +2322,7 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                                 <MdArrowDropUp className='stockmenu__button-export-icon' style={{ display: showButtonMoreOptions == true ? "flex" : "none" }} />
                             </div>
                         </div>
-                        <div className="button stockmenu__button" style={{ display: option != 7 ? 'flex' : 'none' }} onClick={() => option == 1 ? handleOpenWindow('create-products', '', 0, '') : option == 2 ? handleOpenWindow('create-category', '', 0, '') : option == 3 ? handleOpenWindow('create-supplier', '', 0, '') : option == 4 ? handleOpenWindow('new-order', '', 0, '', 'buy') : ""}>{option == 0 ? "New Order" : option == 1 ? "New Product" : option == 2 ? 'New Category' : option == 3 ? 'New Supplier' : option == 4 ? 'New Order' : option == 5 ? 'New Order' : option == 6 ? 'New User' : 'New Type'}</div>
+                        <div className="button stockmenu__button" style={{ display: option != 7 ? 'flex' : 'none' }} onClick={() => option == 1 ? handleOpenWindow('create-products', '', 0, '') : option == 2 ? handleOpenWindow('create-category', '', 0, '') : option == 3 ? handleOpenWindow('create-supplier', '', 0, '') : option == 4 ? handleOpenWindow('new-order', '', 0, '', 'buy') : option == 5 ? handleOpenWindow('new-order', '', 0, '', 'sale') : option == 6 ? handleOpenWindow('new-user', '', 0, '', 'sale') : ""}>{option == 0 ? "New Order" : option == 1 ? "New Product" : option == 2 ? 'New Category' : option == 3 ? 'New Supplier' : option == 4 ? 'New Order' : option == 5 ? 'New Order' : option == 6 ? 'New User' : 'New Type'}</div>
                     </div>
                 </div>
                 <div className="stock__container" ref={imageRef}>
@@ -2194,18 +2384,25 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                                     <HiOutlineXMark className='stock__tag-mark' onClick={() => handleRemoveTag('status')} />
                                 </div>
                             }
-                            {renderFilter.permission != 0 &&
+                            {renderFilter.permission != -1 &&
                                 <div className="stock__tag">
                                     <span>Permission: {renderFilter.permission == 1 ? 'Admin' : 'User'}</span>
                                     <div className="stock__vl"></div>
                                     <HiOutlineXMark className='stock__tag-mark' onClick={() => handleRemoveTag('permission')} />
                                 </div>
                             }
-                            {renderFilter.blocked != 0 &&
+                            {renderFilter.blocked != -1 &&
                                 <div className="stock__tag">
                                     <span>Block: {renderFilter.blocked == 1 ? 'Blocked' : 'No Blocked'}</span>
                                     <div className="stock__vl"></div>
                                     <HiOutlineXMark className='stock__tag-mark' onClick={() => handleRemoveTag('blocked')} />
+                                </div>
+                            }
+                            {renderFilter.order != 0 &&
+                                <div className="stock__tag">
+                                    <span>Order: {renderFilter.order == 1 ? 'In Progress' : renderFilter.order == 2 ? 'Finished' : renderFilter.order == 3 ? "Cancelled" : ""}</span>
+                                    <div className="stock__vl"></div>
+                                    <HiOutlineXMark className='stock__tag-mark' onClick={() => handleRemoveTag('orders')} />
                                 </div>
                             }
                             {isHidingSupplier &&
@@ -2246,6 +2443,20 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                                     <IoIosArrowUp className={`stockitem__product--header__arrow ${filter.orderFilter.username == false ? 'stockitem__product--header__arrow--show' : ''}`} />
                                 </div>
                             }
+                            {((option == 6) && renderFilter.columns.email == true) &&
+                                <div className="stockitem__productusername stockitem__username--header stockitem__product--header" onClick={() => handleChangeOrder('email')}>
+                                    <span>Email</span>
+                                    <IoIosArrowDown className={`stockitem__product--header__arrow ${filter.orderFilter.email == true ? 'stockitem__product--header__arrow--show' : ''}`} />
+                                    <IoIosArrowUp className={`stockitem__product--header__arrow ${filter.orderFilter.email == false ? 'stockitem__product--header__arrow--show' : ''}`} />
+                                </div>
+                            }
+                            {((option == 6) && renderFilter.columns.phonenumber == true) &&
+                                <div className="stockitem__productusername stockitem__username--header stockitem__product--header" onClick={() => handleChangeOrder('phonenumber')}>
+                                    <span>Phone Number</span>
+                                    <IoIosArrowDown className={`stockitem__product--header__arrow ${filter.orderFilter.phonenumber == true ? 'stockitem__product--header__arrow--show' : ''}`} />
+                                    <IoIosArrowUp className={`stockitem__product--header__arrow ${filter.orderFilter.phonenumber == false ? 'stockitem__product--header__arrow--show' : ''}`} />
+                                </div>
+                            }
                             {((option == 6) && renderFilter.columns.permission == true) &&
                                 <div className="stockitem__userpermission stockitem__userpermission--header stockitem__product--header" onClick={() => handleChangeOrder('permission')}>
                                     <span>Permission</span>
@@ -2258,13 +2469,6 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                                     <span>Creation Date</span>
                                     <IoIosArrowDown className={`stockitem__product--header__arrow ${filter.orderFilter.creationDate == true ? 'stockitem__product--header__arrow--show' : ''}`} />
                                     <IoIosArrowUp className={`stockitem__product--header__arrow ${filter.orderFilter.creationDate == false ? 'stockitem__product--header__arrow--show' : ''}`} />
-                                </div>
-                            }
-                            {((option == 6) && renderFilter.columns.lastAccess == true) &&
-                                <div className="stockitem__userlastaccess stockitem__userlastaccess--header stockitem__product--header" onClick={() => handleChangeOrder('last-access')}>
-                                    <span>Last Access</span>
-                                    <IoIosArrowDown className={`stockitem__product--header__arrow ${filter.orderFilter.lastAccess == true ? 'stockitem__product--header__arrow--show' : ''}`} />
-                                    <IoIosArrowUp className={`stockitem__product--header__arrow ${filter.orderFilter.lastAccess == false ? 'stockitem__product--header__arrow--show' : ''}`} />
                                 </div>
                             }
                             {((option == 6) && renderFilter.columns.blocked == true) &&
@@ -2375,7 +2579,7 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                         </div>
                         {loading == '' ?
                             <div className="stock__items-container">
-                                {(option != 2 && option != 3 && option != 1 && option != 4) &&
+                                {(option != 2 && option != 3 && option != 1 && option != 4 && option != 5 && option != 6) &&
                                     <div className="stock__item" style={{ gridTemplateColumns: renderFilter[`option${option}`] }}>
                                         <div className="stockitem__select" onClick={(e) => handleSelectItem(e)}></div>
                                         {((option != 2 && option != 3 && option != 4 && option != 5 && option != 7) && renderFilter.columns.image != false) &&
@@ -2386,6 +2590,12 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                                         }
                                         {((option == 6 || option == 7) && renderFilter.columns.username == true) &&
                                             <p className="stockitem__username">John Roger</p>
+                                        }
+                                        {((option == 6) && renderFilter.columns.email == true) &&
+                                            <p className="stockitem__username">alan4tomaz8@gmail.com</p>
+                                        }
+                                        {((option == 6) && renderFilter.columns.phonenumber == true) &&
+                                            <p className="stockitem__username">31988709707</p>
                                         }
                                         {((option == 6) && renderFilter.columns.permission == true) &&
                                             <p className="stockitem__userpermission">Administrator</p>
@@ -2410,9 +2620,6 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                                         } */}
                                         {((option == 0) && renderFilter.columns.quantity == true) &&
                                             <p className="stockitem__productqnt">17</p>
-                                        }
-                                        {((option == 6) && renderFilter.columns.lastAccess == true) &&
-                                            <p className="stockitem__userlastaccess">July 6, 2024</p>
                                         }
                                         {((option == 6) && renderFilter.columns.blocked == true) &&
                                             <p className="stockitem__userblocked">Yes</p>
@@ -2456,7 +2663,9 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                                                                     <div className='stock__item' style={{ gridTemplateColumns: renderFilter[`option${option}`] }} key={index}>
                                                                         <div className={`stockitem__select ${item.isSelected == true ? 'stockitem__select--selected' : ''}`} onClick={() => handleSelectItem(item._id)}></div>
                                                                         {renderFilter.columns.image == true &&
-                                                                            < img src={`${apiUrl}:${apiPort}/assets/${item.picturePath}`} className='stockitem__img' />
+                                                                            <div className='stockitem__img'>
+                                                                                < img src={`${apiUrl}:${apiPort}/assets/${item.picturePath}`} />
+                                                                            </div>
                                                                         }
                                                                         {renderFilter.columns.productName == true &&
                                                                             <p className="stockitem__productname">{item.productName}</p>
@@ -2568,7 +2777,7 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                                                     <>
                                                         {items.map((item, index) => (
                                                             <>
-                                                                {(renderFilter.supplier.some(elem => { if (elem._id == item.orderSupplier._id) { return elem.isShow } }) && (renderFilter.minBuyPrice <= item.price)) &&
+                                                                {(renderFilter.supplier.some(elem => { if (elem._id == item.orderSupplier._id) { return elem.isShow } }) && (renderFilter.minBuyPrice <= item.price) && (renderFilter.order == 0 ? true : item.status == 'in progress' && renderFilter.order == 1 ? true : item.status == 'finished' && renderFilter.order == 2 ? true : item.status == 'cancelled' && renderFilter.order == 3 ? true : false)) &&
                                                                     <div className='stock__item' style={{ gridTemplateColumns: renderFilter[`option${option}`] }} key={index}>
                                                                         <div className={`stockitem__select ${item.isSelected == true ? 'stockitem__select--selected' : ''}`} onClick={() => handleSelectItem(item._id)}></div>
                                                                         {renderFilter.columns.number == true &&
@@ -2601,6 +2810,101 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                                                             </>
                                                         ))}
 
+                                                    </>
+                                                    :
+                                                    <p className='stock__result'>No More {option == 0 ? 'Orders' : option == 1 ? 'Products' : option == 2 ? 'Categories' : option == 3 ? 'Suppliers' : option == 4 ? 'Purchases' : option == 5 ? 'Sales' : option == 6 ? 'Users' : option == 7 ? 'Logs' : ''} To Show. Try In The Next Page</p>
+                                                }
+                                            </>
+                                        }
+                                        {option == 5 &&
+                                            <>
+                                                {renderFilter.supplier.some(item => item.isShow == true) ?
+                                                    <>
+                                                        {items.map((item, index) => (
+                                                            <>
+                                                                {(renderFilter.supplier.some(elem => { if (elem._id == item.orderSupplier._id) { return elem.isShow } }) && (renderFilter.minSellPrice <= item.price) && (renderFilter.order == 0 ? true : item.status == 'in progress' && renderFilter.order == 1 ? true : item.status == 'finished' && renderFilter.order == 2 ? true : item.status == 'cancelled' && renderFilter.order == 3 ? true : false)) &&
+                                                                    <div className='stock__item' style={{ gridTemplateColumns: renderFilter[`option${option}`] }} key={index}>
+                                                                        <div className={`stockitem__select ${item.isSelected == true ? 'stockitem__select--selected' : ''}`} onClick={() => handleSelectItem(item._id)}></div>
+                                                                        {renderFilter.columns.number == true &&
+                                                                            <p className="stockitem__productnumber">{item.uniqueId}</p>
+                                                                        }
+                                                                        {renderFilter.columns.creationDate == true &&
+                                                                            <p className="stockitem__productcreationdate">{formatDate(item.createdAt)}</p>
+                                                                        }
+                                                                        {renderFilter.columns.supplier == true &&
+                                                                            <p className="stockitem__productcategory">{item.orderSupplier.supplierName}</p>
+                                                                        }
+                                                                        {renderFilter.columns.sellPrice == true &&
+                                                                            <p className="stockitem__productsellprice stockitem__productbuyprice">{item.price}</p>
+                                                                        }
+                                                                        {renderFilter.columns.description == true &&
+                                                                            <p className="stockitem__productdescription">{item.description.length > 125 ? `${item.description.slice(0, 125)}...` : item.description}</p>
+                                                                        }
+                                                                        {renderFilter.columns.description == false &&
+                                                                            <div></div>
+                                                                        }
+                                                                        {renderFilter.columns.order == true &&
+                                                                            <div className={`stockitem__productorder stockitem__productorder stockitem__productstatus ${item.status == "finished" ? "stockitem__productstatus--active" : item.status == "in progress" ? "stockitem__productstatus--waiting" : item.status == "cancelled" ? "stockitem__productstatus--cancelled" : ""}`}>{item.status == "finished" ? "Finished" : item.status == "in progress" ? "In Progress" : item.status == "cancelled" ? "Cancelled" : ""}</div>
+                                                                        }
+                                                                        <div className="stockitem__productoptions">
+                                                                            <div className="stockitem__productremove" onClick={() => handleOpenWindow('new-order', item, 1, item._id, 'sale')}><MdModeEditOutline /></div>
+                                                                            <div className="stockitem__productremove" onClick={() => handleRemoveItem(item, 5, item._id)}><MdRemove /></div>
+                                                                        </div>
+                                                                    </div>
+                                                                }
+                                                            </>
+                                                        ))}
+
+                                                    </>
+                                                    :
+                                                    <p className='stock__result'>No More {option == 0 ? 'Orders' : option == 1 ? 'Products' : option == 2 ? 'Categories' : option == 3 ? 'Suppliers' : option == 4 ? 'Purchases' : option == 5 ? 'Sales' : option == 6 ? 'Users' : option == 7 ? 'Logs' : ''} To Show. Try In The Next Page</p>
+                                                }
+                                            </>
+                                        }
+                                        {option == 6 &&
+                                            <>
+                                                {(undefined == undefined) ?
+                                                    <>
+
+                                                        {items.map((item, index) => (
+                                                            <>
+                                                                {((renderFilter.permission == -1 ? true : item.adminLevel == 0 && renderFilter.permission == 0 ? true : item.adminLevel == 1 && renderFilter.permission == 1 ? true : false) && (renderFilter.blocked == -1 ? true : item.blocked == false && renderFilter.blocked == 0 ? true : item.blocked == true && renderFilter.blocked == 1 ? true : false)) &&
+                                                                    <div className='stock__item' style={{ gridTemplateColumns: renderFilter[`option${option}`] }} key={index}>
+                                                                        <div className={`stockitem__select ${item.isSelected == true ? 'stockitem__select--selected' : ''}`} onClick={() => handleSelectItem(item._id)}></div>
+                                                                        {renderFilter.columns.image == true &&
+                                                                            <div className='stockitem__img'>
+                                                                                < img src={`${apiUrl}:${apiPort}/assets/${item.picturePath}`} />
+                                                                            </div>
+                                                                        }
+                                                                        {renderFilter.columns.username &&
+                                                                            <p className="stockitem__username">{item.name.length > 18 ? item.name.slice(0, 18) + "..." : item.name}</p>
+                                                                        }
+                                                                        {renderFilter.columns.email &&
+                                                                            <p className="stockitem__email">{item.email.length > 22 ? item.email.slice(0, 22) + "..." : item.email}</p>
+                                                                        }
+                                                                        {renderFilter.columns.phonenumber == true &&
+                                                                            <p className="stockitem__phonenumber">{item.phoneNumber}</p>
+                                                                        }
+                                                                        {renderFilter.columns.permission == true &&
+                                                                            <p className="stockitem__permission">{item.adminLevel == 0 ? "User" : item.adminLevel == 1 ? "Administrator" : ""}</p>
+                                                                        }
+                                                                        {renderFilter.columns.creationDate == true &&
+                                                                            <p className="stockitem__logdate">{formatDate(item.createdAt)}</p>
+                                                                        }
+                                                                        {renderFilter.columns.blocked == true &&
+                                                                            <p className="stockitem__permission">{item.blocked == 0 ? "No" : item.blocked == 1 ? "Yes" : ""}</p>
+                                                                        }
+                                                                        {renderFilter.columns.description == false &&
+                                                                            <div></div>
+                                                                        }
+                                                                        <div className="stockitem__productoptions">
+                                                                            <div className="stockitem__productremove" onClick={() => handleOpenWindow('create-products', item, 1, item._id)}><MdModeEditOutline /></div>
+                                                                            <div className="stockitem__productremove" onClick={() => handleRemoveItem(item, 1, item._id)}><MdRemove /></div>
+                                                                        </div>
+                                                                    </div>
+                                                                }
+                                                            </>
+                                                        ))}
                                                     </>
                                                     :
                                                     <p className='stock__result'>No More {option == 0 ? 'Orders' : option == 1 ? 'Products' : option == 2 ? 'Categories' : option == 3 ? 'Suppliers' : option == 4 ? 'Purchases' : option == 5 ? 'Sales' : option == 6 ? 'Users' : option == 7 ? 'Logs' : ''} To Show. Try In The Next Page</p>

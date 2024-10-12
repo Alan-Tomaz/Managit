@@ -1,10 +1,10 @@
 import React from 'react'
 import ItemsCard from '../cards/ItemsCard'
 
-function Sales({ handleOpenWindow }) {
+function Sales({ handleOpenWindow, handleRemoveItem, reload }) {
     return (
         <>
-            <ItemsCard option={5} handleOpenWindow={handleOpenWindow} />
+            <ItemsCard option={5} handleOpenWindow={handleOpenWindow} handleRemoveItem={handleRemoveItem} reload={reload} />
         </>
     )
 }

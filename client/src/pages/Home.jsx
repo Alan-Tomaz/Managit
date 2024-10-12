@@ -531,7 +531,7 @@ function Home({ showToastMessage }) {
                             <CreateSupplier closeWindow={() => setShowModal('')} item={itemInfo.item} option={itemInfo.option} id={itemInfo.id} showToastMessage={showToastMessage} setReload={triggerUpdate} />
                         }
                         {showModal == 'new-user' &&
-                            <NewUser closeWindow={() => setShowModal('')} />
+                            <NewUser closeWindow={() => setShowModal('')} item={itemInfo.item} option={itemInfo.option} id={itemInfo.id} showToastMessage={showToastMessage} setReload={triggerUpdate} />
                         }
                         {showModal == 'remove-item' &&
                             <RemoveItem closeWindow={() => setShowModal('')} item={itemInfo.item} option={itemInfo.option} id={itemInfo.id} showToastMessage={showToastMessage} setReload={triggerUpdate} />
@@ -680,10 +680,10 @@ function Home({ showToastMessage }) {
                                                     <Purchases handleOpenWindow={handleCreateItem} handleRemoveItem={handleRemoveItem} reload={updateTrigger} />
                                                     :
                                                     subSectionDisplay == "sales" ?
-                                                        <Sales handleOpenWindow={() => setShowModal('new-order')} handleRemoveItem={() => setShowModal('remove-item')} />
+                                                        <Sales handleOpenWindow={handleCreateItem} handleRemoveItem={handleRemoveItem} reload={updateTrigger} />
                                                         :
                                                         subSectionDisplay == "users" ?
-                                                            <Users handleOpenWindow={() => setShowModal('new-user')} handleRemoveItem={() => setShowModal('remove-item')} />
+                                                            <Users handleOpenWindow={handleCreateItem} handleRemoveItem={handleRemoveItem} reload={updateTrigger} />
                                                             :
                                                             subSectionDisplay == "log" ?
                                                                 <ActivitiesLog />

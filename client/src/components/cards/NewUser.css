@@ -40,6 +40,10 @@
     color: rgba(0, 0, 0, 0.8) !important
 }
 
+.newuser__edit__img:hover {
+    color: rgba(255, 255, 255, 0.8) !important
+}
+
 .newuser__button {
     min-width: 160px;
     min-height: 55px;
@@ -56,6 +60,46 @@
 
 .newuser__box {
     gap: 1.5rem;
+}
+
+.new-user__item {
+    padding: 0 .8rem;
+    height: 46px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0;
+}
+
+.new-user__item span {
+    color: #6b6b6b;
+    font-weight: 400;
+}
+
+.new-order__status__permission {
+    color: initial !important;
+    font-weight: var(--font-medium) !important;
+}
+
+.new-user__selection {
+    width: 200px;
+    border-radius: 5px;
+}
+
+.new-user__selection--right {
+    left: initial;
+    right: 0;
+}
+
+
+.new-user__selection p:not(:last-of-type) {
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.new-user__selection p:last-of-type {
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
 }
 
 .newuser__password__show {
@@ -75,4 +119,9 @@
 
 /* Small Devices = 600 */
 
-@media screen and (max-width:600px) {}
+@media screen and (max-width:600px) {
+    .new-user__selection--right {
+        right: initial;
+        left: 0;
+    }
+}

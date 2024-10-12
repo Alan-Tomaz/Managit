@@ -1,6 +1,6 @@
 import express from "express";
 import { verifyToken } from '../middlewares/auth.js'
-import { createOrder, getOrders, updateOrder } from "../controllers/order.js";
+import { createOrder, deleteManyOrders, deleteOrder, getOrders, updateOrder } from "../controllers/order.js";
 
 const router = express.Router();
 
@@ -11,5 +11,9 @@ router.post("/add", verifyToken, createOrder);
 router.get("/", verifyToken, getOrders);
 /* Update Order */
 router.put("/update/:id", verifyToken, updateOrder);
+/* Delete Many Order */
+router.delete("/remove/many/", verifyToken, deleteManyOrders);
+/* Update Order */
+router.delete("/remove/:id", verifyToken, deleteOrder);
 
 export default router;

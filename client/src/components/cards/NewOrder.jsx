@@ -31,7 +31,7 @@ function NewOrder({ handleOpenWindow, closeWindow, item, option, id, showToastMe
     const [suppliersLoading, setSuppliersLoading] = useState(false);
     const [productsLoading, setProductsLoading] = useState(false);
     const [orderSupplier, setOrderSupplier] = useState(item ? item.orderSupplier : '');
-    const [choosedProducts, setChoosedProducts] = useState(item ? item.products.map(i => { return { product: i._id, quantity: i.quantity } }) : []);
+    const [choosedProducts, setChoosedProducts] = useState(item ? item.products.map(i => { return { product: i.product._id, quantity: i.quantity } }) : []);
     const [suppliers, setSuppliers] = useState([]);
     const [hasMoreProducts, setHasMoreProducts] = useState(false);
     const [products, setProducts] = useState([]);
@@ -322,6 +322,8 @@ function NewOrder({ handleOpenWindow, closeWindow, item, option, id, showToastMe
             'Authorization': `Bearer ${userInfo.token}`
         }
 
+
+        console.log(choosedProducts);
         const data = {
             type: orderType,
             price,

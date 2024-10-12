@@ -7,6 +7,7 @@ import categoryRoutes from './routes/category.js';
 import supplierRoutes from './routes/supplier.js';
 import productRoutes from './routes/product.js';
 import orderRoutes from './routes/order.js';
+import userRoutes from './routes/user.js';
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -28,10 +29,11 @@ app.use("/assets", express.static(path.join(__dirname, "public/assets")));
 app.get("/", (req, res) => res.status(200).json({ status: 200, msg: "Hello World!" }));
 app.post("/", (req, res) => res.status(200).json({ status: 200, msg: "Hello World!" }));
 app.use("/auth", authRoutes);
-app.use('/category', categoryRoutes)
-app.use('/supplier', supplierRoutes)
-app.use('/product', productRoutes)
-app.use('/order', orderRoutes)
+app.use('/category', categoryRoutes);
+app.use('/supplier', supplierRoutes);
+app.use('/product', productRoutes);
+app.use('/order', orderRoutes);
+app.use('/user', userRoutes);
 
 /* MONGOOSE SETUP */
 /* Server PORT */

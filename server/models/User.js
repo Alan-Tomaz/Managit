@@ -41,7 +41,12 @@ const UserSchema = new mongoose.Schema(
         },
         adminLevel: {
             type: Number,
-            default: 0
+            default: 0,
+            enum: [0, 1],
+        },
+        blocked: {
+            type: Boolean,
+            default: false
         }
     },
     { timestamps: true }

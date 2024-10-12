@@ -36,6 +36,11 @@ export const exportToExcel = (data, option) => {
     const columnMapping = {
         uniqueId: "Number",
         username: "Username",
+        name: "Username",
+        email: "Email",
+        phonenumber: "Phone Number",
+        phoneNumber: "Phone Number",
+        adminLevel: "Permission",
         permission: "Permission",
         creationDate: "Creation Date",
         createdAt: "Creation Date",
@@ -50,7 +55,6 @@ export const exportToExcel = (data, option) => {
         sellPrice: "Sell Price",
         buyPrice: "Buy Price",
         date: "Date",
-        status: "Status",
         order: "Order",
         productSupplier: "Supplier",
         productCategory: "Category"
@@ -62,13 +66,17 @@ export const exportToExcel = (data, option) => {
 
     if (option == 4) {
         columnMapping.price = "Buy Price";
+        columnMapping.status = "Order Status";
     }
 
     if (option == 5) {
         columnMapping.price = "Sell Price";
+        columnMapping.status = "Order Status";
     }
 
-    columnMapping.description = "Description";
+    if (!option == 6) {
+        columnMapping.description = "Description";
+    }
 
     const transformedData = data.map(item => {
         const newItem = {};

@@ -8,13 +8,20 @@ import { US, BR } from "country-flag-icons/react/3x2";
 import UserImg from '../../assets/images/user.png';
 import './EditProfile.css';
 import './NewUser.css';
-import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
+import { IoIosArrowDown, IoIosArrowUp, IoMdArrowDropdown, IoMdArrowDropup } from 'react-icons/io';
+import { useSelector } from 'react-redux';
 
-function NewUser({ closeWindow }) {
+function NewUser({ closeWindow, item, option, id, showToastMessage, setReload }) {
+
+    const apiUrl = useSelector((state) => state.MiscReducer.apiUrl);
+    const apiPort = useSelector((state) => state.MiscReducer.apiPort);
+    const userInfo = useSelector((state) => state.UserReducer);
 
     const showPassword = useRef(null)
     const showConfirmPassword = useRef(null)
     const countryListRef = useRef(null);
+    const permissionRef = useRef(null);
+    const blockedRef = useRef(null);
 
     const [showPasswordButton, setShowPasswordButton] = useState(false);
     const [showConfirmPasswordButton, setShowConfirmPasswordButton] = useState(false);
@@ -24,6 +31,13 @@ function NewUser({ closeWindow }) {
     const [countries, setCountries] = useState([<li key={1} id='newuser__country-item-1' className='register__input__contry-item newuser__input__contry-item' onClick={() => handleChangeCountry(1)}><div className="register__input__contry-img newuser__input__contry-img"><US className='register__input__country-flag newuser__input__country-flag' /><span className='register__input__country-text newuser__input__country-text' id='newuser__country-1'>United States</span></div><span className='register__input__country-text newuser__input__country-text'>+1</span></li>, <li key={2} className='register__input__contry-item newuser__input__contry-item' id='newuser__country-item-2' onClick={() => handleChangeCountry(55)}><div className="register__input__contry-img newuser__input__contry-img"><BR className='register__input__country-flag newuser__input__country-flag' /><span className='register__input__country-text newuser__input__country-text' id='newuser__country-2'>Brazil</span></div><span className='register__input__country-text newuser__input__country-text'>+55</span></li>]);
     const [confirmPasswordType, setConfirmPasswordType] = useState('password');
     const [birthInputType, setBirthInputType] = useState('text');
+    const [picturePath, setPicturePath] = useState(option == 1 ? item.picturePath : '');
+    const [picture, setPicture] = useState()
+    const [picturePreview, setPicturePreview] = useState(picturePath != '' ? `${apiUrl}:${apiPort}/assets/${picturePath}` : UserImg);
+    const [permission, setPermission] = useState(-1);
+    const [showPermissions, setShowPermissions] = useState(false);
+    const [blocked, setBlocked] = useState(-1);
+    const [showBlockedList, setShowBlockedList] = useState(false);
 
 
     const [name, setName] = useState('');
@@ -87,6 +101,31 @@ function NewUser({ closeWindow }) {
         }
     }
 
+    const handlePreviewImage = (e) => {
+        const inputTarget = e.target;
+        const file = inputTarget.files[0];
+
+        let fileType = file.name.split('.');
+        fileType = fileType[fileType.length - 1]
+        const fileSize = (file.size / 1024);
+
+        console.log(fileType);
+
+        const supportedFiles = ['jpeg', 'png', 'jpg'];
+
+        if (file && fileSize < 2048 && supportedFiles.includes(fileType)) {
+            const reader = new FileReader();
+
+            reader.addEventListener('load', (e) => {
+                const readerTarget = e.target;
+                setPicturePreview(readerTarget.result);
+                setPicture(file);
+            })
+
+            reader.readAsDataURL(file);
+        }
+    }
+
     const handleChangeCountry = (code) => {
         setCountryCode(code);
         setIsCountryListOpen(false);
@@ -145,6 +184,12 @@ function NewUser({ closeWindow }) {
             if (countryListRef.current && !countryListRef.current.contains(event.target)) {
                 setIsCountryListOpen(false);
             }
+            if (permissionRef.current && !permissionRef.current.contains(event.target)) {
+                setShowPermissions(false);
+            }
+            if (blockedRef.current && !blockedRef.current.contains(event.target)) {
+                setShowBlockedList(false);
+            }
         };
 
         document.addEventListener("mousedown", handleClickOutside);
@@ -162,10 +207,10 @@ function NewUser({ closeWindow }) {
             <h2 className='edit-profile__title new-user__title'>New User</h2>
             <div className="editprofile__imgbox__container">
                 <div className="editprofile__imgbox newuser__imgbox">
-                    <img className='editprofile__img newuser__img' src={UserImg} alt="profile_img" />
+                    <img className='editprofile__img newuser__img' src={picturePreview} alt="profile_img" />
                     <MdEditSquare className='editprofile__edit editprofile__edit__img newuser__edit__img' onClick={handleSelectFile} />
                 </div>
-                <input type="file" style={{ visibility: 'hidden' }} id='editprofile__input__file' className='editprofile__input__file' />
+                <input type="file" style={{ visibility: 'hidden' }} id='editprofile__input__file' className='editprofile__input__file' onChange={(e) => handlePreviewImage(e)} />
             </div>
             <div className="editprofile__inputbox-container newuser__inputbox-container">
                 <div className="editprofile__box newuser__box">
@@ -205,7 +250,19 @@ function NewUser({ closeWindow }) {
                 <div className="editprofile__inputbox edit-profile__inputbox__biography">
                     <textarea name="editprofile__biography" id="editprofile__biography" className="editprofile__input newuser__input editprofile__biography newuser__biography" placeholder='Description:' onChange={(e) => setBiography(e.target.value)}>{biography}</textarea>
                 </div>
-                <div className="editprofile__inputbox edit-profile__inputbox__password new-user__inputbox__password">
+                <div className="editprofile__inputbox edit-profile__inputbox__password new-user__inputbox__password newuser__box">
+                    <div className="new-order__buyprice new-type__inputbox" id='new-type__input2'>
+                        <div className="new-order__status new-user__item" ref={permissionRef} onClick={() => setShowPermissions(!showPermissions)}>
+                            <span className={`${permission != -1 && "new-order__status__permission"}`}>{permission == -1 ? "Permission:" : permission == 0 ? "User" : permission == 1 ? "Administrator" : ""}</span>
+                            <IoMdArrowDropdown style={{ display: showPermissions == true ? 'none' : 'inline-block' }} className='new-order__status__arr' />
+                            <IoMdArrowDropup style={{ display: showPermissions == false ? 'none' : 'inline-block' }} className='new-order__status__arr' />
+                            <div className="new-order__status-selection new-user__selection" style={{ display: showPermissions == true ? 'flex' : 'none' }} >
+                                <p onClick={() => setPermission(0)}>User</p>
+                                <p onClick={() => setPermission(1)}>Administrator</p>
+                                <IoMdArrowDropup className='new-order__status__arrow' style={{ display: showPermissions == true ? 'flex' : 'none' }} />
+                            </div>
+                        </div>
+                    </div>
                     <div className="editprofile__passbox">
                         <div className="editprofile__password__field" ref={showPassword}>
                             <input type={passwordType} name="newuser__password" id="newuser__password" className="editprofile__input newuser__input editprofile__password newuser__password" onChange={(e) => setPassword(e.target.value)} onClick={() => setShowPasswordButton(true)} placeholder='Password:' />
@@ -215,7 +272,19 @@ function NewUser({ closeWindow }) {
                     </div>
                 </div>
                 <div className="editprofile__row"></div>
-                <div className="editprofile__inputbox edit-profile__inputbox__password new-user__inputbox__password">
+                <div className="editprofile__inputbox edit-profile__inputbox__password new-user__inputbox__password newuser__box">
+                    <div className="new-order__buyprice new-type__inputbox" id='new-type__input2'>
+                        <div className="new-order__status new-user__item" ref={blockedRef} onClick={() => setShowBlockedList(!showBlockedList)}>
+                            <span className={`${blocked != -1 && "new-order__status__permission"}`}>{blocked == -1 ? "Blocked:" : blocked == 0 ? "No" : blocked == 1 ? "Yes" : ""}</span>
+                            <IoMdArrowDropdown style={{ display: showBlockedList == true ? 'none' : 'inline-block' }} className='new-order__status__arr' />
+                            <IoMdArrowDropup style={{ display: showBlockedList == false ? 'none' : 'inline-block' }} className='new-order__status__arr' />
+                            <div className="new-order__status-selection new-user__selection new-user__selection--right" style={{ display: showBlockedList == true ? 'flex' : 'none' }} >
+                                <p onClick={() => setBlocked(0)}>No</p>
+                                <p onClick={() => setBlocked(1)}>Yes</p>
+                                <IoMdArrowDropup className='new-order__status__arrow' style={{ display: showBlockedList == true ? 'flex' : 'none' }} />
+                            </div>
+                        </div>
+                    </div>
                     <div className="editprofile__passbox">
                         <div className="editprofile__password__field" ref={showConfirmPassword}>
                             <input type={confirmPasswordType} name="newuser__confirmpassword" id="newuser__confirmpassword" className="editprofile__input newuser__input editprofile__password newuser__password" onChange={(e) => setConfirmPassword(e.target.value)} onClick={() => setShowConfirmPasswordButton(true)} placeholder='Confirm Password:' />

@@ -335,6 +335,12 @@
     justify-content: space-around;
 }
 
+.filter__option-others-order {
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
 .filter__option-others {
     cursor: pointer;
     display: flex;
@@ -555,8 +561,16 @@
 }
 
 .stockitem__img {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.stockitem__img img {
     width: 65px;
-    max-height: 65px;
+    height: 65px;
+    border-radius: 100%;
+    object-fit: cover;
 }
 
 .stockitem__productsellprice {

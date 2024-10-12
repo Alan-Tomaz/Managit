@@ -27,6 +27,12 @@ export const createOrder = async (req, res) => {
         }
         else {
 
+            for (let k = 0; k < products.length; k++) {
+                if (products[k].quantity < 0) {
+                    return res.status(401).json({ error: `Products Quantity Not Expected` });
+                }
+            }
+
             const productsIds = products.filter(item => item.quantity > 0 ? item.product : false).map(item => item.product);
 
             const productsFinded = await Product.find({ _id: { $in: productsIds } });
@@ -147,6 +153,12 @@ export const updateOrder = async (req, res) => {
         }
         else {
 
+            for (let k = 0; k < products.length; k++) {
+                if (products[k].quantity < 0) {
+                    return res.status(401).json({ error: `Products Quantity Not Expected` });
+                }
+            }
+
             const orderFinded = await Order.findById(id);
 
             if (!orderFinded) {
@@ -170,8 +182,6 @@ export const updateOrder = async (req, res) => {
                 const orderProductNotFind = orderFinded.products.filter(item1 =>
                     !products.some(item2 => item1.product.toString() === item2.product.toString())
                 );
-
-                console.log(orderProductNotFind);
 
                 const productsFinded = await Product.find({ _id: { $in: productsIds } });
                 const supplierFinded = await Supplier.findOne({ _id: orderSupplier });
@@ -204,8 +214,6 @@ export const updateOrder = async (req, res) => {
                         });
                         const productChoosed = products.find(item => item.product == productsFinded[i]._id);
                         if (type === "buy") {
-                            /*    console.log(orderProductFind)
-                               console.log(productChoosed) */
                             if (orderProductFind) {
                                 const productChoosedDif = orderProductFind.quantity - productChoosed.quantity;
                                 if (orderProductFind.quantity != productChoosed.quantity) {
@@ -288,9 +296,117 @@ export const updateOrder = async (req, res) => {
                         }
                     }
                     const result = await Order.findByIdAndUpdate(id, updateOrder);
-                    /*   console.log(result); */
                     res.status(201).json({ order: result });
                 }
+            }
+        }
+    } catch (error) {
+        console.log(error.message)
+        res.status(500).json({ error: "Something Wrong Ocurred. Try Again Later" });
+    }
+}
+
+/* DELETE MANY ORDERS */
+export const deleteManyOrders = async (req, res) => {
+    try {
+        const { idsToDelete } = req.query;
+
+        const orders = await Order.find({ _id: { $in: idsToDelete } })
+
+        if (!orders || orders.length < idsToDelete.length) {
+            res.status(401).json({ error: "Some Orders Not Found" });
+        } else {
+            const result = await Order.deleteMany({
+                _id: { $in: idsToDelete }
+            });
+
+            if (!result) {
+                return res.status(404).json({ error: "Orders not Found" });
+            } else {
+                for (let j = 0; j < orders.length; j++) {
+                    if (orders[j].type == "buy") {
+                        for (let i = 0; i < orders[j].products.length; i++) {
+                            const currentProductOrder = orders[j].products[i];
+                            const currentProduct = await Product.findById(currentProductOrder.product);
+
+                            if (currentProduct.stock >= currentProductOrder.quantity) {
+                                const updateProduct = await Product.findByIdAndUpdate(currentProductOrder.product, { stock: currentProduct.stock - currentProductOrder.quantity });
+                            }
+
+                            if (currentProduct.stock - currentProductOrder.quantity == 0 && currentProduct.status != "out of stock") {
+                                const updateProductStatus = await Product.findByIdAndUpdate(currentProductOrder.product, { status: "out of stock" })
+                            }
+                        }
+                    }
+
+                    if (orders[j].type == "sale") {
+                        for (let i = 0; i < orders[j].products.length; i++) {
+                            const currentProductOrder = orders[j].products[i];
+                            const currentProduct = await Product.findById(currentProductOrder.product);
+
+                            const updateProduct = await Product.findByIdAndUpdate(currentProductOrder.product, { stock: currentProduct.stock + currentProductOrder.quantity });
+
+                            if (currentProduct.stock + currentProductOrder.quantity > 0 && currentProduct.status == "out of stock") {
+                                const updateProductStatus = await Product.findByIdAndUpdate(currentProductOrder.product, { status: "in stock" })
+                            }
+                        }
+                    }
+                }
+
+                return res.status(200).json({ msg: "Orders Successfully Deleted" });
+            }
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: "Something Wrong Ocurred. Try Again Later" });
+    }
+}
+
+/* DELETE ORDER */
+export const deleteOrder = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const order = await Order.findById(id)
+
+        if (!order) {
+            res.status(401).json({ error: "Order Not Found" });
+        } else {
+
+            const result = await Order.findByIdAndDelete(id);
+
+            if (!result) {
+                return res.status(404).json({ error: "Order not Found" });
+            } else {
+                if (order.type == "buy") {
+                    for (let i = 0; i < order.products.length; i++) {
+                        const currentProductOrder = order.products[i];
+                        const currentProduct = await Product.findById(currentProductOrder.product);
+
+                        if (currentProduct.stock >= currentProductOrder.quantity) {
+                            const updateProduct = await Product.findByIdAndUpdate(currentProductOrder.product, { stock: currentProduct.stock - currentProductOrder.quantity });
+                        }
+
+                        if (currentProduct.stock - currentProductOrder.quantity == 0 && currentProduct.status != "out of stock") {
+                            const updateProductStatus = await Product.findByIdAndUpdate(currentProductOrder.product, { status: "out of stock" })
+                        }
+                    }
+                }
+
+                if (order.type == "sale") {
+                    for (let i = 0; i < order.products.length; i++) {
+                        const currentProductOrder = order.products[i];
+                        const currentProduct = await Product.findById(currentProductOrder.product);
+
+                        const updateProduct = await Product.findByIdAndUpdate(currentProductOrder.product, { stock: currentProduct.stock + currentProductOrder.quantity });
+
+                        if (currentProduct.stock + currentProductOrder.quantity > 0 && currentProduct.status == "out of stock") {
+                            const updateProductStatus = await Product.findByIdAndUpdate(currentProductOrder.product, { status: "in stock" })
+                        }
+                    }
+                }
+
+                return res.status(200).json({ msg: "Order Successfully Deleted" });
             }
         }
     } catch (error) {
