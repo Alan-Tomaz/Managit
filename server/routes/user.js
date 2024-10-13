@@ -6,7 +6,7 @@ import { createUser, getUsers } from '../controllers/user.js';
 const router = express.Router();
 
 /* Create User */
-router.post("/add", verifyToken, checkAdminPermission, upload.single("picture"), createUser);
+router.post("/add", verifyToken, upload.single("picture"), checkAdminPermission, createUser);
 /* Get Users */
 router.get("/:userId", verifyToken, checkAdminPermission, getUsers);
 /* Update User */

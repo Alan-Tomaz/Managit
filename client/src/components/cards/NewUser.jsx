@@ -10,6 +10,7 @@ import './EditProfile.css';
 import './NewUser.css';
 import { IoIosArrowDown, IoIosArrowUp, IoMdArrowDropdown, IoMdArrowDropup } from 'react-icons/io';
 import { useSelector } from 'react-redux';
+import axios from 'axios';
 
 function NewUser({ closeWindow, item, option, id, showToastMessage, setReload }) {
 
@@ -38,6 +39,7 @@ function NewUser({ closeWindow, item, option, id, showToastMessage, setReload })
     const [showPermissions, setShowPermissions] = useState(false);
     const [blocked, setBlocked] = useState(-1);
     const [showBlockedList, setShowBlockedList] = useState(false);
+    const [reqError, setReqError] = useState("");
 
 
     const [name, setName] = useState('');
@@ -45,7 +47,7 @@ function NewUser({ closeWindow, item, option, id, showToastMessage, setReload })
     const [phoneNumber, setPhoneNumber] = useState('');
     const [birthDate, setBirthDate] = useState('');
     const [location, setLocation] = useState('');
-    const [biography, setBiography] = useState('');
+    const [description, setDescription] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
 
@@ -109,8 +111,6 @@ function NewUser({ closeWindow, item, option, id, showToastMessage, setReload })
         fileType = fileType[fileType.length - 1]
         const fileSize = (file.size / 1024);
 
-        console.log(fileType);
-
         const supportedFiles = ['jpeg', 'png', 'jpg'];
 
         if (file && fileSize < 2048 && supportedFiles.includes(fileType)) {
@@ -169,6 +169,121 @@ function NewUser({ closeWindow, item, option, id, showToastMessage, setReload })
 
     const handleSelectFile = () => {
         document.getElementById('editprofile__input__file').click();
+    }
+
+    const handleCreateUser = (values) => {
+        setReqError(<img src={Loading} />);
+
+        const birthRegex = new RegExp('^\\d{4}(-)(((0)[0-9])|((1)[0-2]))(-)([0-2^([0-2][0-9]|(3)[0-1])$');
+
+        /* USA FORMAT */
+        const phoneRegex1 = new RegExp('\\(?([0-9]{3})\\)?([ .-]?)([0-9]{3})-([0-9]{4})');
+        /* BRAZIL FORMAT */
+        const phoneRegex2 = new RegExp('\\(?([0-9]{2})\\)?([ .-]?)9?([ .-]?)([0-9]{4})([ .-]?)([0-9]{4})');
+
+        const passRegex1 = new RegExp('[a-z]', 'g');
+        const passRegex2 = new RegExp('[A-Z]', 'g');
+        const passRegex3 = new RegExp('[0-9]', 'g');
+        const passRegex4 = new RegExp('[^A-Za-z0-9]', 'g');
+
+        const emailRegex = new RegExp('^(([^<>()[\\]\\\\.,;:\\s@\\"]+(\\.[^<>()[\\]\\\\.,;:\\s@\\"]+)*)|(\\".+\\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$');
+
+        /* FORM VALIDATION */
+
+        if ((name == "" || name == undefined) || (email == "" || email == undefined) || (phoneNumber == "" || phoneNumber == undefined) || (birthDate == "" || birthDate == undefined) || (location == "" || location == undefined) || (description == "" || description == undefined) || (password == "" || password == undefined) || (confirmPassword == "" || confirmPassword == undefined) || (permission === "" || permission == undefined) || (blocked === "" || blocked == undefined)) {
+            setReqError("Fill in all form fields");
+        }
+
+        else if (!emailRegex.test(email)) {
+            setReqError("Invalid email");
+        }
+
+        else if (!phoneRegex1.test(phoneNumber) && !phoneRegex2.test(phoneNumber)) {
+            setReqError("Incorret Phone Number");
+        }
+
+        else if (name.length > 15) {
+            setReqError("Name too Large");
+        }
+
+        else if (location.length < 8) {
+            setReqError("Location too Short");
+        }
+
+        else if (description.length < 8) {
+            setReqError("Description too Short");
+        }
+
+        else if (password.length < 8) {
+            setReqError("Password too Short");
+        }
+
+        else if (confirmPassword.length < 8) {
+            setReqError("Password Confirm too Short");
+        }
+
+        else if (!birthRegex.test(birthDate)) {
+            setReqError("Birth Date Format Incorret");
+        }
+
+        else if (!passRegex1.test(password)) {
+            setReqError("The password must contain at least one lowercase letter");
+        }
+
+        else if (!passRegex2.test(password)) {
+            setReqError("The password must contain at least one uppercase letter");
+        }
+
+        else if (!passRegex3.test(password)) {
+            setReqError("The password must contain at least one number");
+        }
+
+        else if (!passRegex4.test(password)) {
+            setReqError("The password must contain at least one special symbol");
+        }
+
+        else if (password != confirmPassword) {
+            setReqError("Passwords don't match");
+        }
+
+        else if (picture == "") {
+            setReqError("Please Insert a Profile Image");
+        }
+
+        else {
+
+            const headers = {
+                'Authorization': `Bearer ${userInfo.token}`
+            }
+
+            // this allows us to send form info with image
+            const formData = new FormData();
+            for (let value in values) {
+                formData.append(value, values[value]);
+            }
+
+            /* SEND COUNTRY CODE FOR PHONE NUMBER */
+            formData.append("countryCode", countryCode);
+
+            formData.append("adminLevel", permission);
+
+            formData.append("userId", userInfo.user._id);
+
+            axios.post(`${apiUrl}:${apiPort}/user/add`, formData, {
+                headers
+            })
+                .then((data) => {
+
+                    console.log(data);
+                    showToastMessage('success', 'User Created Successfully');
+                    setReload();
+                    closeWindow();
+                })
+                .catch((err) => {
+                    console.log(err);
+                    setReqError(err.response.data.error);
+                })
+        }
     }
 
     useEffect(() => {
@@ -241,14 +356,14 @@ function NewUser({ closeWindow, item, option, id, showToastMessage, setReload })
                         <input type="text" name="editprofile__email" id="editprofile__email" className="editprofile__input newuser__input editprofile__email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder='Email:' />
                     </div>
                     <div className="editprofile__inputbox ">
-                        <input type={birthInputType} name="editprofile__birthdate" id="editprofile__birthdate" className="editprofile__input newuser__input editprofile__birthdate" placeholder='Birth Date:' onClick={(e) => handleChangeDateInput(e, 'focus')} onBlur={(e) => handleChangeDateInput(e, 'blur')} onDoubleClick={(e) => handleChangeDateInput(e, 'double_click')} />
+                        <input type={birthInputType} name="editprofile__birthdate" id="editprofile__birthdate" className="editprofile__input newuser__input editprofile__birthdate" placeholder='Birth Date:' onChange={(e) => setBirthDate(e.target.value)} onClick={(e) => handleChangeDateInput(e, 'focus')} onBlur={(e) => handleChangeDateInput(e, 'blur')} onDoubleClick={(e) => handleChangeDateInput(e, 'double_click')} />
                     </div>
                 </div>
                 <div className="editprofile__inputbox edit-profile__inputbox__location">
                     <input type="text" name="editprofile__location" id="editprofile__location" className="editprofile__input newuser__input editprofile__location" value={location} onChange={(e) => setLocation(e.target.value)} placeholder='Location' />
                 </div>
                 <div className="editprofile__inputbox edit-profile__inputbox__biography">
-                    <textarea name="editprofile__biography" id="editprofile__biography" className="editprofile__input newuser__input editprofile__biography newuser__biography" placeholder='Description:' onChange={(e) => setBiography(e.target.value)}>{biography}</textarea>
+                    <textarea name="editprofile__biography" id="editprofile__biography" className="editprofile__input newuser__input editprofile__biography newuser__biography" placeholder='Description:' onChange={(e) => setDescription(e.target.value)}>{description}</textarea>
                 </div>
                 <div className="editprofile__inputbox edit-profile__inputbox__password new-user__inputbox__password newuser__box">
                     <div className="new-order__buyprice new-type__inputbox" id='new-type__input2'>
@@ -294,8 +409,11 @@ function NewUser({ closeWindow, item, option, id, showToastMessage, setReload })
                     </div>
                 </div>
             </div>
-            <button className="button  newuser__button">Create User</button>
-        </div>
+            <div className="create-products__error">
+                {reqError == '' ? '' : reqError}
+            </div>
+            <button className="button  newuser__button" onClick={() => handleCreateUser({ name, email, phoneNumber, password, confirmPassword, location, description, blocked, birthDate, picture })}>Create User</button>
+        </div >
     )
 }
 

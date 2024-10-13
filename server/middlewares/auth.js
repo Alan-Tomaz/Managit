@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
+import fs from "fs";
 
 export const verifyToken = async (req, res, next) => {
     try {
@@ -24,15 +25,17 @@ export const verifyToken = async (req, res, next) => {
 export const checkAdminPermission = async (req, res, next) => {
     try {
 
-        console.log(req.body);
+        const filePath = `./public/assets/${req.body.picturePath}`;
 
         const userId = req.body.userId ? req.body.userId : req.params.userId;
         if (!userId) {
+            fs.unlink(filePath, (err) => { if (err) { console.log(err) } else { console.log("File is Deleted") } });
             return res.status(401).json({ error: "User Id Not Received" });
         } else {
             const user = await User.findById(userId);
 
             if (!user.adminLevel == 1) {
+                fs.unlink(filePath, (err) => { if (err) { console.log(err) } else { console.log("File is Deleted") } });
                 return res.status(401).json({ error: "User Not Authorized" });
             }
             else {
