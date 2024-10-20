@@ -96,8 +96,8 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
         option3: 'min-content 250px 1fr 100px',
         option4: 'min-content 150px 150px 100px 100px 1fr 120px 100px',
         option5: 'min-content 150px 150px 100px 100px 1fr 120px 100px',
-        option6: 'min-content 65px 150px 200px 180px 120px 150px 60px 1fr 100px',
-        option7: 'min-content 50px 150px 150px 1fr 100px'
+        option6: 'min-content 65px 150px 200px 180px 120px 150px 100px 1fr 100px',
+        option7: '50px 200px 200px 1fr 100px'
     });
 
     const [filter, setFilter] = useState({ ...initialFilterObj })
@@ -518,6 +518,44 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                 console.log(err);
             })
     }
+    const handleGetLogs = (searchParam) => {
+        setLoading(<img src={Loading} alt='Loading' className='stock__loading' />)
+
+        const headers = {
+            'Authorization': `Bearer ${userInfo.token}`
+        }
+
+        const filteringObj = {
+            search: searchParam == undefined ? filter.search : searchParam,
+            page: page,
+            limit: limit
+        }
+
+
+        const url = new URL(`${apiUrl}:${apiPort}/log/`);
+        url.search = new URLSearchParams(filteringObj)
+
+        axios.get(`${url}`, ({
+            headers
+        }))
+            .then((data) => {
+
+                const requestedItems = data.data.logsData;
+
+                requestedItems.forEach(elem => {
+                    elem.isSelected = false;
+                });
+
+                setDefaultItems(requestedItems);
+                setItems(requestedItems);
+                setTotalItems(data.data.totalLogs);
+                setLoading('')
+                setTotalPages(Math.ceil(data.data.totalLogs / limit));
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+    }
     /*  */
 
     /* Delete Many Items */
@@ -596,6 +634,17 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                 return dateB - dateA;
             } else {
                 return dateA - dateB;
+            }
+        })
+    }
+
+    const sortBoolean = (arr, getter, order = 'asc') => {
+        return arr.sort((a, b) => {
+
+            if (order == 'desc') {
+                return getter(a) - getter(b);
+            } else {
+                return getter(b) - getter(a);
             }
         })
     }
@@ -684,7 +733,7 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
     }
 
     const handleFilter = () => {
-        const newColumns = `min-content ${filter.columns.image == true ? '65px ' : ''}${filter.columns.number == true ? '150px ' : ''}${filter.columns.username == true ? '150px ' : ''}${filter.columns.email == true ? '200px ' : ''}${filter.columns.phonenumber == true ? '180px ' : ''}${filter.columns.permission == true ? '120px ' : ''}${filter.columns.productName == true ? '200px ' : ''}${filter.columns.creationDate == true ? '150px ' : ''}${filter.columns.lastAccess == true ? '150px ' : ''}${option == 2 ? filter.columns.category == true ? '250px ' : '' : filter.columns.category == true ? '100px ' : ''}${option == 3 ? filter.columns.supplier == true ? '250px ' : '' : filter.columns.supplier == true ? '100px ' : ''}${filter.columns.code == true ? '100px ' : ''}${filter.columns.quantity == true ? '80px ' : ''}${filter.columns.sellPrice == true ? '100px ' : ''}${filter.columns.buyPrice == true ? '100px ' : ''}${filter.columns.price == true ? '100px ' : ''}${filter.columns.blocked == true ? '60px ' : ''}${filter.columns.date == true ? '150px ' : ''}${filter.columns.description == true ? '1fr ' : ''}${filter.columns.description == false ? '1fr ' : ''}${filter.columns.order == true ? '120px ' : ''}${filter.columns.status == true ? '100px ' : ''}100px`;
+        const newColumns = `${option != 7 && "min-content"} ${filter.columns.image == true ? '65px ' : ''}${filter.columns.number == true ? '150px ' : ''}${option == 7 ? filter.columns.username == true ? '200px ' : '' : filter.columns.username == true ? '150px ' : ''}${filter.columns.email == true ? '200px ' : ''}${filter.columns.phonenumber == true ? '180px ' : ''}${filter.columns.permission == true ? '120px ' : ''}${filter.columns.productName == true ? '200px ' : ''}${filter.columns.creationDate == true ? '150px ' : ''}${filter.columns.lastAccess == true ? '150px ' : ''}${option == 2 ? filter.columns.category == true ? '250px ' : '' : filter.columns.category == true ? '100px ' : ''}${option == 3 ? filter.columns.supplier == true ? '250px ' : '' : filter.columns.supplier == true ? '100px ' : ''}${filter.columns.code == true ? '100px ' : ''}${filter.columns.quantity == true ? '80px ' : ''}${filter.columns.sellPrice == true ? '100px ' : ''}${filter.columns.buyPrice == true ? '100px ' : ''}${filter.columns.price == true ? '100px ' : ''}${filter.columns.blocked == true ? '100px ' : ''}${option == 7 ? filter.columns.date == true ? '200px ' : '' : filter.columns.date == true ? '150px ' : ''}${filter.columns.description == true ? '1fr ' : ''}${filter.columns.description == false ? '1fr ' : ''}${filter.columns.order == true ? '120px ' : ''}${filter.columns.status == true ? '100px ' : ''}100px`;
         setFilter(prev => ({
             ...prev,
             [`option${option}`]: newColumns,
@@ -720,6 +769,9 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                     break;
                 case 6:
                     handleGetUsers();
+                    break;
+                case 7:
+                    handleGetLogs();
                     break;
             }
         }
@@ -783,6 +835,9 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                 break;
             case 6:
                 handleGetUsers();
+                break;
+            case 7:
+                handleGetLogs();
                 break;
         }
     }
@@ -863,10 +918,18 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
 
                 break;
             case 'number':
-                if (filter.orderFilter.number == false) {
-                    setItems(sortByGreater([...items], g => g.uniqueId));
+                if (option == 7) {
+                    if (filter.orderFilter.number == false) {
+                        setItems(sortByGreater([...items], g => g.seqNum));
+                    } else {
+                        setItems(sortByGreater([...items], g => g.seqNum, 'desc'));
+                    }
                 } else {
-                    setItems(sortByGreater([...items], g => g.uniqueId, 'desc'));
+                    if (filter.orderFilter.number == false) {
+                        setItems(sortByGreater([...items], g => g.uniqueId));
+                    } else {
+                        setItems(sortByGreater([...items], g => g.uniqueId, 'desc'));
+                    }
                 }
                 setFilter(prev => ({
                     ...prev,
@@ -895,6 +958,11 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                 }))
                 break;
             case 'blocked':
+                if (filter.orderFilter.blocked == false) {
+                    setItems(sortBoolean([...items], g => g.blocked));
+                } else {
+                    setItems(sortBoolean([...items], g => g.blocked, "desc"));
+                }
                 setFilter(prev => ({
                     ...prev,
                     orderFilter: {
@@ -935,6 +1003,19 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                 }))
                 break;
             case 'username':
+                if (option == 7) {
+                    if (filter.orderFilter.username == false) {
+                        setItems(sortAlphabetical([...items], g => g.userGuilty.name));
+                    } else {
+                        setItems(sortAlphabetical([...items], g => g.userGuilty.name, "desc"));
+                    }
+                } else {
+                    if (filter.orderFilter.username == false) {
+                        setItems(sortAlphabetical([...items], g => g.name));
+                    } else {
+                        setItems(sortAlphabetical([...items], g => g.name, "desc"));
+                    }
+                }
                 setFilter(prev => ({
                     ...prev,
                     orderFilter: {
@@ -945,7 +1026,44 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                     },
                 }))
                 break;
+            case 'email':
+                if (filter.orderFilter.email == false) {
+                    setItems(sortAlphabetical([...items], g => g.email));
+                } else {
+                    setItems(sortAlphabetical([...items], g => g.email, "desc"));
+                }
+                setFilter(prev => ({
+                    ...prev,
+                    orderFilter: {
+                        ...initialFilterObj.orderFilter,
+                        email: !filter.orderFilter.email,
+                        onFiltering: 'Email',
+                        onFilteringVar: 'email'
+                    },
+                }))
+                break;
+            case 'phonenumber':
+                if (filter.orderFilter.phonenumber == false) {
+                    setItems(sortAlphabetical([...items], g => g.phoneNumber));
+                } else {
+                    setItems(sortAlphabetical([...items], g => g.phoneNumber, "desc"));
+                }
+                setFilter(prev => ({
+                    ...prev,
+                    orderFilter: {
+                        ...initialFilterObj.orderFilter,
+                        phonenumber: !filter.orderFilter.phonenumber,
+                        onFiltering: 'Phone Number',
+                        onFilteringVar: 'phonenumber'
+                    },
+                }))
+                break;
             case 'permission':
+                if (filter.orderFilter.permission == false) {
+                    setItems(sortByGreater([...items], g => g.adminLevel));
+                } else {
+                    setItems(sortByGreater([...items], g => g.adminLevel, "desc"));
+                }
                 setFilter(prev => ({
                     ...prev,
                     orderFilter: {
@@ -1021,6 +1139,11 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                 }))
                 break;
             case 'date':
+                if (filter.orderFilter.date == false) {
+                    setItems(sortDates([...items], g => g.createdAt));
+                } else {
+                    setItems(sortDates([...items], g => g.createdAt, 'desc'));
+                }
                 setFilter(prev => ({
                     ...prev,
                     orderFilter: {
@@ -1133,13 +1256,13 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
             case 'admin':
                 setFilter(prev => ({
                     ...prev,
-                    permission: 0
+                    permission: 1
                 }))
                 break;
             case 'user':
                 setFilter(prev => ({
                     ...prev,
-                    permission: 1
+                    permission: 0
                 }))
                 break;
             case 'all-stocks':
@@ -1211,6 +1334,9 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                         break;
                     case 6:
                         handleGetUsers("");
+                        break;
+                    case 7:
+                        handleGetLogs("");
                         break;
                 }
                 break;
@@ -1929,6 +2055,9 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                 case 6:
                     handleGetUsers(renderFilter.search);
                     break;
+                case 7:
+                    handleGetLogs(renderFilter.search);
+                    break;
             }
         } else {
             switch (option) {
@@ -1950,6 +2079,9 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                 case 6:
                     handleGetUsers();
                     break;
+                case 7:
+                    handleGetLogs();
+                    break;
             }
         }
     }, [reload, page])
@@ -1961,7 +2093,7 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                     <div className="stockmenu__options" >
                         <form className="stockmenu__search" onSubmit={(e) => handleSearch(e)}>
                             <IoSearch className='stockmenu__search-icon' />
-                            <input type="text" className="stockmenu__searchinput" placeholder={option == 0 ? "Search Orders" : option == 1 ? "Search Products" : option == 2 ? 'Search Categories' : option == 3 ? 'Search Suppliers' : option == 4 ? 'Search Orders' : option == 5 ? 'Search Orders' : option == 6 ? 'Search Users' : 'Search Types'} value={filter.search} onChange={(e) => setFilter({ ...filter, search: e.target.value })} />
+                            <input type="text" className="stockmenu__searchinput" placeholder={option == 0 ? "Search Orders" : option == 1 ? "Search Products" : option == 2 ? 'Search Categories' : option == 3 ? 'Search Suppliers' : option == 4 ? 'Search Orders' : option == 5 ? 'Search Orders' : option == 6 ? 'Search Users' : option == 7 ? 'Search Logs' : 'Search Types'} value={filter.search} onChange={(e) => setFilter({ ...filter, search: e.target.value })} />
                         </form>
                         <div className="stockmenu__filter" ref={filterRef} >
                             <div className="stockmenu__filter-button" onClick={() => setShowFilterOptions(!showFilterOptions)}>
@@ -2258,12 +2390,12 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                                                             </div>
                                                             <span>All</span>
                                                         </div>
-                                                        <div className={`filter__option-others filter__option-others-permissions filter__option-others-admin ${filter.permission == 0 ? 'filter__option-others--selected' : ''}`} onClick={() => handleSelectFilter('admin')}>
+                                                        <div className={`filter__option-others filter__option-others-permissions filter__option-others-admin ${filter.permission == 1 ? 'filter__option-others--selected' : ''}`} onClick={() => handleSelectFilter('admin')}>
                                                             <div className="filter__option-radio">
                                                             </div>
                                                             <span>Admin</span>
                                                         </div>
-                                                        <div className={`filter__option-others filter__option-others-permissions filter__option-others-user ${filter.permission == 1 ? 'filter__option-others--selected' : ''}`} onClick={() => handleSelectFilter('user')}>
+                                                        <div className={`filter__option-others filter__option-others-permissions filter__option-others-user ${filter.permission == 0 ? 'filter__option-others--selected' : ''}`} onClick={() => handleSelectFilter('user')}>
                                                             <div className="filter__option-radio">
                                                             </div>
                                                             <span>User</span>
@@ -2428,7 +2560,9 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                     </div>
                     <div className="stock__items">
                         <div className="stockitems__header stock__item" style={{ gridTemplateColumns: renderFilter[`option${option}`] }}>
-                            <div className={`stockitem__select ${isAllItemsSelected == true ? 'stockitem__select--selected' : ''}`} onClick={handleSelectAllItems}></div>
+                            {(option != 7) &&
+                                <div className={`stockitem__select ${isAllItemsSelected == true ? 'stockitem__select--selected' : ''}`} onClick={handleSelectAllItems}></div>
+                            }
                             {((option != 2 && option != 3 && option != 4 && option != 5 && option != 7) && renderFilter.columns.image != false) &&
                                 <div className=""></div>
                             }
@@ -2582,7 +2716,7 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                         </div>
                         {loading == '' ?
                             <div className="stock__items-container">
-                                {(option != 2 && option != 3 && option != 1 && option != 4 && option != 5 && option != 6) &&
+                                {(option != 2 && option != 3 && option != 1 && option != 4 && option != 5 && option != 6 && option != 7) &&
                                     <div className="stock__item" style={{ gridTemplateColumns: renderFilter[`option${option}`] }}>
                                         <div className="stockitem__select" onClick={(e) => handleSelectItem(e)}></div>
                                         {((option != 2 && option != 3 && option != 4 && option != 5 && option != 7) && renderFilter.columns.image != false) &&
@@ -2904,6 +3038,41 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                                                                             <div className="stockitem__productremove" onClick={() => handleOpenWindow('new-user', item, 1, item._id)}><MdModeEditOutline /></div>
                                                                             <div className="stockitem__productremove" onClick={() => handleRemoveItem(item, 6, item._id)}><MdRemove /></div>
                                                                         </div>
+                                                                    </div>
+                                                                }
+                                                            </>
+                                                        ))}
+                                                    </>
+                                                    :
+                                                    <p className='stock__result'>No More {option == 0 ? 'Orders' : option == 1 ? 'Products' : option == 2 ? 'Categories' : option == 3 ? 'Suppliers' : option == 4 ? 'Purchases' : option == 5 ? 'Sales' : option == 6 ? 'Users' : option == 7 ? 'Logs' : ''} To Show. Try In The Next Page</p>
+                                                }
+                                            </>
+                                        }
+                                        {option == 7 &&
+                                            <>
+                                                {(undefined == undefined) ?
+                                                    <>
+
+                                                        {items.map((item, index) => (
+                                                            <>
+                                                                {((undefined == undefined)) &&
+                                                                    <div className='stock__item' style={{ gridTemplateColumns: renderFilter[`option${option}`] }} key={index}>
+                                                                        {/* <div className={`stockitem__select ${item.isSelected == true ? 'stockitem__select--selected' : ''}`} onClick={() => handleSelectItem(item._id)}></div>*/}
+                                                                        {renderFilter.columns.number == true &&
+                                                                            <p className="stockitem__productnumber">{item.seqNum}</p>
+                                                                        }
+                                                                        {renderFilter.columns.username == true &&
+                                                                            <p className="stockitem__username">{item.userGuilty.name.length > 18 ? item.userGuilty.name.slice(0, 18) + "..." : item.userGuilty.name}</p>
+                                                                        }
+                                                                        {renderFilter.columns.date == true &&
+                                                                            <p className="stockitem__productcreationdate">{formatDate(item.createdAt)}</p>
+                                                                        }
+                                                                        {renderFilter.columns.description == true &&
+                                                                            <p className="stockitem__productdescription">{item.description.length > 125 ? `${item.description.slice(0, 125)}...` : item.description}</p>
+                                                                        }
+                                                                        {renderFilter.columns.description == false &&
+                                                                            <div></div>
+                                                                        }
                                                                     </div>
                                                                 }
                                                             </>

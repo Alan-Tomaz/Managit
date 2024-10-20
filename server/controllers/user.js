@@ -1,6 +1,7 @@
 import User from "../models/User.js";
 import fs from "fs";
 import bcrypt from "bcrypt";
+import { createLogMiddleware } from './log.js';
 
 /* CREATE USER */
 export const createUser = async (req, res) => {
@@ -133,8 +134,16 @@ export const createUser = async (req, res) => {
                 fs.unlink(filePath, (err) => { if (err) { console.log(err) } else { console.log("File is Deleted") } });
             } else {
                 const savedUser = await newUser.save()
-                console.log(savedUser);
+
+                /* LOG PARAMETERS */
+                req.body.info = savedUser;
+                req.body.type = "create-user";
+
                 res.status(201).json({ status: 201 });
+
+                setTimeout(() => {
+                    createLogMiddleware(req);
+                }, 0)
             }
         }
     }
@@ -425,7 +434,7 @@ export const updateUser = async (req, res) => {
 
         const emailRegex = new RegExp('^(([^<>()[\\]\\\\.,;:\\s@\\"]+(\\.[^<>()[\\]\\\\.,;:\\s@\\"]+)*)|(\\".+\\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$');
 
-        if ((name == "" || name == undefined) || (email == "" || email == undefined) || (phoneNumber == "" || phoneNumber == undefined) || (birthDate == "" || birthDate == undefined) || (location == "" || location == undefined) || (description == "" || description == undefined) || (password == "" || password == undefined) || (picturePath == "" || picturePath == undefined) || (countryCode == "" || countryCode == undefined) || (adminLevel === "" || adminLevel === undefined) || (blocked === "" || blocked === undefined)) {
+        if ((name == "" || name == undefined) || (email == "" || email == undefined) || (phoneNumber == "" || phoneNumber == undefined) || (birthDate == "" || birthDate == undefined) || (location == "" || location == undefined) || (description == "" || description == undefined) || (countryCode == "" || countryCode == undefined) || (adminLevel === "" || adminLevel === undefined) || (blocked === "" || blocked === undefined)) {
             res.status(401).json({ status: 401, msg: "Fill All Fields!" });
             /* DELETE THE UPLOADED FILE */
             fs.unlink(filePath, (err) => { if (err) { console.log(err) } else { console.log("File is Deleted") } });
@@ -461,41 +470,12 @@ export const updateUser = async (req, res) => {
             fs.unlink(filePath, (err) => { if (err) { console.log(err) } else { console.log("File is Deleted") } });
         }
 
-        else if (password.length < 8) {
-            res.status(401).json({ status: 401, msg: "Password Too Short" });
-            /* DELETE THE UPLOADED FILE */
-            fs.unlink(filePath, (err) => { if (err) { console.log(err) } else { console.log("File is Deleted") } });
-        }
-
         else if (!birthRegex.test(birthDate)) {
             res.status(401).json({ status: 401, msg: "Birth Date Format Incorret" });
             /* DELETE THE UPLOADED FILE */
             fs.unlink(filePath, (err) => { if (err) { console.log(err) } else { console.log("File is Deleted") } });
         }
 
-        else if (!passRegex1.test(password)) {
-            res.status(401).json({ status: 401, msg: "The password must contain at least one lowercase letter" });
-            /* DELETE THE UPLOADED FILE */
-            fs.unlink(filePath, (err) => { if (err) { console.log(err) } else { console.log("File is Deleted") } });
-        }
-
-        else if (!passRegex2.test(password)) {
-            res.status(401).json({ status: 401, msg: "The password must contain at least one uppercase letter" });
-            /* DELETE THE UPLOADED FILE */
-            fs.unlink(filePath, (err) => { if (err) { console.log(err) } else { console.log("File is Deleted") } });
-        }
-
-        else if (!passRegex3.test(password)) {
-            res.status(401).json({ status: 401, msg: "The password must contain at least one number" });
-            /* DELETE THE UPLOADED FILE */
-            fs.unlink(filePath, (err) => { if (err) { console.log(err) } else { console.log("File is Deleted") } });
-        }
-
-        else if (!passRegex4.test(password)) {
-            res.status(401).json({ status: 401, msg: "The password must contain at least one special symbol" });
-            /* DELETE THE UPLOADED FILE */
-            fs.unlink(filePath, (err) => { if (err) { console.log(err) } else { console.log("File is Deleted") } });
-        }
         else if (req.body.userId == id) {
             return res.status(401).json({ error: "You Not Can Upload Yourself Here" });
         }
@@ -507,8 +487,6 @@ export const updateUser = async (req, res) => {
                 return res.status(401).json({ error: "The Email Alread Exists" });
             }
 
-            const salt = await bcrypt.genSalt();
-            const passwordHash = await bcrypt.hash(password, salt)
 
             const updateUser = {
                 name,
@@ -517,11 +495,52 @@ export const updateUser = async (req, res) => {
                 birthDate,
                 location,
                 description,
-                password: passwordHash,
                 picturePath,
                 adminLevel,
                 blocked
             }
+
+            if (password != undefined && password != "") {
+
+                if (password.length < 8) {
+                    /* DELETE THE UPLOADED FILE */
+                    fs.unlink(filePath, (err) => { if (err) { console.log(err) } else { console.log("File is Deleted") } });
+                    return res.status(401).json({ status: 401, msg: "Password Too Short" });
+                }
+                if (!passRegex1.test(password)) {
+                    /* DELETE THE UPLOADED FILE */
+                    fs.unlink(filePath, (err) => { if (err) { console.log(err) } else { console.log("File is Deleted") } });
+                    return res.status(401).json({ status: 401, msg: "The password must contain at least one lowercase letter" });
+                }
+
+                if (!passRegex2.test(password)) {
+                    /* DELETE THE UPLOADED FILE */
+                    fs.unlink(filePath, (err) => { if (err) { console.log(err) } else { console.log("File is Deleted") } });
+                    return res.status(401).json({ status: 401, msg: "The password must contain at least one uppercase letter" });
+                }
+
+                if (!passRegex3.test(password)) {
+                    /* DELETE THE UPLOADED FILE */
+                    fs.unlink(filePath, (err) => { if (err) { console.log(err) } else { console.log("File is Deleted") } });
+                    return res.status(401).json({ status: 401, msg: "The password must contain at least one number" });
+                }
+
+                if (!passRegex4.test(password)) {
+                    /* DELETE THE UPLOADED FILE */
+                    fs.unlink(filePath, (err) => { if (err) { console.log(err) } else { console.log("File is Deleted") } });
+                    return res.status(401).json({ status: 401, msg: "The password must contain at least one special symbol" });
+                }
+
+                const salt = await bcrypt.genSalt();
+                const passwordHash = await bcrypt.hash(password, salt)
+
+                updateUser.password = passwordHash;
+            }
+
+            if (picturePath != undefined && picturePath != "") {
+                updateUser.picturePath = picturePath;
+            }
+
 
             const userFinded = await User.findById(id);
 
@@ -531,12 +550,22 @@ export const updateUser = async (req, res) => {
                 /* DELETE THE UPLOADED FILE */
                 fs.unlink(filePath, (err) => { if (err) { console.log(err) } else { console.log("File is Deleted") } });
             } else {
-                const oldFilePath = `./public/assets/${userFinded.picturePath}`;
-                /* Erase the old picture file */
-                fs.unlink(oldFilePath, (err) => { if (err) { console.log(err) } else { console.log("File is Deleted") } });
+                if (picturePath != undefined && picturePath != "") {
+                    const oldFilePath = `./public/assets/${userFinded.picturePath}`;
+                    /* Erase the old picture file */
+                    fs.unlink(oldFilePath, (err) => { if (err) { console.log(err) } else { console.log("File is Deleted") } });
+                }
                 const result = await User.findByIdAndUpdate(id, updateUser);
-                console.log(result);
+
+                /* LOG PARAMETERS */
+                req.body.info = result;
+                req.body.type = "update-user";
+
                 res.status(201).json({ status: 201 });
+
+                setTimeout(() => {
+                    createLogMiddleware(req);
+                }, 0)
             }
         }
     } catch (error) {
@@ -569,7 +598,16 @@ export const deleteManyUsers = async (req, res) => {
                 const filePath = `./public/assets/${user.picturePath}`;
                 fs.unlink(filePath, (err) => { if (err) { console.log(err) } else { console.log(`File ${index + 1} is Deleted`) } });
             })
-            return res.status(200).json({ msg: "Users Successfully Deleted" });
+
+            /* LOG PARAMETERS */
+            req.body.info = usersToDelete;
+            req.body.type = "delete-many-users";
+
+            res.status(200).json({ msg: "Users Successfully Deleted" });
+
+            setTimeout(() => {
+                createLogMiddleware(req);
+            }, 0)
         }
 
     } catch (error) {
@@ -587,7 +625,7 @@ export const deleteUser = async (req, res) => {
             return res.status(404).json({ error: "You cannot delete your own User" });
         }
 
-        const user = User.findById(id);
+        const user = await User.findById(id);
 
         const result = await User.findByIdAndDelete(id);
 
@@ -597,7 +635,16 @@ export const deleteUser = async (req, res) => {
             const filePath = `./public/assets/${user.picturePath}`;
             /* Erase the old picture file */
             fs.unlink(filePath, (err) => { if (err) { console.log(err) } else { console.log("File is Deleted") } });
-            return res.status(200).json({ msg: "User Successfully Deleted" });
+
+            /* LOG PARAMETERS */
+            req.body.info = user;
+            req.body.type = "delete-user";
+
+            res.status(200).json({ msg: "User Successfully Deleted" });
+
+            setTimeout(() => {
+                createLogMiddleware(req);
+            }, 0)
         }
 
     } catch (error) {

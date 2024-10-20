@@ -1,6 +1,7 @@
 import Order from '../models/Order.js';
 import Product from '../models/Product.js';
 import Supplier from '../models/Supplier.js';
+import { createLogMiddleware } from './log.js';
 
 /* CREATE ORDER */
 export const createOrder = async (req, res) => {
@@ -67,7 +68,12 @@ export const createOrder = async (req, res) => {
                     uniqueId
                 })
 
+
                 const savedOrder = await newOrder.save()
+
+                req.body.info = savedOrder;
+                req.body.type = "create-order";
+
                 for (let i = 0; i < productsFinded.length; i++) {
                     const productChoosed = products.find(item => item.product == productsFinded[i]._id);
                     if (type === "buy") {
@@ -85,6 +91,10 @@ export const createOrder = async (req, res) => {
                 }
                 console.log(savedOrder);
                 res.status(201).json({ order: savedOrder });
+
+                setTimeout(() => {
+                    createLogMiddleware(req);
+                }, 0);
             }
         }
 
@@ -295,8 +305,19 @@ export const updateOrder = async (req, res) => {
                             }
                         }
                     }
+
+
                     const result = await Order.findByIdAndUpdate(id, updateOrder);
+
+                    /* LOG PARAMETERS */
+                    req.body.info = result;
+                    req.body.type = "update-order";
+
                     res.status(201).json({ order: result });
+
+                    setTimeout(() => {
+                        createLogMiddleware(req);
+                    }, 0);
                 }
             }
         }
@@ -353,7 +374,15 @@ export const deleteManyOrders = async (req, res) => {
                     }
                 }
 
-                return res.status(200).json({ msg: "Orders Successfully Deleted" });
+                /* LOG PARAMETERS */
+                req.body.info = orders;
+                req.body.type = "delete-many-orders";
+
+                res.status(200).json({ msg: "Orders Successfully Deleted" });
+
+                setTimeout(() => {
+                    createLogMiddleware(req);
+                }, 0);
             }
         }
     } catch (error) {
@@ -406,7 +435,15 @@ export const deleteOrder = async (req, res) => {
                     }
                 }
 
-                return res.status(200).json({ msg: "Order Successfully Deleted" });
+                /* LOG PARAMETERS */
+                req.body.info = order;
+                req.body.type = "delete-order";
+
+                res.status(200).json({ msg: "Order Successfully Deleted" });
+
+                setTimeout(() => {
+                    createLogMiddleware(req);
+                }, 0);
             }
         }
     } catch (error) {

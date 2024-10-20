@@ -35,7 +35,9 @@ export const exportToExcel = (data, option) => {
     /* New names of columns */
     const columnMapping = {
         uniqueId: "Number",
+        seqNum: "Number",
         username: "Username",
+        userGuilty: "Username",
         name: "Username",
         email: "Email",
         phonenumber: "Phone Number",
@@ -74,7 +76,7 @@ export const exportToExcel = (data, option) => {
         columnMapping.status = "Order Status";
     }
 
-    if (!option == 6) {
+    if (option != 6) {
         columnMapping.description = "Description";
     }
 
@@ -91,6 +93,9 @@ export const exportToExcel = (data, option) => {
                 } else if (key == "productSupplier") {
                     const newKey = columnMapping[key]; // Nome personalizado da coluna
                     newItem[newKey] = item[key].supplierName; // Valor da propriedade original
+                } else if (key == "userGuilty") {
+                    const newKey = columnMapping[key]; // Nome personalizado da coluna
+                    newItem[newKey] = item[key].name; // Valor da propriedade original
                 } else if (key == "_id") {
                     const newKey = columnMapping[key]; // Nome personalizado da coluna
                     newItem[newKey] = `${item[key].slice(14).toUpperCase()}`; // Valor da propriedade original

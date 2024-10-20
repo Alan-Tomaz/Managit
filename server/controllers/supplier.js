@@ -1,4 +1,7 @@
+import Product from '../models/Product.js';
+import Order from '../models/Order.js';
 import Supplier from '../models/Supplier.js';
+import { createLogMiddleware } from './log.js';
 
 /* CREATE SUPPLIER */
 export const createSupplier = async (req, res) => {
@@ -28,9 +31,18 @@ export const createSupplier = async (req, res) => {
             if (supplierFinded) {
                 res.status(401).json({ error: "Supplier Already Exists" });
             } else {
+
                 const savedSupplier = await newSupplier.save()
-                console.log(savedSupplier);
+
+                /* LOG PARAMETERS */
+                req.body.info = savedSupplier;
+                req.body.type = "create-supplier";
+
                 res.status(201).json({ supplier: savedSupplier });
+
+                setTimeout(() => {
+                    createLogMiddleware(req);
+                }, 0);
             }
         }
 
@@ -95,7 +107,16 @@ export const updateSupplier = async (req, res) => {
                 if (!result) {
                     return res.status(404).json({ error: "Supplier Not Found" })
                 } else {
-                    return res.status(200).send({ supplier: result })
+
+                    /* LOG PARAMETERS */
+                    req.body.info = result;
+                    req.body.type = "update-supplier";
+
+                    res.status(200).send({ supplier: result })
+
+                    setTimeout(() => {
+                        createLogMiddleware(req);
+                    }, 0);
                 }
             }
         }
@@ -110,6 +131,18 @@ export const deleteManySuppliers = async (req, res) => {
     try {
         const { idsToDelete } = req.query;
 
+        const suppliersToDelete = await Supplier.find({ _id: { $in: idsToDelete } })
+
+        for (let i = 0; i < suppliersToDelete.length; i++) {
+            const itemDependent = await Product.findOne({ productSupplier: suppliersToDelete[i]._id });
+            const itemDependent2 = await Order.findOne({ orderSupplier: suppliersToDelete[i]._id });
+
+            if (itemDependent || itemDependent2) {
+                return res.status(404).json({ error: `The supplier ${suppliersToDelete[i].supplierName} cannot be deleted because it is linked to other records.` });
+            }
+
+        }
+
         const result = await Supplier.deleteMany({
             _id: { $in: idsToDelete }
         });
@@ -117,7 +150,15 @@ export const deleteManySuppliers = async (req, res) => {
         if (!result) {
             return res.status(404).json({ error: "Suppliers not Found" });
         } else {
-            return res.status(200).json({ msg: "Suppliers Successfully Deleted" });
+            /* LOG PARAMETERS */
+            req.body.info = suppliersToDelete;
+            req.body.type = "delete-many-suppliers";
+
+            res.status(200).json({ msg: "Suppliers Successfully Deleted" });
+
+            setTimeout(() => {
+                createLogMiddleware(req);
+            }, 0)
         }
 
     } catch (error) {
@@ -130,12 +171,30 @@ export const deleteManySuppliers = async (req, res) => {
 export const deleteSupplier = async (req, res) => {
     try {
         const { id } = req.params;
+
+        const supplierToDelete = await Supplier.findById(id)
+
+        const itemDependent = await Product.findOne({ productCategory: supplierToDelete._id });
+        const itemDependent2 = await Order.findOne({ orderSupplier: supplierToDelete._id });
+
+        if (itemDependent || itemDependent2) {
+            return res.status(404).json({ error: `The supplier ${supplierToDelete.supplierName} cannot be deleted because it is linked to other records.` });
+        }
+
         const result = await Supplier.findByIdAndDelete(id);
 
         if (!result) {
             return res.status(404).json({ error: "Supplier not Found" });
         } else {
-            return res.status(200).json({ msg: "Supplier Successfully Deleted" });
+            /* LOG PARAMETERS */
+            req.body.info = supplierToDelete;
+            req.body.type = "delete-supplier";
+
+            res.status(200).json({ msg: "Supplier Successfully Deleted" });
+
+            setTimeout(() => {
+                createLogMiddleware(req);
+            }, 0)
         }
 
     } catch (error) {

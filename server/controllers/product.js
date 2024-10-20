@@ -1,7 +1,9 @@
 import Category from '../models/Category.js';
 import Product from '../models/Product.js';
 import Supplier from '../models/Supplier.js';
+import Order from '../models/Order.js';
 import fs from "fs";
+import { createLogMiddleware } from './log.js';
 
 /* CREATE PRODUCT */
 export const createProduct = async (req, res) => {
@@ -65,8 +67,16 @@ export const createProduct = async (req, res) => {
                     fs.unlink(filePath, (err) => { if (err) { console.log(err) } else { console.log("File is Deleted") } });
                 } else {
                     const savedProduct = await newProduct.save()
-                    console.log(savedProduct);
+
+                    /* LOG PARAMETERS */
+                    req.body.info = savedProduct;
+                    req.body.type = "create-product";
+
                     res.status(201).json({ product: savedProduct });
+
+                    setTimeout(() => {
+                        createLogMiddleware(req);
+                    }, 0);
                 }
             }
         }
@@ -198,7 +208,15 @@ export const updateProduct = async (req, res) => {
                         if (picturePath != undefined) {
                             fs.unlink(`./public/assets/${oldProduct.picturePath}`, (err) => { if (err) { console.log(err) } else { console.log("Old File is Deleted") } });
                         }
-                        return res.status(200).send({ product: result })
+                        /* LOG PARAMETERS */
+                        req.body.info = result;
+                        req.body.type = "update-product";
+
+                        res.status(200).send({ product: result })
+
+                        setTimeout(() => {
+                            createLogMiddleware(req);
+                        }, 0)
                     }
                 }
             }
@@ -220,6 +238,14 @@ export const deleteManyProducts = async (req, res) => {
 
         const productsToDelete = await Product.find({ _id: { $in: idsToDelete } })
 
+        for (let i = 0; i < productsToDelete.length; i++) {
+            const itemDependent = await Order.findOne({ "products.product": productsToDelete[i]._id });
+
+            if (itemDependent) {
+                return res.status(404).json({ error: `The  product ${productsToDelete[i].productName} cannot be deleted because it is linked to other records.` });
+            }
+        }
+
         const result = await Product.deleteMany({
             _id: { $in: idsToDelete }
         });
@@ -231,7 +257,16 @@ export const deleteManyProducts = async (req, res) => {
                 const filePath = `./public/assets/${product.picturePath}`;
                 fs.unlink(filePath, (err) => { if (err) { console.log(err) } else { console.log(`File ${index + 1} is Deleted`) } });
             })
-            return res.status(200).json({ msg: "Products Successfully Deleted" });
+
+            /* LOG PARAMETERS */
+            req.body.info = productsToDelete;
+            req.body.type = "delete-many-products";
+
+            res.status(200).json({ msg: "Products Successfully Deleted" });
+
+            setTimeout(() => {
+                createLogMiddleware(req);
+            }, 0)
         }
 
     } catch (error) {
@@ -247,6 +282,12 @@ export const deleteProduct = async (req, res) => {
 
         const product = await Product.findById(id);
 
+        const itemDependent = await Order.findOne({ "products.product": product._id });
+
+        if (itemDependent) {
+            return res.status(404).json({ error: `The product ${product.productName} cannot be deleted because it is linked to other records.` });
+        }
+
         const result = await Product.findByIdAndDelete(id);
 
         if (!result) {
@@ -254,7 +295,16 @@ export const deleteProduct = async (req, res) => {
         } else {
             const filePath = `./public/assets/${product.picturePath}`;
             fs.unlink(filePath, (err) => { if (err) { console.log(err) } else { console.log("File is Deleted") } });
-            return res.status(200).json({ msg: "Product Successfully Deleted" });
+
+            /* LOG PARAMETERS */
+            req.body.info = product;
+            req.body.type = "delete-product";
+
+            res.status(200).json({ msg: "Product Successfully Deleted" });
+
+            setTimeout(() => {
+                createLogMiddleware(req);
+            }, 0)
         }
 
     } catch (error) {

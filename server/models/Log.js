@@ -10,6 +10,14 @@ const LogSchema = new mongoose.Schema(
             type: String,
             required: true
         },
+        notification: {
+            type: String,
+            required: true
+        },
+        type: {
+            type: String,
+            required: true
+        },
         userGuilty: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User',

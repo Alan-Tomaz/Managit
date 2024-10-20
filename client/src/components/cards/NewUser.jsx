@@ -279,7 +279,7 @@ function NewUser({ closeWindow, item, option, id, showToastMessage, setReload })
                 })
                 .catch((err) => {
                     console.log(err);
-                    setReqError(err.response.data.error);
+                    setReqError(err.response.data.msg);
                 })
         }
     }
@@ -303,7 +303,7 @@ function NewUser({ closeWindow, item, option, id, showToastMessage, setReload })
 
         /* FORM VALIDATION */
 
-        if ((name == "" || name == undefined) || (email == "" || email == undefined) || (phoneNumber == "" || phoneNumber == undefined) || (birthDate == "" || birthDate == undefined) || (location == "" || location == undefined) || (description == "" || description == undefined) || (password == "" || password == undefined) || (confirmPassword == "" || confirmPassword == undefined) || (permission === "" || permission == undefined) || (blocked === "" || blocked == undefined)) {
+        if ((name == "" || name == undefined) || (email == "" || email == undefined) || (phoneNumber == "" || phoneNumber == undefined) || (birthDate == "" || birthDate == undefined) || (location == "" || location == undefined) || (description == "" || description == undefined) || (permission === "" || permission == undefined) || (blocked === "" || blocked == undefined)) {
             setReqError("Fill in all form fields");
         }
 
@@ -327,40 +327,8 @@ function NewUser({ closeWindow, item, option, id, showToastMessage, setReload })
             setReqError("Description too Short");
         }
 
-        else if (password.length < 8) {
-            setReqError("Password too Short");
-        }
-
-        else if (confirmPassword.length < 8) {
-            setReqError("Password Confirm too Short");
-        }
-
         else if (!birthRegex.test(birthDate)) {
             setReqError("Birth Date Format Incorret");
-        }
-
-        else if (!passRegex1.test(password)) {
-            setReqError("The password must contain at least one lowercase letter");
-        }
-
-        else if (!passRegex2.test(password)) {
-            setReqError("The password must contain at least one uppercase letter");
-        }
-
-        else if (!passRegex3.test(password)) {
-            setReqError("The password must contain at least one number");
-        }
-
-        else if (!passRegex4.test(password)) {
-            setReqError("The password must contain at least one special symbol");
-        }
-
-        else if (password != confirmPassword) {
-            setReqError("Passwords don't match");
-        }
-
-        else if (picture == "") {
-            setReqError("Please Insert a Profile Image");
         }
 
         else {
@@ -380,6 +348,37 @@ function NewUser({ closeWindow, item, option, id, showToastMessage, setReload })
 
             formData.append("adminLevel", permission);
 
+            if (password != undefined && password != "") {
+                if (password.length < 8) {
+                    return setReqError("Password too Short");
+                }
+
+                if (confirmPassword.length < 8) {
+                    return setReqError("Password Confirm too Short");
+                }
+                if (!passRegex1.test(password)) {
+                    return setReqError("The password must contain at least one lowercase letter");
+                }
+
+                if (!passRegex2.test(password)) {
+                    return setReqError("The password must contain at least one uppercase letter");
+                }
+
+                if (!passRegex3.test(password)) {
+                    return setReqError("The password must contain at least one number");
+                }
+
+                if (!passRegex4.test(password)) {
+                    return setReqError("The password must contain at least one special symbol");
+                }
+
+                if (password != confirmPassword) {
+                    return setReqError("Passwords don't match");
+                }
+
+            }
+
+
             axios.put(`${apiUrl}:${apiPort}/user/update/${item._id}`, formData, {
                 headers
             })
@@ -392,7 +391,7 @@ function NewUser({ closeWindow, item, option, id, showToastMessage, setReload })
                 })
                 .catch((err) => {
                     console.log(err);
-                    setReqError(err.response.data.error);
+                    setReqError(err.response.data.msg);
                 })
         }
     }

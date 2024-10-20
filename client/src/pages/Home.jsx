@@ -12,6 +12,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { IoMdArrowDropdown } from "react-icons/io";
 import DefaultView from '../components/DefaultView';
 import NotificationItem from "../assets/images/notification_item.png";
+import { MdCategory, MdProductionQuantityLimits, } from "react-icons/md";
+import { FaBoxOpen, FaUser, FaCoins } from "react-icons/fa";
+import { GoLog } from "react-icons/go";
 import { useNavigate, useParams } from 'react-router-dom';
 import { logout } from "../state/User/UserSlice.js";
 import Dashboard from "../components/sections/Dashboard.jsx";
@@ -32,6 +35,7 @@ import CreateSupplier from '../components/cards/CreateSupplier.jsx';
 import CreateCategory from '../components/cards/CreateCategory.jsx';
 import NewUser from '../components/cards/NewUser.jsx';
 import RemoveItem from '../components/cards/RemoveItem.jsx';
+import axios from 'axios';
 
 function Home({ showToastMessage }) {
 
@@ -55,11 +59,21 @@ function Home({ showToastMessage }) {
     const [itemInfo, setItemInfo] = useState({ item: '', option: -1, id: 0 });
     const [updateTrigger, setUpdateTrigger] = useState(false);
 
+    const [notifications, setNotifications] = useState([]);
+    const [notificationsPage, setNotificationsPage] = useState(1);
+    const [notificationsLimit, setNotificationsLimit] = useState(7);
+    const notificationsScrollDiv = useRef(null); // Referência para a div
+    const [hasMoreNotifications, setHasMoreNotifications] = useState(true); // Controle de mais dados
+    const [isLoadingNotifications, setIsLoadingNotifications] = useState(false);
+
+
+
     const dispatch = useDispatch();
     const apiUrl = useSelector((state) => state.MiscReducer.apiUrl);
     const apiPort = useSelector((state) => state.MiscReducer.apiPort);
 
     const userInfo = useSelector((state) => state.UserReducer.user);
+    const tokenInfo = useSelector((state) => state.UserReducer.token);
 
     const navigate = useNavigate();
 
@@ -486,6 +500,99 @@ function Home({ showToastMessage }) {
         navigate('/')
     }
 
+    const formattDate = (date) => {
+        const creationDate = new Date(date).getTime();
+        const currentDate = new Date().getTime();
+
+        const createadAt = new Date(date);
+
+        const diffInMs = currentDate - creationDate;
+
+        const diffInSec = Math.floor(diffInMs / (1000));
+        const diffInMinutes = Math.floor(diffInMs / (1000 * 60));
+        const hours = Math.floor(diffInMinutes / 60);
+        const minutes = diffInMinutes % 60;
+
+        const year = createadAt.getFullYear();
+        const month = String(createadAt.getMonth() + 1).padStart(2, '0'); // `getMonth()` retorna de 0 a 11, então adicionamos 1
+        const day = String(createadAt.getDate()).padStart(2, '0');
+
+        if (diffInSec > 60) {
+            if (diffInMinutes > 60) {
+                if (hours > 24) {
+                    return `${year}-${month}-${day}`;
+                } else {
+                    return `${hours} hours ago.`;
+                }
+            } else {
+                return `${diffInMinutes} min ago.`;
+            }
+        } else {
+            return `${diffInSec} sec ago.`;
+        }
+    }
+
+    const handleGetNotifications = (page = notificationsPage) => {
+
+        if (!hasMoreNotifications || isLoadingNotifications) return;
+
+        setIsLoadingNotifications(true);
+
+
+        const headers = {
+            'Authorization': `Bearer ${tokenInfo}`
+        }
+
+        const filteringObj = {
+            page,
+            limit: notificationsLimit
+        }
+
+        const url = new URL(`${apiUrl}:${apiPort}/log/notifications`);
+        url.search = new URLSearchParams(filteringObj)
+
+        axios.get(`${url}`, ({
+            headers
+        })).then(data => {
+
+            const newNotifications = data.data.notificationsData;
+
+            if (newNotifications.length > 0) {
+
+                console.log(newNotifications);
+
+                setNotifications(prevItems => {
+                    const uniqueItems = data.data.notificationsData.filter(item =>
+                        !prevItems.some(prev => prev._id === item._id)
+                    );
+                    return [...prevItems, ...uniqueItems];
+                })
+            } else {
+                setHasMoreNotifications(false);
+
+            }
+
+        }).catch((err) => {
+            console.log(err);
+        }).finally(() => {
+            setIsLoadingNotifications(false); // Finaliza o carregamento
+        })
+    }
+
+    const handleScrollNotifications = () => {
+        if (notificationsScrollDiv.current) {
+            const { scrollTop, scrollHeight, clientHeight } = notificationsScrollDiv.current;
+            if (scrollTop + clientHeight >= scrollHeight) {
+                // Quando o scroll atinge o fim da div, carrega mais itens
+                setNotificationsPage(prevPage => prevPage + 1);
+            }
+        }
+    };
+
+    useEffect(() => {
+        handleGetNotifications(notificationsPage)
+    }, [notificationsPage]);
+
     useEffect(() => {
 
         if (innerWidth <= 600) {
@@ -503,6 +610,10 @@ function Home({ showToastMessage }) {
             };
         }
     }, [])
+
+    useEffect(() => {
+        handleGetNotifications(1);
+    }, [updateTrigger])
 
     return (
         <>
@@ -581,37 +692,40 @@ function Home({ showToastMessage }) {
                                 <div className={`sidebar__moreoptions moreoptions__admin ${(sectionDisplay == "admin" ? "moreoptions__admin--open" : "")}`}>
                                     <span className={`admin__option admin__option1 ${subSectionDisplay == "users" ? "moreoptions__option--open" : ""} ${sectionDisplay == "admin" ? "admin__option1--open admin__option1--open2" : ""}`} onClick={() => handleChangeSection(7)}>Users</span>
                                     <span className={`admin__option admin__option2 ${subSectionDisplay == "log" ? "moreoptions__option--open" : ""} ${sectionDisplay == "admin" ? "admin__option2--open admin__option2--open2" : ""}`} onClick={() => handleChangeSection(8)}>Activities Log</span>
-                                    <span className={`admin__option admin__option3 ${subSectionDisplay == "details" ? "moreoptions__option--open" : ""} ${sectionDisplay == "admin" ? "admin__option3--open admin__option3--open2" : ""}`} onClick={() => handleChangeSection(9)}>Edit Details</span>
+                                    {/* <span className={`admin__option admin__option3 ${subSectionDisplay == "details" ? "moreoptions__option--open" : ""} ${sectionDisplay == "admin" ? "admin__option3--open admin__option3--open2" : ""}`} onClick={() => handleChangeSection(9)}>Edit Details</span> */}
                                 </div>
                             </>
                         )}
                         <p className="credits" >Created By <a href="https://github.com/Alan-Tomaz" target='_blank'>Alan Tomaz</a></p>
                     </aside>
                     <nav className='home__navbar' >
-                        <div className="navbar__search" style={{ visibility: showSearchInput == true ? "visible" : "hidden", opacity: showSearchInput == true ? "1" : "0" }}>
+                        {/* <div className="navbar__search" style={{ visibility: showSearchInput == true ? "visible" : "hidden", opacity: showSearchInput == true ? "1" : "0" }}>
                             <input type="text" name="" id="" placeholder='Search:' className="input__search" />
-                        </div>
+                        </div> */}
                         <div className="navbar__content">
-                            <FaSearch className='navbar__icons ' onClick={handleShowSearchInput} />
+                            {/* <FaSearch className='navbar__icons ' onClick={handleShowSearchInput} /> */}
                             <div className="navbar__notification" ref={notificationRef}>
                                 <IoIosNotifications className='navbar__icons notification__icon' onClick={handleShowNotifications} />
                                 <div className="notification__circle"></div>
-                                <div className="notification__container" style={{ display: showNavbarNotifications == true ? "flex" : "none" }}>
-                                    <div className="notification__item" >
-                                        <img src={NotificationItem} alt="notification_item_img" className='notification__img' />
-                                        <h3 className="notification__name">Example</h3>
-                                        <span className="notification__time">3 min ago.</span>
-                                    </div>
-                                    <div className="notification__item" >
-                                        <img src={NotificationItem} alt="notification_item_img" className='notification__img' />
-                                        <h3 className="notification__name">Example</h3>
-                                        <span className="notification__time">3 min ago.</span>
-                                    </div>
-                                    <div className="notification__item" >
-                                        <img src={NotificationItem} alt="notification_item_img" className='notification__img' />
-                                        <h3 className="notification__name">Example</h3>
-                                        <span className="notification__time">3 min ago.</span>
-                                    </div>
+                                {/*                                 <IoMdArrowDropup className='notification__arrow' />
+ */}                                <div className="notification__container" style={{ display: showNavbarNotifications == true ? "flex" : "none" }} ref={notificationsScrollDiv} onScroll={handleScrollNotifications}>
+                                    {notifications.length > 0 ?
+                                        <>
+                                            {notifications.map(notification => (
+                                                <div className="notification__item" >
+                                                    <div className="notification__img-box">
+                                                        <span>
+                                                            {notification.type == "category" ? <MdCategory className='notification__img' /> : notification.type == "supplier" ? <FaBoxOpen className='notification__img' /> : notification.type == "product" ? <MdProductionQuantityLimits className='notification__img' /> : notification.type == "order" ? <FaCoins className='notification__img' /> : notification.type == "user" ? <FaUser className='notification__img' /> : notification.type == "log" ? <GoLog className='notification__img' /> : ""}
+                                                        </span>
+                                                    </div>
+                                                    <h3 className="notification__name">{notification.notification}</h3>
+                                                    <span className="notification__time">{formattDate(notification.createdAt)}</span>
+                                                </div>
+                                            ))}
+                                        </>
+                                        :
+                                        <span className='notifications-alert'>No Notifications</span>
+                                    }
                                 </div>
                             </div>
                             <div className="navbar__profile" onClick={handleShowProfileOptions} ref={profileRef}>
@@ -624,7 +738,7 @@ function Home({ showToastMessage }) {
                                     <IoMdArrowDropup className='profile__arrow' style={{ display: showNavbarOptions == true ? "flex" : "none" }} />
                                 </div>
                                 <div className="profile__options" style={{ display: showNavbarOptions == true ? "flex" : "none" }}>
-                                    <span className="profile__option profile__inventories" onClick={() => setShowModal('edit-inventories')} >Inventories</span>
+                                    {/* <span className="profile__option profile__inventories" onClick={() => setShowModal('edit-inventories')} >Inventories</span> */}
                                     <span className="profile__option profile__edit" onClick={() => setShowModal('edit-profile')}>Edit Profile</span>
                                     <span className="profile__option profile__logout" onClick={logoutUser}>Logout</span>
                                     <IoMdArrowDropup className='profile__option__arrow' />

@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 import fs from "fs";
+import { createLogMiddleware } from "./log.js";
 
 /* REGISTER USER */
 export const register = async (req, res) => {
@@ -125,13 +126,22 @@ export const register = async (req, res) => {
             const userFinded = await User.findOne({ email: email });
 
             if (userFinded) {
-                res.status(401).json({ status: 401, msg: "User Already Exists" });
                 /* DELETE THE UPLOADED FILE */
                 fs.unlink(filePath, (err) => { if (err) { console.log(err) } else { console.log("File is Deleted") } });
+                res.status(401).json({ status: 401, msg: "User Already Exists" });
             } else {
+
                 const savedUser = await newUser.save()
+
+                req.body.type = "register";
+                req.body.info = savedUser;
+
                 console.log(savedUser);
                 res.status(201).json({ status: 201 });
+
+                setTimeout(() => {
+                    createLogMiddleware(req);
+                }, 0);
             }
         }
     }

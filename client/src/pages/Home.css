@@ -257,6 +257,7 @@
 
 .navbar__notification {
     position: relative;
+    z-index: 100;
 }
 
 .navbar__icons {
@@ -283,26 +284,43 @@
     border-radius: 100%;
 }
 
+.notification__arrow {
+    position: absolute;
+    top: 20px;
+    left: -12px;
+    color: #f3f3f3;
+    font-size: 3rem;
+    z-index: 1000;
+}
+
 .notification__container {
     display: none;
     position: absolute;
     flex-direction: column;
-    top: 25px;
+    top: 45px;
     z-index: 10;
     right: -100px;
-    height: 300px;
-    width: 250px;
+    height: fit-content;
+    max-height: 300px;
+    width: 300px;
     background-color: var(--box-color);
-    border-radius: 1rem;
-    box-shadow: 3px 3px 3px rgba(0, 0, 0, .2);
+    border-radius: .5rem;
+    box-shadow: 0px 0px 3px rgba(0, 0, 0, .2);
+    overflow-y: auto;
 }
 
 .notification__item {
     width: 100%;
+    height: 70px;
     display: flex;
     align-items: center;
-    padding: .4rem;
+    padding: .4rem .8rem;
     gap: 1rem;
+}
+
+.notifications-alert {
+    padding: 1rem 0;
+    text-align: center;
 }
 
 .notification__img {
@@ -315,9 +333,31 @@
 }
 
 .notification__time {
+    width: 60px;
+    min-width: 60px;
+    text-align: right;
     align-self: flex-end;
     margin: 0 0 0 auto;
     font-size: .6rem;
+}
+
+.notification__img-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+    background-color: var(--color-primary);
+    color: white;
+    font-size: 1rem;
+    border-radius: 5px;
+}
+
+.notification__img {
+    width: 25px;
+    height: 25px;
 }
 
 .notification__item:not(:last-child) {
@@ -337,6 +377,7 @@
     gap: .2rem;
     align-items: center;
     justify-content: center;
+    min-width: 150px;
 }
 
 .profile__name {
@@ -633,8 +674,32 @@
         /* padding-left: 200px; */
     }
 
+    .notification__time {
+        width: 80px;
+        text-align: right;
+    }
+
+    .notification__item {
+        gap: .8rem;
+        padding: .5rem;
+    }
+
+    .notification__img-box {
+        width: 35px;
+        height: 35px;
+        min-height: 35px;
+        min-width: 35px;
+    }
+
+    .notification__img {
+        width: 20px;
+        height: 20px;
+    }
+
     .notification__container {
-        width: 200px;
+        top: 30px;
+        border-radius: 5px;
+        width: 250px;
         right: -20px;
         height: 200px;
         overflow-y: auto;
