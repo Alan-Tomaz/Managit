@@ -8,6 +8,7 @@ import supplierRoutes from './routes/supplier.js';
 import productRoutes from './routes/product.js';
 import orderRoutes from './routes/order.js';
 import userRoutes from './routes/user.js';
+import logRoutes from './routes/log.js';
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -34,6 +35,7 @@ app.use('/supplier', supplierRoutes);
 app.use('/product', productRoutes);
 app.use('/order', orderRoutes);
 app.use('/user', userRoutes);
+app.use('/log', logRoutes);
 
 /* MONGOOSE SETUP */
 /* Server PORT */

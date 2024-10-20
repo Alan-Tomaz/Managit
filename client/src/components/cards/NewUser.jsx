@@ -3,7 +3,6 @@ import { FaEye, FaEyeSlash, FaRegEdit } from 'react-icons/fa';
 import { IoClose } from 'react-icons/io5';
 import { MdEditSquare } from "react-icons/md";
 import Loading from '../../assets/images/loading.svg';
-import LoadingWhite from '../../assets/images/loading-white.svg';
 import { US, BR } from "country-flag-icons/react/3x2";
 import UserImg from '../../assets/images/user.png';
 import './EditProfile.css';
@@ -28,28 +27,29 @@ function NewUser({ closeWindow, item, option, id, showToastMessage, setReload })
     const [showConfirmPasswordButton, setShowConfirmPasswordButton] = useState(false);
     const [isCountryListOpen, setIsCountryListOpen] = useState(false);
     const [passwordType, setPasswordType] = useState('password');
-    const [countryCode, setCountryCode] = useState(1);
+    const [countryCode, setCountryCode] = useState(item ? Number(item.phoneNumber.split(" ")[0].slice(1)) : 1);
     const [countries, setCountries] = useState([<li key={1} id='newuser__country-item-1' className='register__input__contry-item newuser__input__contry-item' onClick={() => handleChangeCountry(1)}><div className="register__input__contry-img newuser__input__contry-img"><US className='register__input__country-flag newuser__input__country-flag' /><span className='register__input__country-text newuser__input__country-text' id='newuser__country-1'>United States</span></div><span className='register__input__country-text newuser__input__country-text'>+1</span></li>, <li key={2} className='register__input__contry-item newuser__input__contry-item' id='newuser__country-item-2' onClick={() => handleChangeCountry(55)}><div className="register__input__contry-img newuser__input__contry-img"><BR className='register__input__country-flag newuser__input__country-flag' /><span className='register__input__country-text newuser__input__country-text' id='newuser__country-2'>Brazil</span></div><span className='register__input__country-text newuser__input__country-text'>+55</span></li>]);
     const [confirmPasswordType, setConfirmPasswordType] = useState('password');
     const [birthInputType, setBirthInputType] = useState('text');
     const [picturePath, setPicturePath] = useState(option == 1 ? item.picturePath : '');
-    const [picture, setPicture] = useState()
+    const [picture, setPicture] = useState("")
     const [picturePreview, setPicturePreview] = useState(picturePath != '' ? `${apiUrl}:${apiPort}/assets/${picturePath}` : UserImg);
-    const [permission, setPermission] = useState(-1);
+    const [permission, setPermission] = useState(item ? item.adminLevel : -1);
     const [showPermissions, setShowPermissions] = useState(false);
-    const [blocked, setBlocked] = useState(-1);
+    const [blocked, setBlocked] = useState(item ? item.blocked : -1);
     const [showBlockedList, setShowBlockedList] = useState(false);
     const [reqError, setReqError] = useState("");
 
+    const date = new Date(item ? item.birthDate : '');
 
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [phoneNumber, setPhoneNumber] = useState('');
-    const [birthDate, setBirthDate] = useState('');
-    const [location, setLocation] = useState('');
-    const [description, setDescription] = useState('');
+    const [name, setName] = useState(item ? item.name : "");
+    const [email, setEmail] = useState(item ? item.email : "");
+    const [phoneNumber, setPhoneNumber] = useState(item ? item.phoneNumber.slice(4) : "");
+    const [birthDate, setBirthDate] = useState(item ? `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}` : "");
+    const [location, setLocation] = useState(item ? item.location : "");
+    const [description, setDescription] = useState(item ? item.description : "");
     const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState();
 
     const handleChangeDateInput = (e, type) => {
         const input = e.target;
@@ -267,8 +267,6 @@ function NewUser({ closeWindow, item, option, id, showToastMessage, setReload })
 
             formData.append("adminLevel", permission);
 
-            formData.append("userId", userInfo.user._id);
-
             axios.post(`${apiUrl}:${apiPort}/user/add`, formData, {
                 headers
             })
@@ -276,6 +274,119 @@ function NewUser({ closeWindow, item, option, id, showToastMessage, setReload })
 
                     console.log(data);
                     showToastMessage('success', 'User Created Successfully');
+                    setReload();
+                    closeWindow();
+                })
+                .catch((err) => {
+                    console.log(err);
+                    setReqError(err.response.data.error);
+                })
+        }
+    }
+
+    const handleUpdateUser = (values) => {
+        setReqError(<img src={Loading} />);
+
+        const birthRegex = new RegExp('^\\d{4}(-)(((0)[0-9])|((1)[0-2]))(-)([0-2^([0-2][0-9]|(3)[0-1])$');
+
+        /* USA FORMAT */
+        const phoneRegex1 = new RegExp('\\(?([0-9]{3})\\)?([ .-]?)([0-9]{3})-([0-9]{4})');
+        /* BRAZIL FORMAT */
+        const phoneRegex2 = new RegExp('\\(?([0-9]{2})\\)?([ .-]?)9?([ .-]?)([0-9]{4})([ .-]?)([0-9]{4})');
+
+        const passRegex1 = new RegExp('[a-z]', 'g');
+        const passRegex2 = new RegExp('[A-Z]', 'g');
+        const passRegex3 = new RegExp('[0-9]', 'g');
+        const passRegex4 = new RegExp('[^A-Za-z0-9]', 'g');
+
+        const emailRegex = new RegExp('^(([^<>()[\\]\\\\.,;:\\s@\\"]+(\\.[^<>()[\\]\\\\.,;:\\s@\\"]+)*)|(\\".+\\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$');
+
+        /* FORM VALIDATION */
+
+        if ((name == "" || name == undefined) || (email == "" || email == undefined) || (phoneNumber == "" || phoneNumber == undefined) || (birthDate == "" || birthDate == undefined) || (location == "" || location == undefined) || (description == "" || description == undefined) || (password == "" || password == undefined) || (confirmPassword == "" || confirmPassword == undefined) || (permission === "" || permission == undefined) || (blocked === "" || blocked == undefined)) {
+            setReqError("Fill in all form fields");
+        }
+
+        else if (!emailRegex.test(email)) {
+            setReqError("Invalid email");
+        }
+
+        else if (!phoneRegex1.test(phoneNumber) && !phoneRegex2.test(phoneNumber)) {
+            setReqError("Incorret Phone Number");
+        }
+
+        else if (name.length > 15) {
+            setReqError("Name too Large");
+        }
+
+        else if (location.length < 8) {
+            setReqError("Location too Short");
+        }
+
+        else if (description.length < 8) {
+            setReqError("Description too Short");
+        }
+
+        else if (password.length < 8) {
+            setReqError("Password too Short");
+        }
+
+        else if (confirmPassword.length < 8) {
+            setReqError("Password Confirm too Short");
+        }
+
+        else if (!birthRegex.test(birthDate)) {
+            setReqError("Birth Date Format Incorret");
+        }
+
+        else if (!passRegex1.test(password)) {
+            setReqError("The password must contain at least one lowercase letter");
+        }
+
+        else if (!passRegex2.test(password)) {
+            setReqError("The password must contain at least one uppercase letter");
+        }
+
+        else if (!passRegex3.test(password)) {
+            setReqError("The password must contain at least one number");
+        }
+
+        else if (!passRegex4.test(password)) {
+            setReqError("The password must contain at least one special symbol");
+        }
+
+        else if (password != confirmPassword) {
+            setReqError("Passwords don't match");
+        }
+
+        else if (picture == "") {
+            setReqError("Please Insert a Profile Image");
+        }
+
+        else {
+
+            const headers = {
+                'Authorization': `Bearer ${userInfo.token}`
+            }
+
+            // this allows us to send form info with image
+            const formData = new FormData();
+            for (let value in values) {
+                formData.append(value, values[value]);
+            }
+
+            /* SEND COUNTRY CODE FOR PHONE NUMBER */
+            formData.append("countryCode", countryCode);
+
+            formData.append("adminLevel", permission);
+
+            axios.put(`${apiUrl}:${apiPort}/user/update/${item._id}`, formData, {
+                headers
+            })
+                .then((data) => {
+
+                    console.log(data);
+                    showToastMessage('success', 'User Updated Successfully');
                     setReload();
                     closeWindow();
                 })
@@ -319,7 +430,7 @@ function NewUser({ closeWindow, item, option, id, showToastMessage, setReload })
             <div className="edit-profile__close-window">
                 <IoClose onClick={closeWindow} />
             </div>
-            <h2 className='edit-profile__title new-user__title'>New User</h2>
+            <h2 className='edit-profile__title new-user__title'>{option == 0 ? "New" : option == 1 ? "Update" : ""} User</h2>
             <div className="editprofile__imgbox__container">
                 <div className="editprofile__imgbox newuser__imgbox">
                     <img className='editprofile__img newuser__img' src={picturePreview} alt="profile_img" />
@@ -356,7 +467,7 @@ function NewUser({ closeWindow, item, option, id, showToastMessage, setReload })
                         <input type="text" name="editprofile__email" id="editprofile__email" className="editprofile__input newuser__input editprofile__email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder='Email:' />
                     </div>
                     <div className="editprofile__inputbox ">
-                        <input type={birthInputType} name="editprofile__birthdate" id="editprofile__birthdate" className="editprofile__input newuser__input editprofile__birthdate" placeholder='Birth Date:' onChange={(e) => setBirthDate(e.target.value)} onClick={(e) => handleChangeDateInput(e, 'focus')} onBlur={(e) => handleChangeDateInput(e, 'blur')} onDoubleClick={(e) => handleChangeDateInput(e, 'double_click')} />
+                        <input type={birthInputType} name="editprofile__birthdate" id="editprofile__birthdate" className="editprofile__input newuser__input editprofile__birthdate" placeholder='Birth Date:' onChange={(e) => setBirthDate(e.target.value)} onClick={(e) => handleChangeDateInput(e, 'focus')} onBlur={(e) => handleChangeDateInput(e, 'blur')} onDoubleClick={(e) => handleChangeDateInput(e, 'double_click')} value={birthDate} />
                     </div>
                 </div>
                 <div className="editprofile__inputbox edit-profile__inputbox__location">
@@ -412,7 +523,7 @@ function NewUser({ closeWindow, item, option, id, showToastMessage, setReload })
             <div className="create-products__error">
                 {reqError == '' ? '' : reqError}
             </div>
-            <button className="button  newuser__button" onClick={() => handleCreateUser({ name, email, phoneNumber, password, confirmPassword, location, description, blocked, birthDate, picture })}>Create User</button>
+            <button className="button  newuser__button" onClick={() => option == 0 ? handleCreateUser({ name, email, phoneNumber, password, confirmPassword, location, description, blocked, birthDate, picture }) : option == 1 ? handleUpdateUser({ name, email, phoneNumber, password, confirmPassword, location, description, blocked, birthDate, picture }) : ""}>{option == 0 ? "New" : option == 1 ? "Update" : ""} User</button>
         </div >
     )
 }

@@ -26,8 +26,20 @@ export const checkAdminPermission = async (req, res, next) => {
     try {
 
         const filePath = `./public/assets/${req.body.picturePath}`;
+        let token = req.header('Authorization')
 
-        const userId = req.body.userId ? req.body.userId : req.params.userId;
+        if (!token) {
+            fs.unlink(filePath, (err) => { if (err) { console.log(err) } else { console.log("File is Deleted") } });
+            return res.status(403).send("Access Denied");
+        }
+
+        if (token.startsWith("Bearer ")) {
+            token = token.slice(7, token.length).trimLeft();
+        }
+
+        const decoded = jwt.decode(token);
+
+        const userId = decoded.id
         if (!userId) {
             fs.unlink(filePath, (err) => { if (err) { console.log(err) } else { console.log("File is Deleted") } });
             return res.status(401).json({ error: "User Id Not Received" });
@@ -39,6 +51,7 @@ export const checkAdminPermission = async (req, res, next) => {
                 return res.status(401).json({ error: "User Not Authorized" });
             }
             else {
+                req.body.userId = userId;
                 next();
             }
         }

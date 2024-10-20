@@ -513,7 +513,7 @@ function Home({ showToastMessage }) {
                             <NewOrder closeWindow={() => setShowModal('')} item={itemInfo.item} option={itemInfo.option} id={itemInfo.id} orderTypeParam={itemInfo.orderTypeParam} showToastMessage={showToastMessage} setReload={triggerUpdate} handleOpenWindow={handleCreateItem} />
                         }
                         {showModal == 'edit-profile' &&
-                            <EditProfile closeWindow={() => setShowModal('')} />
+                            <EditProfile closeWindow={() => setShowModal('')} showToastMessage={showToastMessage} />
                         }
                         {showModal == 'edit-inventories' &&
                             <EditInventories closeWindow={() => setShowModal('')} />

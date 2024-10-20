@@ -491,7 +491,7 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
             limit: limit
         }
 
-        const url = new URL(`${apiUrl}:${apiPort}/user/${userInfo.user._id}`);
+        const url = new URL(`${apiUrl}:${apiPort}/user/`);
         url.search = new URLSearchParams(filteringObj)
 
         axios.get(`${url}`, ({
@@ -540,6 +540,9 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                 break;
             case 5:
                 handleRemoveItem(itemsToDelete, 13, idsToDelete);
+                break;
+            case 6:
+                handleRemoveItem(itemsToDelete, 14, idsToDelete);
                 break;
         }
     }
@@ -2898,8 +2901,8 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                                                                             <div></div>
                                                                         }
                                                                         <div className="stockitem__productoptions">
-                                                                            <div className="stockitem__productremove" onClick={() => handleOpenWindow('create-products', item, 1, item._id)}><MdModeEditOutline /></div>
-                                                                            <div className="stockitem__productremove" onClick={() => handleRemoveItem(item, 1, item._id)}><MdRemove /></div>
+                                                                            <div className="stockitem__productremove" onClick={() => handleOpenWindow('new-user', item, 1, item._id)}><MdModeEditOutline /></div>
+                                                                            <div className="stockitem__productremove" onClick={() => handleRemoveItem(item, 6, item._id)}><MdRemove /></div>
                                                                         </div>
                                                                     </div>
                                                                 }

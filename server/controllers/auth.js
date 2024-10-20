@@ -157,6 +157,10 @@ export const login = async (req, res) => {
             return res.status(401).json({ status: 401, msg: "Invalid Credentials" });
         }
 
+        if (user.blocked == true) {
+            return res.status(401).json({ status: 401, msg: "User Blocked" });
+        }
+
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
         delete user.password;
         res.status(201).json({ status: 201, user, token });
