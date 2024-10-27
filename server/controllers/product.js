@@ -95,9 +95,11 @@ export const createProduct = async (req, res) => {
 export const getProducts = async (req, res) => {
     try {
 
-        const { page = 1, limit = 10, search, categories } = req.query;
+        const { page = 1, limit = 10, search, order = 1 } = req.query;
 
         const filters = {};
+
+        const sortProducts = order == 0 ? { stock: -1 } : order == 1 ? { productName: 1 } : {};
 
         if (search) {
             filters.productName = { ...filters.productName, $regex: search, $options: 'i' };
@@ -106,7 +108,7 @@ export const getProducts = async (req, res) => {
         const productsData = await Product.find(filters)
             .populate('productCategory')
             .populate('productSupplier')
-            .sort({ productName: 1 })
+            .sort(sortProducts)
             .skip((page - 1) * limit)
             .limit(parseInt(limit));
 

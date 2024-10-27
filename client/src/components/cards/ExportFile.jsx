@@ -51,19 +51,24 @@ export const exportToExcel = (data, option) => {
         productName: "Product Name",
         categoryName: "Category",
         supplierName: "Supplier",
+        productSupplier: "Supplier",
+        productCategory: "Category",
         orderSupplier: "Supplier",
-        code: "Code",
+        qnt: "Quantity",
+        stock: "Quantity",
         quantity: "Quantity",
         sellPrice: "Sell Price",
         buyPrice: "Buy Price",
         date: "Date",
-        order: "Order",
-        productSupplier: "Supplier",
-        productCategory: "Category"
+        order: "Order"
     };
 
-    if (option == 1) {
-        columnMapping._id = "Code";
+    if (option == 0) {
+        columnMapping.status = "Status"
+    }
+
+    if (option <= 3) {
+        delete columnMapping.createdAt
     }
 
     if (option == 4) {

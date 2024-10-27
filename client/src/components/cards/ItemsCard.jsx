@@ -8,7 +8,7 @@ import { IoIosArrowBack } from "react-icons/io";
 import { IoIosArrowForward } from "react-icons/io";
 import { HiOutlineXMark } from "react-icons/hi2";
 import Tshirt from "../../assets/images/t-shirt.png";
-import { MdRemove } from "react-icons/md";
+import { MdAdd, MdRemove } from "react-icons/md";
 import { MdArrowDropUp } from "react-icons/md";
 import { IoMdArrowDropup } from "react-icons/io";
 import { MdModeEditOutline } from "react-icons/md";
@@ -40,18 +40,18 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
             permission: option == 6 ? true : false,
             creationDate: option == 4 ? true : option == 5 ? true : option == 6 ? true : false,
             blocked: option == 6 ? true : false,
-            productName: option == 1 ? true : option == 0 ? true : false,
-            category: option == 1 ? true : option == 0 ? true : option == 2 ? true : false,
+            productName: option == 1 ? true : option === 0 ? true : false,
+            category: option == 1 ? true : option === 0 ? true : option == 2 ? true : false,
             supplier: option == 1 ? true : option == 3 ? true : option == 4 ? true : option == 5 ? true : false,
-            code: option == 0 ? true : option == 1 ? true : false,
-            quantity: option == 0 ? true : false,
+            code: false,
+            quantity: option === 0 ? true : false,
             sellPrice: option == 1 ? true : option == 5 ? true : false,
             buyPrice: option == 4 ? true : false,
-            price: option == 0 ? true : false,
+            price: option === 0 ? true : false,
             date: option == 7 ? true : false,
             description: option != 6 ? true : false,
             buttons: option == 6 ? true : option == 7 ? true : false,
-            status: option == 1 ? true : false,
+            status: option === 0 ? true : false,
             order: option == 4 ? true : option == 5 ? true : false,
             delete: option == 7 ? false : true,
         },
@@ -90,8 +90,8 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
         category: [],
         supplier: [],
         blocked: -1,
-        option0: 'min-content 65px 200px 100px 100px 80px 100px 1fr 100px',
-        option1: 'min-content 65px 200px 100px 100px 100px 1fr 100px 100px',
+        option0: '65px 200px 100px 100px 100px 1fr 120px 100px',
+        option1: 'min-content 65px 200px 100px 100px 100px 1fr 100px',
         option2: 'min-content 250px 1fr 100px',
         option3: 'min-content 250px 1fr 100px',
         option4: 'min-content 150px 150px 100px 100px 1fr 120px 100px',
@@ -104,7 +104,7 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
     const [renderFilter, setRenderFilter] = useState({ ...initialFilterObj })
     const [showFilterOptions, setShowFilterOptions] = useState(false);
     const [showButtonMoreOptions, setShowButtonMoreOptions] = useState(false);
-    const [filterOptionsGrid, setFilterOptionsGrid] = useState(option == 0 ? renderFilter.option0 : option == 1 ? renderFilter.option1 : option == 2 ? renderFilter.option2 : option == 3 ? renderFilter.option3 : option == 4 ? renderFilter.option4 : option == 5 ? renderFilter.option5 : option == 6 ? renderFilter.option6 : option == 7 ? renderFilter.option7 : 0)
+    const [filterOptionsGrid, setFilterOptionsGrid] = useState(option === 0 ? renderFilter.option0 : option == 1 ? renderFilter.option1 : option == 2 ? renderFilter.option2 : option == 3 ? renderFilter.option3 : option == 4 ? renderFilter.option4 : option == 5 ? renderFilter.option5 : option == 6 ? renderFilter.option6 : option == 7 ? renderFilter.option7 : 0)
     const [chooseSelection, setChooseSelection] = useState('columns');
     const [isAllItemsSelected, setIsAllItemsSelected] = useState(false);
     const [isHidingSupplier, setIsHiddingSupplier] = useState(renderFilter.supplier.some(item => item.isShow == false));
@@ -277,7 +277,8 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
         const filteringObj = {
             search: searchParam == undefined ? filter.search : searchParam,
             page: page,
-            limit: limit
+            limit: limit,
+            order: option
         }
 
 
@@ -374,6 +375,7 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                 setItems(requestedItems);
                 setTotalItems(data.data.totalProducts);
                 setMaxSellPrice(getMaxValue(requestedItems, 'sellPrice'))
+                setMaxQnt(getMaxValue(requestedItems, 'stock'))
                 setLoading('')
                 setTotalPages(Math.ceil(data.data.totalProducts / limit));
             })
@@ -564,6 +566,9 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
         const idsToDelete = itemsToDelete.map((item) => item._id);
 
         switch (option) {
+            case 0:
+                handleRemoveItem(itemsToDelete, 8, idsToDelete);
+                break;
             case 1:
                 handleRemoveItem(itemsToDelete, 9, idsToDelete);
                 break;
@@ -687,22 +692,19 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
         if ((option == 6) && filter.columns.blocked == false) {
             updatedFilteringColumn.push('blocked');
         }
-        if ((option == 0 || option == 1) && filter.columns.productName == false) {
+        if ((option === 0 || option == 1) && filter.columns.productName == false) {
             updatedFilteringColumn.push('product-name');
         }
-        if ((option == 0 || option == 1 || option == 2) && filter.columns.category == false) {
+        if ((option === 0 || option == 1 || option == 2) && filter.columns.category == false) {
             updatedFilteringColumn.push('category');
         }
         if ((option == 1 || option == 3 || option == 4 || option == 5) && filter.columns.supplier == false) {
             updatedFilteringColumn.push('supplier');
         }
-        if ((option == 0 || option == 1) && filter.columns.code == false) {
-            updatedFilteringColumn.push('code');
-        }
-        if ((option == 0) && filter.columns.quantity == false) {
+        if ((option === 0) && filter.columns.quantity == false) {
             updatedFilteringColumn.push('quantity');
         }
-        if ((option == 0) && filter.columns.price == false) {
+        if ((option === 0) && filter.columns.price == false) {
             updatedFilteringColumn.push('price');
         }
         if ((option == 1 || option == 5) && filter.columns.sellPrice == false) {
@@ -717,7 +719,7 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
         if ((option != 6) && filter.columns.description == false) {
             updatedFilteringColumn.push('description');
         }
-        if ((option == 1) && filter.columns.status == false) {
+        if ((option === 0) && filter.columns.status == false) {
             updatedFilteringColumn.push('status');
         }
         if ((option == 4 || option == 5) && filter.columns.order == false) {
@@ -733,7 +735,7 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
     }
 
     const handleFilter = () => {
-        const newColumns = `${option != 7 && "min-content"} ${filter.columns.image == true ? '65px ' : ''}${filter.columns.number == true ? '150px ' : ''}${option == 7 ? filter.columns.username == true ? '200px ' : '' : filter.columns.username == true ? '150px ' : ''}${filter.columns.email == true ? '200px ' : ''}${filter.columns.phonenumber == true ? '180px ' : ''}${filter.columns.permission == true ? '120px ' : ''}${filter.columns.productName == true ? '200px ' : ''}${filter.columns.creationDate == true ? '150px ' : ''}${filter.columns.lastAccess == true ? '150px ' : ''}${option == 2 ? filter.columns.category == true ? '250px ' : '' : filter.columns.category == true ? '100px ' : ''}${option == 3 ? filter.columns.supplier == true ? '250px ' : '' : filter.columns.supplier == true ? '100px ' : ''}${filter.columns.code == true ? '100px ' : ''}${filter.columns.quantity == true ? '80px ' : ''}${filter.columns.sellPrice == true ? '100px ' : ''}${filter.columns.buyPrice == true ? '100px ' : ''}${filter.columns.price == true ? '100px ' : ''}${filter.columns.blocked == true ? '100px ' : ''}${option == 7 ? filter.columns.date == true ? '200px ' : '' : filter.columns.date == true ? '150px ' : ''}${filter.columns.description == true ? '1fr ' : ''}${filter.columns.description == false ? '1fr ' : ''}${filter.columns.order == true ? '120px ' : ''}${filter.columns.status == true ? '100px ' : ''}100px`;
+        const newColumns = `${(option != 7 && option !== 0) ? "min-content" : ""} ${filter.columns.image == true ? '65px ' : ''}${filter.columns.number == true ? '150px ' : ''}${option == 7 ? filter.columns.username == true ? '200px ' : '' : filter.columns.username == true ? '150px ' : ''}${filter.columns.email == true ? '200px ' : ''}${filter.columns.phonenumber == true ? '180px ' : ''}${filter.columns.permission == true ? '120px ' : ''}${filter.columns.productName == true ? '200px ' : ''}${filter.columns.creationDate == true ? '150px ' : ''}${filter.columns.lastAccess == true ? '150px ' : ''}${option == 2 ? filter.columns.category == true ? '250px ' : '' : filter.columns.category == true ? '100px ' : ''}${option == 3 ? filter.columns.supplier == true ? '250px ' : '' : filter.columns.supplier == true ? '100px ' : ''}${filter.columns.code == true ? '100px ' : ''}${filter.columns.quantity == true ? '100px ' : ''}${filter.columns.sellPrice == true ? '100px ' : ''}${filter.columns.buyPrice == true ? '100px ' : ''}${filter.columns.price == true ? '100px ' : ''}${filter.columns.blocked == true ? '100px ' : ''}${option == 7 ? filter.columns.date == true ? '200px ' : '' : filter.columns.date == true ? '150px ' : ''}${filter.columns.description == true ? '1fr ' : ''}${filter.columns.description == false ? '1fr ' : ''}${filter.columns.order == true ? '120px ' : ''}${filter.columns.status == true ? '120px ' : ''}100px`;
         setFilter(prev => ({
             ...prev,
             [`option${option}`]: newColumns,
@@ -752,6 +754,9 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
         /*  */
         if (renderFilter.search != filter.search) {
             switch (option) {
+                case 0:
+                    handleGetProducts();
+                    break;
                 case 1:
                     handleGetProducts();
                     break;
@@ -818,6 +823,9 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
         });
 
         switch (option) {
+            case 0:
+                handleGetProducts();
+                break;
             case 1:
                 handleGetProducts();
                 break;
@@ -1317,6 +1325,9 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                     return { ...filter, search: "" }
                 });
                 switch (option) {
+                    case 0:
+                        handleGetProducts("");
+                        break;
                     case 1:
                         handleGetProducts("");
                         break;
@@ -1380,14 +1391,14 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                         permission: option == 6 ? true : false,
                         creationDate: option == 4 ? true : option == 5 ? true : option == 6 ? true : false,
                         blocked: option == 6 ? true : false,
-                        productName: option == 1 ? true : option == 0 ? true : false,
-                        category: option == 1 ? true : option == 0 ? true : option == 2 ? true : option == 4 ? true : option == 5 ? true : false,
+                        productName: option == 1 ? true : option === 0 ? true : false,
+                        category: option == 1 ? true : option === 0 ? true : option == 2 ? true : option == 4 ? true : option == 5 ? true : false,
                         supplier: option == 1 ? true : option == 3 ? true : option == 4 ? true : option == 5 ? true : false,
-                        code: option == 0 ? true : option == 1 ? true : false,
-                        quantity: option == 0 ? true : false,
+                        code: option === 0 ? true : option == 1 ? true : false,
+                        quantity: option === 0 ? true : false,
                         sellPrice: option == 1 ? true : option == 5 ? true : false,
                         buyPrice: option == 4 ? true : false,
-                        price: option == 0 ? true : false,
+                        price: option === 0 ? true : false,
                         date: option == 7 ? true : false,
                         description: option != 6 ? true : false,
                         buttons: option == 6 ? true : option == 7 ? true : false,
@@ -1409,14 +1420,14 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                         phonenumber: option == 6 ? true : false,
                         creationDate: option == 4 ? true : option == 5 ? true : option == 6 ? true : false,
                         blocked: option == 6 ? true : false,
-                        productName: option == 1 ? true : option == 0 ? true : false,
-                        category: option == 1 ? true : option == 0 ? true : option == 2 ? true : option == 4 ? true : option == 5 ? true : false,
+                        productName: option == 1 ? true : option === 0 ? true : false,
+                        category: option == 1 ? true : option === 0 ? true : option == 2 ? true : option == 4 ? true : option == 5 ? true : false,
                         supplier: option == 1 ? true : option == 3 ? true : option == 4 ? true : option == 5 ? true : false,
-                        code: option == 0 ? true : option == 1 ? true : false,
-                        quantity: option == 0 ? true : false,
+                        code: option === 0 ? true : option == 1 ? true : false,
+                        quantity: option === 0 ? true : false,
                         sellPrice: option == 1 ? true : option == 5 ? true : false,
                         buyPrice: option == 4 ? true : false,
-                        price: option == 0 ? true : false,
+                        price: option === 0 ? true : false,
                         date: option == 7 ? true : false,
                         description: option != 6 ? true : false,
                         buttons: option == 6 ? true : option == 7 ? true : false,
@@ -2037,6 +2048,9 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                 return { ...prev, search: renderFilter.search }
             });
             switch (option) {
+                case 0:
+                    handleGetProducts(renderFilter.search);
+                    break;
                 case 1:
                     handleGetProducts(renderFilter.search);
                     break;
@@ -2061,6 +2075,9 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
             }
         } else {
             switch (option) {
+                case 0:
+                    handleGetProducts();
+                    break;
                 case 1:
                     handleGetProducts();
                     break;
@@ -2093,7 +2110,7 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                     <div className="stockmenu__options" >
                         <form className="stockmenu__search" onSubmit={(e) => handleSearch(e)}>
                             <IoSearch className='stockmenu__search-icon' />
-                            <input type="text" className="stockmenu__searchinput" placeholder={option == 0 ? "Search Orders" : option == 1 ? "Search Products" : option == 2 ? 'Search Categories' : option == 3 ? 'Search Suppliers' : option == 4 ? 'Search Orders' : option == 5 ? 'Search Orders' : option == 6 ? 'Search Users' : option == 7 ? 'Search Logs' : 'Search Types'} value={filter.search} onChange={(e) => setFilter({ ...filter, search: e.target.value })} />
+                            <input type="text" className="stockmenu__searchinput" placeholder={option == 0 ? "Search Products" : option == 1 ? "Search Products" : option == 2 ? 'Search Categories' : option == 3 ? 'Search Suppliers' : option == 4 ? 'Search Orders' : option == 5 ? 'Search Orders' : option == 6 ? 'Search Users' : option == 7 ? 'Search Logs' : 'Search Types'} value={filter.search} onChange={(e) => setFilter({ ...filter, search: e.target.value })} />
                         </form>
                         <div className="stockmenu__filter" ref={filterRef} >
                             <div className="stockmenu__filter-button" onClick={() => setShowFilterOptions(!showFilterOptions)}>
@@ -2115,7 +2132,7 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                                     {(option == 0 || option == 1 || option == 4 || option == 5) &&
                                         <div onClick={() => setChooseSelection('values')} className={`${chooseSelection == 'values' ? 'filter_choose-selection--selected' : ''}`} >Values</div>
                                     }
-                                    {(option == 1 || option == 6 || option == 5 || option == 4) &&
+                                    {(option == 0 || option == 6 || option == 5 || option == 4) &&
                                         <div onClick={() => setChooseSelection('others')} className={`${chooseSelection == 'others' ? 'filter_choose-selection--selected' : ''}`} >Others</div>
                                     }
                                 </div>
@@ -2269,7 +2286,7 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                                                     <span>Description</span>
                                                 </div>
                                             }
-                                            {(option == 1) &&
+                                            {(option == 0) &&
                                                 <div className={`filter__option filter__option-status ${filter.columns.status == true ? 'filter__option--selected' : ''}`} onClick={() => handleUncheckColumn('status')}>
                                                     <div className="filter__option-checkbox">
                                                         <FaCheck className='filter__option-check filter__option--selected' />
@@ -2332,7 +2349,7 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                                     }
                                     {chooseSelection == 'others' &&
                                         <div className="filter__options-others">
-                                            {(option == 1) &&
+                                            {(option == 0) &&
                                                 <div className="filter__options-others-status">
                                                     <h4>Status</h4>
                                                     <div className="filter__option-others-status">
@@ -2457,7 +2474,7 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                                 <MdArrowDropUp className='stockmenu__button-export-icon' style={{ display: showButtonMoreOptions == true ? "flex" : "none" }} />
                             </div>
                         </div>
-                        <div className="button stockmenu__button" style={{ display: option != 7 ? 'flex' : 'none' }} onClick={() => option == 1 ? handleOpenWindow('create-products', '', 0, '') : option == 2 ? handleOpenWindow('create-category', '', 0, '') : option == 3 ? handleOpenWindow('create-supplier', '', 0, '') : option == 4 ? handleOpenWindow('new-order', '', 0, '', 'buy') : option == 5 ? handleOpenWindow('new-order', '', 0, '', 'sale') : option == 6 ? handleOpenWindow('new-user', '', 0, '', 'sale') : ""}>{option == 0 ? "New Order" : option == 1 ? "New Product" : option == 2 ? 'New Category' : option == 3 ? 'New Supplier' : option == 4 ? 'New Order' : option == 5 ? 'New Order' : option == 6 ? 'New User' : 'New Type'}</div>
+                        <div className="button stockmenu__button" style={{ display: option != 7 ? 'flex' : 'none' }} onClick={() => option == 0 ? handleOpenWindow('new-order', '', 0, '', 'buy') : option == 1 ? handleOpenWindow('create-products', '', 0, '') : option == 2 ? handleOpenWindow('create-category', '', 0, '') : option == 3 ? handleOpenWindow('create-supplier', '', 0, '') : option == 4 ? handleOpenWindow('new-order', '', 0, '', 'buy') : option == 5 ? handleOpenWindow('new-order', '', 0, '', 'sale') : option == 6 ? handleOpenWindow('new-user', '', 0, '', 'sale') : ""}>{option == 0 ? "New Order" : option == 1 ? "New Product" : option == 2 ? 'New Category' : option == 3 ? 'New Supplier' : option == 4 ? 'New Order' : option == 5 ? 'New Order' : option == 6 ? 'New User' : 'New Type'}</div>
                     </div>
                 </div>
                 <div className="stock__container" ref={imageRef}>
@@ -2560,7 +2577,7 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                     </div>
                     <div className="stock__items">
                         <div className="stockitems__header stock__item" style={{ gridTemplateColumns: renderFilter[`option${option}`] }}>
-                            {(option != 7) &&
+                            {(option != 7 && option != 0) &&
                                 <div className={`stockitem__select ${isAllItemsSelected == true ? 'stockitem__select--selected' : ''}`} onClick={handleSelectAllItems}></div>
                             }
                             {((option != 2 && option != 3 && option != 4 && option != 5 && option != 7) && renderFilter.columns.image != false) &&
@@ -2652,7 +2669,7 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                             }
                             {((option == 0) && renderFilter.columns.price == true) &&
                                 < div className="stockitem__productsellprice stockitem__productsellprice--header stockitem__product--header" onClick={() => handleChangeOrder('price')}>
-                                    <span>Price</span>
+                                    <span>Sell Price</span>
                                     <IoIosArrowDown className={`stockitem__product--header__arrow ${filter.orderFilter.price == true ? 'stockitem__product--header__arrow--show' : ''}`} />
                                     <IoIosArrowUp className={`stockitem__product--header__arrow ${filter.orderFilter.price == false ? 'stockitem__product--header__arrow--show' : ''}`} />
                                 </div>
@@ -2697,7 +2714,7 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                                 <div></div>
                             }
                             {/*  */}
-                            {((option == 1) && renderFilter.columns.status == true) &&
+                            {((option === 0) && renderFilter.columns.status == true) &&
                                 <p className="stockitem__productstatus--header stockitem__product--header" onClick={() => handleChangeOrder('status')}>
                                     <span>Status</span>
                                     <IoIosArrowDown className={`stockitem__product--header__arrow ${filter.orderFilter.status == true ? 'stockitem__product--header__arrow--show' : ''}`} />
@@ -2716,7 +2733,7 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                         </div>
                         {loading == '' ?
                             <div className="stock__items-container">
-                                {(option != 2 && option != 3 && option != 1 && option != 4 && option != 5 && option != 6 && option != 7) &&
+                                {(option != 0 && option != 2 && option != 3 && option != 1 && option != 4 && option != 5 && option != 6 && option != 7) &&
                                     <div className="stock__item" style={{ gridTemplateColumns: renderFilter[`option${option}`] }}>
                                         <div className="stockitem__select" onClick={(e) => handleSelectItem(e)}></div>
                                         {((option != 2 && option != 3 && option != 4 && option != 5 && option != 7) && renderFilter.columns.image != false) &&
@@ -2789,6 +2806,62 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                                 }
                                 {items.length > 0 ?
                                     <>
+                                        {option == 0 &&
+                                            <>
+                                                {(renderFilter.category.some(item => item.isShow == true) && items.some(item => renderFilter.minSellPrice <= item.sellPrice) && items.some(item => renderFilter.minQnt <= item.stock)) ?
+                                                    <>
+
+                                                        {items.map((item, index) => (
+                                                            <>
+                                                                {(renderFilter.category.some(elem => { if (elem._id == item.productCategory._id) { return elem.isShow } }) && (renderFilter.minSellPrice <= item.sellPrice) && (renderFilter.minQnt <= item.stock) && renderFilter.status == 0 ? true : renderFilter.status == 1 && item.status == 'in stock' ? true : renderFilter.status == 2 && item.status == 'out of stock' ? true : false) &&
+                                                                    <div className='stock__item' style={{ gridTemplateColumns: renderFilter[`option${option}`] }} key={index}>
+                                                                        {renderFilter.columns.image == true &&
+                                                                            <div className='stockitem__img'>
+                                                                                < img src={`${apiUrl}:${apiPort}/assets/${item.picturePath}`} />
+                                                                            </div>
+                                                                        }
+                                                                        {renderFilter.columns.productName == true &&
+                                                                            <p className="stockitem__productname">{item.productName}</p>
+                                                                        }
+                                                                        {renderFilter.columns.category == true &&
+                                                                            <p className="stockitem__productcategory">{item.productCategory.categoryName}</p>
+                                                                        }
+                                                                        {renderFilter.columns.supplier == true &&
+                                                                            <p className="stockitem__productcategory">{item.productSupplier.supplierName}</p>
+                                                                        }
+                                                                        {renderFilter.columns.quantity == true &&
+                                                                            <p className="stockitem__productqnt">{item.stock}</p>
+                                                                        }
+                                                                        {/*   {renderFilter.columns.code &&
+                                                                            <p className="stockitem__productcode">{`${item._id.slice(14).toUpperCase()}`}</p>
+                                                                        } */}
+                                                                        {renderFilter.columns.price &&
+                                                                            <p className="stockitem__productsellprice">{item.sellPrice}</p>
+                                                                        }
+                                                                        {renderFilter.columns.description == true &&
+                                                                            <p className="stockitem__productdescription">{item.description.length > 125 ? `${item.description.slice(0, 125)}...` : item.description}</p>
+                                                                        }
+                                                                        {renderFilter.columns.description == false &&
+                                                                            <div></div>
+                                                                        }
+                                                                        {
+                                                                            renderFilter.columns.status == true &&
+                                                                            <div className={`stockitem__productorder stockitem__productorder stockitem__productstatus ${item.status == "in stock" ? "stockitem__productstatus--active" : item.status == "out of stock" ? "stockitem__productstatus--cancelled" : ""}`}>{item.status == "in stock" ? "In Stock" : item.status == "out of stock" ? "Out of Stock" : ""}</div>
+                                                                        }
+                                                                        <div className="stockitem__productoptions">
+                                                                            <div className="stockitem__productremove" onClick={() => handleOpenWindow('new-order', '', 0, '', 'buy')}><MdAdd /></div>
+                                                                            <div className="stockitem__productremove" onClick={() => handleOpenWindow('new-order', '', 0, '', 'sale')}><MdRemove /></div>
+                                                                        </div>
+                                                                    </div>
+                                                                }
+                                                            </>
+                                                        ))}
+                                                    </>
+                                                    :
+                                                    <p className='stock__result'>No More {option === 0 ? 'Orders' : option == 1 ? 'Products' : option == 2 ? 'Categories' : option == 3 ? 'Suppliers' : option == 4 ? 'Purchases' : option == 5 ? 'Sales' : option == 6 ? 'Users' : option == 7 ? 'Logs' : ''} To Show. Try In The Next Page</p>
+                                                }
+                                            </>
+                                        }
                                         {option == 1 &&
                                             <>
                                                 {(renderFilter.category.some(item => item.isShow == true) && renderFilter.supplier.some(item => item.isShow == true) && items.some(item => renderFilter.minSellPrice <= item.sellPrice)) ?
@@ -2825,9 +2898,9 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                                                                         {renderFilter.columns.description == false &&
                                                                             <div></div>
                                                                         }
-                                                                        {renderFilter.columns.status == true &&
+                                                                        {/*     {renderFilter.columns.status == true &&
                                                                             <div className={`stockitem__productorder stockitem__productorder stockitem__productstatus ${item.status == "in stock" ? "stockitem__productstatus--active" : item.status == "out of stock" ? "stockitem__productstatus--cancelled" : ""}`}>{item.status == "in stock" ? "In Stock" : item.status == "out of stock" ? "Out of Stock" : ""}</div>
-                                                                        }
+                                                                        } */}
                                                                         <div className="stockitem__productoptions">
                                                                             <div className="stockitem__productremove" onClick={() => handleOpenWindow('create-products', item, 1, item._id)}><MdModeEditOutline /></div>
                                                                             <div className="stockitem__productremove" onClick={() => handleRemoveItem(item, 1, item._id)}><MdRemove /></div>
@@ -2838,7 +2911,7 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                                                         ))}
                                                     </>
                                                     :
-                                                    <p className='stock__result'>No More {option == 0 ? 'Orders' : option == 1 ? 'Products' : option == 2 ? 'Categories' : option == 3 ? 'Suppliers' : option == 4 ? 'Purchases' : option == 5 ? 'Sales' : option == 6 ? 'Users' : option == 7 ? 'Logs' : ''} To Show. Try In The Next Page</p>
+                                                    <p className='stock__result'>No More {option === 0 ? 'Orders' : option == 1 ? 'Products' : option == 2 ? 'Categories' : option == 3 ? 'Suppliers' : option == 4 ? 'Purchases' : option == 5 ? 'Sales' : option == 6 ? 'Users' : option == 7 ? 'Logs' : ''} To Show. Try In The Next Page</p>
                                                 }
                                             </>
                                         }
@@ -2871,7 +2944,7 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                                                         ))}
                                                     </>
                                                     :
-                                                    <p className='stock__result'>No More {option == 0 ? 'Orders' : option == 1 ? 'Products' : option == 2 ? 'Categories' : option == 3 ? 'Suppliers' : option == 4 ? 'Purchases' : option == 5 ? 'Sales' : option == 6 ? 'Users' : option == 7 ? 'Logs' : ''} To Show. Try In The Next Page</p>
+                                                    <p className='stock__result'>No More {option === 0 ? 'Orders' : option == 1 ? 'Products' : option == 2 ? 'Categories' : option == 3 ? 'Suppliers' : option == 4 ? 'Purchases' : option == 5 ? 'Sales' : option == 6 ? 'Users' : option == 7 ? 'Logs' : ''} To Show. Try In The Next Page</p>
                                                 }
                                             </>
                                         }
@@ -2904,7 +2977,7 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
 
                                                     </>
                                                     :
-                                                    <p className='stock__result'>No More {option == 0 ? 'Orders' : option == 1 ? 'Products' : option == 2 ? 'Categories' : option == 3 ? 'Suppliers' : option == 4 ? 'Purchases' : option == 5 ? 'Sales' : option == 6 ? 'Users' : option == 7 ? 'Logs' : ''} To Show. Try In The Next Page</p>
+                                                    <p className='stock__result'>No More {option === 0 ? 'Orders' : option == 1 ? 'Products' : option == 2 ? 'Categories' : option == 3 ? 'Suppliers' : option == 4 ? 'Purchases' : option == 5 ? 'Sales' : option == 6 ? 'Users' : option == 7 ? 'Logs' : ''} To Show. Try In The Next Page</p>
                                                 }
                                             </>
                                         }
@@ -2949,7 +3022,7 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
 
                                                     </>
                                                     :
-                                                    <p className='stock__result'>No More {option == 0 ? 'Orders' : option == 1 ? 'Products' : option == 2 ? 'Categories' : option == 3 ? 'Suppliers' : option == 4 ? 'Purchases' : option == 5 ? 'Sales' : option == 6 ? 'Users' : option == 7 ? 'Logs' : ''} To Show. Try In The Next Page</p>
+                                                    <p className='stock__result'>No More {option === 0 ? 'Orders' : option == 1 ? 'Products' : option == 2 ? 'Categories' : option == 3 ? 'Suppliers' : option == 4 ? 'Purchases' : option == 5 ? 'Sales' : option == 6 ? 'Users' : option == 7 ? 'Logs' : ''} To Show. Try In The Next Page</p>
                                                 }
                                             </>
                                         }
@@ -2994,7 +3067,7 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
 
                                                     </>
                                                     :
-                                                    <p className='stock__result'>No More {option == 0 ? 'Orders' : option == 1 ? 'Products' : option == 2 ? 'Categories' : option == 3 ? 'Suppliers' : option == 4 ? 'Purchases' : option == 5 ? 'Sales' : option == 6 ? 'Users' : option == 7 ? 'Logs' : ''} To Show. Try In The Next Page</p>
+                                                    <p className='stock__result'>No More {option === 0 ? 'Orders' : option == 1 ? 'Products' : option == 2 ? 'Categories' : option == 3 ? 'Suppliers' : option == 4 ? 'Purchases' : option == 5 ? 'Sales' : option == 6 ? 'Users' : option == 7 ? 'Logs' : ''} To Show. Try In The Next Page</p>
                                                 }
                                             </>
                                         }
@@ -3044,7 +3117,7 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                                                         ))}
                                                     </>
                                                     :
-                                                    <p className='stock__result'>No More {option == 0 ? 'Orders' : option == 1 ? 'Products' : option == 2 ? 'Categories' : option == 3 ? 'Suppliers' : option == 4 ? 'Purchases' : option == 5 ? 'Sales' : option == 6 ? 'Users' : option == 7 ? 'Logs' : ''} To Show. Try In The Next Page</p>
+                                                    <p className='stock__result'>No More {option === 0 ? 'Orders' : option == 1 ? 'Products' : option == 2 ? 'Categories' : option == 3 ? 'Suppliers' : option == 4 ? 'Purchases' : option == 5 ? 'Sales' : option == 6 ? 'Users' : option == 7 ? 'Logs' : ''} To Show. Try In The Next Page</p>
                                                 }
                                             </>
                                         }
@@ -3079,13 +3152,13 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                                                         ))}
                                                     </>
                                                     :
-                                                    <p className='stock__result'>No More {option == 0 ? 'Orders' : option == 1 ? 'Products' : option == 2 ? 'Categories' : option == 3 ? 'Suppliers' : option == 4 ? 'Purchases' : option == 5 ? 'Sales' : option == 6 ? 'Users' : option == 7 ? 'Logs' : ''} To Show. Try In The Next Page</p>
+                                                    <p className='stock__result'>No More {option === 0 ? 'Orders' : option == 1 ? 'Products' : option == 2 ? 'Categories' : option == 3 ? 'Suppliers' : option == 4 ? 'Purchases' : option == 5 ? 'Sales' : option == 6 ? 'Users' : option == 7 ? 'Logs' : ''} To Show. Try In The Next Page</p>
                                                 }
                                             </>
                                         }
                                     </>
                                     :
-                                    <p className='stock__result'>No {option == 0 ? 'Orders' : option == 1 ? 'Products' : option == 2 ? 'Categories' : option == 3 ? 'Suppliers' : option == 4 ? 'Purchases' : option == 5 ? 'Sales' : option == 6 ? 'Users' : option == 7 ? 'Logs' : ''} Found</p>
+                                    <p className='stock__result'>No {option === 0 ? 'Orders' : option == 1 ? 'Products' : option == 2 ? 'Categories' : option == 3 ? 'Suppliers' : option == 4 ? 'Purchases' : option == 5 ? 'Sales' : option == 6 ? 'Users' : option == 7 ? 'Logs' : ''} Found</p>
                                 }
                             </div>
                             :

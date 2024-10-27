@@ -779,7 +779,7 @@ function Home({ showToastMessage }) {
                                 <Dashboard />
                                 :
                                 sectionDisplay == "stock" ?
-                                    <Stock handleOpenWindow={() => setShowModal('new-order')} handleRemoveItem={() => setShowModal('remove-item')} />
+                                    <Stock handleOpenWindow={handleCreateItem} handleRemoveItem={handleRemoveItem} reload={updateTrigger} />
                                     :
                                     subSectionDisplay == "products" ?
                                         <Products handleOpenWindow={handleCreateItem} handleRemoveItem={handleRemoveItem} reload={updateTrigger} />

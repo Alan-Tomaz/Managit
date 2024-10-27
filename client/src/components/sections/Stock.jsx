@@ -9,7 +9,7 @@ import { FaMoneyBill1 } from "react-icons/fa6";
 
 ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels);
 
-function Stock({ handleOpenWindow, handleRemoveItem }) {
+function Stock({ handleOpenWindow, handleRemoveItem, reload }) {
 
     const data = [
         {
@@ -71,23 +71,23 @@ function Stock({ handleOpenWindow, handleRemoveItem }) {
 
     return (
         <>
-            <div className="card card--xsm doughnut-chart__info">
+            <div className="card card--md doughnut-chart__info">
                 <h3>Stock Info (Per Supplier)</h3>
                 <DoughnutChartCard options={options} finalData={finalData} />
             </div>
-            <div className="card card--xsm stock-info__card">
+            {/*  <div className="card card--xsm stock-info__card">
                 <div className="stock-info__range">
                     <FaBoxOpen />
                 </div>
                 <h3>Stock Items</h3>
                 <h2>137</h2>
                 <h2>US$1700.43</h2>
-            </div>
-            <div className="card card--xsm doughnut-chart__info">
+            </div> */}
+            <div className="card card--md doughnut-chart__info">
                 <h3>Stock Info (Per Category)</h3>
                 <DoughnutChartCard options={options} finalData={finalData} />
             </div>
-            <ItemsCard option={0} handleOpenWindow={handleOpenWindow} handleRemoveItem={handleRemoveItem} />
+            <ItemsCard option={0} handleOpenWindow={handleOpenWindow} handleRemoveItem={handleRemoveItem} reload={reload} />
         </>
     )
 }
