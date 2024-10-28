@@ -39,6 +39,14 @@
     font-weight: var(--font-semi-bold);
 }
 
+.stock__loading-box {
+    min-height: calc(90vh - 110px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    grid-column: span 12;
+}
+
 /* ============== MEDIA QUERIES =============== */
 
 /* Medium Devices = 1024 */

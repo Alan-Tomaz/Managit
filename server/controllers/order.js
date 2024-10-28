@@ -136,6 +136,270 @@ export const getOrders = async (req, res) => {
     }
 }
 
+export const getOrdersByTime = async (req, res) => {
+    try {
+
+        const { type, time, leastTime } = req.query;
+
+        const dateTimeAgo = new Date();
+        dateTimeAgo.setDate(dateTimeAgo.getDate() - time);
+
+        const dateLeastTime = new Date();
+
+        if (leastTime != undefined) {
+            dateTimeAgo.setDate(dateTimeAgo.getDate() - leastTime);
+        }
+
+        const filters = {
+            createdAt: { $gte: dateTimeAgo, $lt: dateLeastTime }
+        };
+
+        if (type != undefined && type != "all") {
+            filters.type = type;
+        }
+
+        const ordersData = await Order.find(filters)
+            .sort({ createdAt: -1 })
+
+        const totalOrders = await Order.countDocuments(filters);
+
+        res.status(200).json({ ordersData, totalOrders });
+    } catch (error) {
+        console.log(error.message)
+        res.status(500).json({ error: "Something Wrong Ocurred. Try Again Later" });
+    }
+}
+
+export const getOrdersByPeriod = async (req, res) => {
+    try {
+
+        const { option = 0 } = req.query;
+
+        const arr = [[], []];
+        const values = [[], []];
+
+        switch (option) {
+            case "0":
+                for (let i = 0; i < 30; i = i + 5) {
+                    let count = 0;
+
+                    const dateTimeAgo = new Date();
+                    dateTimeAgo.setDate(dateTimeAgo.getDate() - (i + 5));
+
+                    const dateLeastTime = new Date();
+                    dateLeastTime.setDate(dateLeastTime.getDate() - i);
+
+                    const filters = {
+                        type: "buy",
+                        createdAt: { $gte: dateTimeAgo, $lt: dateLeastTime }
+                    };
+
+                    const ordersData = await Order.find(filters)
+                        .sort({ createdAt: -1 })
+
+
+                    const totalOrders = await Order.countDocuments(filters);
+
+                    ordersData.forEach(order => { count += order.price });
+
+                    values[0].push(count);
+                    arr[0].push({ ordersData, totalOrders })
+                }
+
+                for (let i = 0; i < 30; i = i + 5) {
+                    let count = 0;
+
+                    const dateTimeAgo = new Date();
+                    dateTimeAgo.setDate(dateTimeAgo.getDate() - (i + 5));
+
+                    const dateLeastTime = new Date();
+                    dateLeastTime.setDate(dateLeastTime.getDate() - i);
+
+                    const filters = {
+                        type: "sale",
+                        createdAt: { $gte: dateTimeAgo, $lt: dateLeastTime }
+                    };
+
+                    const ordersData = await Order.find(filters)
+                        .sort({ createdAt: -1 })
+
+
+                    const totalOrders = await Order.countDocuments(filters);
+
+                    ordersData.forEach(order => { count += order.price });
+
+                    values[1].push(count);
+                    arr[1].push({ ordersData, totalOrders })
+                }
+                break;
+
+            case "1":
+                for (let i = 0; i < 90; i = i + 10) {
+                    let count = 0;
+
+                    const dateTimeAgo = new Date();
+                    dateTimeAgo.setDate(dateTimeAgo.getDate() - (i + 10));
+
+                    const dateLeastTime = new Date();
+                    dateLeastTime.setDate(dateLeastTime.getDate() - i);
+
+                    const filters = {
+                        type: "buy",
+                        createdAt: { $gte: dateTimeAgo, $lt: dateLeastTime }
+                    };
+
+                    const ordersData = await Order.find(filters)
+                        .sort({ createdAt: -1 })
+
+
+                    const totalOrders = await Order.countDocuments(filters);
+
+                    ordersData.forEach(order => { count += order.price });
+
+                    values[0].push(count);
+                    arr[0].push({ ordersData, totalOrders })
+                }
+
+                for (let i = 0; i < 90; i = i + 10) {
+                    let count = 0;
+
+                    const dateTimeAgo = new Date();
+                    dateTimeAgo.setDate(dateTimeAgo.getDate() - (i + 10));
+
+                    const dateLeastTime = new Date();
+                    dateLeastTime.setDate(dateLeastTime.getDate() - i);
+
+                    const filters = {
+                        type: "sale",
+                        createdAt: { $gte: dateTimeAgo, $lt: dateLeastTime }
+                    };
+
+                    const ordersData = await Order.find(filters)
+                        .sort({ createdAt: -1 })
+
+
+                    const totalOrders = await Order.countDocuments(filters);
+
+                    ordersData.forEach(order => { count += order.price });
+
+                    values[1].push(count);
+                    arr[1].push({ ordersData, totalOrders })
+                }
+                break;
+            case "2":
+                for (let i = 180; i > 0; i = i - 30) {
+                    let count = 0;
+
+                    const dateTimeAgo = new Date();
+                    dateTimeAgo.setDate(dateTimeAgo.getDate() - (i - 30));
+
+                    const dateLeastTime = new Date();
+                    dateLeastTime.setDate(dateLeastTime.getDate() - i);
+
+                    const filters = {
+                        type: "buy",
+                        createdAt: { $gte: dateLeastTime, $lt: dateTimeAgo }
+                    };
+
+                    const ordersData = await Order.find(filters)
+                        .sort({ createdAt: -1 })
+
+
+                    const totalOrders = await Order.countDocuments(filters);
+
+                    ordersData.forEach(order => { count += order.price });
+
+                    values[0].push(count);
+                    arr[0].push({ ordersData, totalOrders })
+                }
+
+                for (let i = 180; i > 0; i = i - 30) {
+                    let count = 0;
+
+                    const dateTimeAgo = new Date();
+                    dateTimeAgo.setDate(dateTimeAgo.getDate() - (i - 30));
+
+                    const dateLeastTime = new Date();
+                    dateLeastTime.setDate(dateLeastTime.getDate() - i);
+
+                    const filters = {
+                        type: "sale",
+                        createdAt: { $gte: dateLeastTime, $lt: dateTimeAgo }
+                    };
+
+                    const ordersData = await Order.find(filters)
+                        .sort({ createdAt: -1 })
+
+
+                    const totalOrders = await Order.countDocuments(filters);
+
+                    ordersData.forEach(order => { count += order.price });
+
+                    values[1].push(count);
+                    arr[1].push({ ordersData, totalOrders })
+                }
+            case "3":
+                for (let i = 360; i > 0; i = i - 30) {
+                    let count = 0;
+
+                    const dateTimeAgo = new Date();
+                    dateTimeAgo.setDate(dateTimeAgo.getDate() - (i - 30));
+
+                    const dateLeastTime = new Date();
+                    dateLeastTime.setDate(dateLeastTime.getDate() - i);
+
+                    const filters = {
+                        type: "buy",
+                        createdAt: { $gte: dateLeastTime, $lt: dateTimeAgo }
+                    };
+
+                    const ordersData = await Order.find(filters)
+                        .sort({ createdAt: -1 })
+
+
+                    const totalOrders = await Order.countDocuments(filters);
+
+                    ordersData.forEach(order => { count += order.price });
+
+                    values[0].push(count);
+                    arr[0].push({ ordersData, totalOrders })
+                }
+
+                for (let i = 360; i > 0; i = i - 30) {
+                    let count = 0;
+
+                    const dateTimeAgo = new Date();
+                    dateTimeAgo.setDate(dateTimeAgo.getDate() - (i - 30));
+
+                    const dateLeastTime = new Date();
+                    dateLeastTime.setDate(dateLeastTime.getDate() - i);
+
+                    const filters = {
+                        type: "sale",
+                        createdAt: { $gte: dateLeastTime, $lt: dateTimeAgo }
+                    };
+
+                    const ordersData = await Order.find(filters)
+                        .sort({ createdAt: -1 })
+
+
+                    const totalOrders = await Order.countDocuments(filters);
+
+                    ordersData.forEach(order => { count += order.price });
+
+                    values[1].push(count);
+                    arr[1].push({ ordersData, totalOrders })
+                }
+                break;
+        }
+
+        res.status(200).json({ orders: arr, values });
+    } catch (error) {
+        console.log(error.message)
+        res.status(500).json({ error: "Something Wrong Ocurred. Try Again Later" });
+    }
+}
+
 /* UPDATE ORDER */
 export const updateOrder = async (req, res) => {
     try {

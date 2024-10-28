@@ -95,11 +95,30 @@ export const createProduct = async (req, res) => {
 export const getProducts = async (req, res) => {
     try {
 
-        const { page = 1, limit = 10, search, order = 1 } = req.query;
+        const { page = 1, limit = 10, search, order = 1, searchBy = null, id = null } = req.query;
 
         const filters = {};
 
         const sortProducts = order == 0 ? { stock: -1 } : order == 1 ? { productName: 1 } : {};
+
+        if (searchBy != null && id != null) {
+            switch (searchBy) {
+                case "category":
+                    filters.productCategory = id;
+                    break;
+                case "supplier":
+                    filters.productSupplier = id;
+                    break;
+                case "stock-category":
+                    filters.productCategory = id;
+                    filters.stock = { $gt: 0 };
+                    break;
+                case "stock-supplier":
+                    filters.productSupplier = id;
+                    filters.stock = { $gt: 0 };
+                    break;
+            }
+        }
 
         if (search) {
             filters.productName = { ...filters.productName, $regex: search, $options: 'i' };
@@ -113,6 +132,59 @@ export const getProducts = async (req, res) => {
             .limit(parseInt(limit));
 
         const totalProducts = await Product.countDocuments(filters);
+
+        res.status(200).json({ productsData, totalProducts });
+    } catch (error) {
+        console.log(error.message)
+        res.status(500).json({ error: "Something Wrong Ocurred. Try Again Later" });
+    }
+}
+
+/* GET LOW STOCK PRODUCTS */
+export const getLowStockProducts = async (req, res) => {
+    try {
+        const filters = { status: 'out of stock' };
+
+        const productsData = await Product.find(filters)
+
+
+        const totalProducts = await Product.countDocuments(filters);
+
+        res.status(200).json({ productsData, totalProducts });
+    } catch (error) {
+        console.log(error.message)
+        res.status(500).json({ error: "Something Wrong Ocurred. Try Again Later" });
+    }
+}
+
+/* GET STOCK PRODUCTS */
+export const getStockProducts = async (req, res) => {
+    try {
+        const filters = { stock: { $gt: 0 } };
+
+        const productsData = await Product.find(filters)
+
+
+        const totalProducts = await Product.countDocuments(filters);
+
+        res.status(200).json({ productsData, totalProducts });
+    } catch (error) {
+        console.log(error.message)
+        res.status(500).json({ error: "Something Wrong Ocurred. Try Again Later" });
+    }
+}
+
+/* GET RECENTLY ADDED PRODUCTS */
+export const getRecentlyAddedProducts = async (req, res) => {
+    try {
+
+        const productsData = await Product.find()
+            .populate('productCategory')
+            .populate('productSupplier')
+            .sort({ createdAt: -1 })
+            .limit(parseInt(10));
+
+        const totalProducts = await Product.countDocuments();
 
         res.status(200).json({ productsData, totalProducts });
     } catch (error) {

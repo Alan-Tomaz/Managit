@@ -559,8 +559,6 @@ function Home({ showToastMessage }) {
 
             if (newNotifications.length > 0) {
 
-                console.log(newNotifications);
-
                 setNotifications(prevItems => {
                     const uniqueItems = data.data.notificationsData.filter(item =>
                         !prevItems.some(prev => prev._id === item._id)
@@ -711,8 +709,8 @@ function Home({ showToastMessage }) {
  */}                                <div className="notification__container" style={{ display: showNavbarNotifications == true ? "flex" : "none" }} ref={notificationsScrollDiv} onScroll={handleScrollNotifications}>
                                     {notifications.length > 0 ?
                                         <>
-                                            {notifications.map(notification => (
-                                                <div className="notification__item" >
+                                            {notifications.map((notification, index) => (
+                                                <div className="notification__item" key={index}>
                                                     <div className="notification__img-box">
                                                         <span>
                                                             {notification.type == "category" ? <MdCategory className='notification__img' /> : notification.type == "supplier" ? <FaBoxOpen className='notification__img' /> : notification.type == "product" ? <MdProductionQuantityLimits className='notification__img' /> : notification.type == "order" ? <FaCoins className='notification__img' /> : notification.type == "user" ? <FaUser className='notification__img' /> : notification.type == "log" ? <GoLog className='notification__img' /> : ""}

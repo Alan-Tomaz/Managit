@@ -55,7 +55,7 @@ export const createCategory = async (req, res) => {
 export const getCategories = async (req, res) => {
     try {
 
-        const { page = 1, limit = 10, search, categories } = req.query;
+        const { page = 1, limit = 10, search } = req.query;
 
         const filters = {};
 

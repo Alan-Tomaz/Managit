@@ -1,14 +1,23 @@
 import React from 'react'
 import './MdTopProducts.css';
 import TShirt from "../../assets/images/t-shirt.png";
+import { useNavigate } from "react-router-dom";
 
-function MdTopProducts({ isLast }) {
+function MdTopProducts({ isLast, text = "T-Shirt", img = TShirt, unity = 12 }) {
+
+    const navigate = useNavigate()
+
+    const handleLeaveSection = () => {
+        navigate("/home/stock");
+        window.location.reload();
+    }
+
     return (
-        <div className='MdTopProducts'>
+        <div className='MdTopProducts' onClick={handleLeaveSection}>
             <div className="MdTopProducts__product">
-                <img src={TShirt} alt="" />
-                <p>T-Shirt</p>
-                <span>12 un</span>
+                <img src={img} alt="" />
+                <p>{text}</p>
+                <span>{unity} un</span>
             </div>
             <div className="MdTopProducts__line" style={{ display: isLast == true ? "none" : "inline-block" }} ></div>
         </div >
