@@ -382,6 +382,12 @@
     align-self: center;
 }
 
+.products-warning {
+    margin-top: 2rem;
+    font-size: 1.2rem;
+    text-align: center;
+}
+
 /* ============== MEDIA QUERIES =============== */
 
 /* Medium Devices = 1024 */

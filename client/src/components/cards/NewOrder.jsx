@@ -41,6 +41,7 @@ function NewOrder({ handleOpenWindow, closeWindow, item, option, id, showToastMe
     const [isHovered, setIsHovered] = useState(false);
     const [limit, setLimit] = useState(5);
     const [reqError, setReqError] = useState("");
+    const [pageIsLoad, setPageIsLoad] = useState([])
 
     const handleDecreaseProduct = (index) => {
         const productsArr = [...products]
@@ -182,6 +183,13 @@ function NewOrder({ handleOpenWindow, closeWindow, item, option, id, showToastMe
                     );
                     return [...prevSuppliers, ...uniqueSuppliers]
                 });
+                setPageIsLoad(prevPageIsLoad => {
+                    if (prevPageIsLoad.indexOf("supplier") == -1) {
+                        return [...prevPageIsLoad, 'supplier']
+                    } else {
+                        return [...prevPageIsLoad]
+                    }
+                });
                 if (orderSupplier && orderSupplier._id) {
                     const selectedSupplier = newSuppliers.find((elem => elem._id === orderSupplier._id))
                     if (selectedSupplier) {
@@ -237,6 +245,13 @@ function NewOrder({ handleOpenWindow, closeWindow, item, option, id, showToastMe
                         newProducts.push(productsData[i]);
                     }
                 }
+                setPageIsLoad(prevPageIsLoad => {
+                    if (prevPageIsLoad.indexOf("product") == -1) {
+                        return [...prevPageIsLoad, 'product']
+                    } else {
+                        return [...prevPageIsLoad]
+                    }
+                });
 
                 if (reload) {
                     setProducts(newProducts)
@@ -388,7 +403,7 @@ function NewOrder({ handleOpenWindow, closeWindow, item, option, id, showToastMe
 
     return (
         <>
-            {(products.length > 0 && suppliers.length > 0) ?
+            {((pageIsLoad[0] === 'product' && pageIsLoad[1] === 'supplier') || (pageIsLoad[0] === 'supplier' && pageIsLoad[1] === 'product')) ?
                 <div className='new-order new-item'>
                     <div className="new-type__first-row">
                         <h4>{option == 0 ? "New" : option == 1 ? "Update" : ""} Order</h4>
@@ -433,20 +448,29 @@ function NewOrder({ handleOpenWindow, closeWindow, item, option, id, showToastMe
                             <div className="new-order__buyprice new-type__inputbox" id='new-type__input3'>
                                 <span>Supplier</span>
                                 <div className="new-order__status new-order__employee" ref={employeeSelectionRef} onClick={() => setShowEmployees(!showEmployees)}>
-                                    <span>{String(orderSupplier.supplierName).toUpperCase()}</span>
-                                    <IoMdArrowDropdown style={{ display: showEmployees == true ? 'none' : 'inline-block' }} className='new-order__status__arr' />
-                                    <IoMdArrowDropup style={{ display: showEmployees == false ? 'none' : 'inline-block' }} className='new-order__status__arr' />
-                                    <div className="new-order__status-selection" style={{ display: showEmployees == true ? 'flex' : 'none' }} >
-                                        <div className="order-supplier__options-scroll" ref={suppliersDivRef} onScroll={handleScrollSuppliers}>
-                                            {suppliers.map((supplier, index) =>
-                                                <p onClick={() => setOrderSupplier(supplier)} key={index} onMouseEnter={() => index === 0 && setIsHovered(true)} onMouseLeave={() => index === 0 && setIsHovered(false)}>{String(supplier.supplierName).toUpperCase()}</p>
-                                            )}
-                                            {suppliersLoading == true &&
-                                                <p className='product__category__options-scroll__loading' ><img src={Loading} /></p>
-                                            }
-                                        </div>
-                                        <IoMdArrowDropup className='new-order__status__arrow' style={{ color: isHovered ? 'rgb(219, 219, 219)' : 'rgba(88, 88, 88, 0.1)' }} />
-                                    </div>
+                                    {orderSupplier == null
+                                        ?
+                                        <>
+                                            <span>No Suppliers</span>
+                                        </>
+                                        :
+                                        <>
+                                            <span>{String(orderSupplier.supplierName).toUpperCase()}</span>
+                                            <IoMdArrowDropdown style={{ display: showEmployees == true ? 'none' : 'inline-block' }} className='new-order__status__arr' />
+                                            <IoMdArrowDropup style={{ display: showEmployees == false ? 'none' : 'inline-block' }} className='new-order__status__arr' />
+                                            <div className="new-order__status-selection" style={{ display: showEmployees == true ? 'flex' : 'none' }} >
+                                                <div className="order-supplier__options-scroll" ref={suppliersDivRef} onScroll={handleScrollSuppliers}>
+                                                    {suppliers.map((supplier, index) =>
+                                                        <p onClick={() => setOrderSupplier(supplier)} key={index} onMouseEnter={() => index === 0 && setIsHovered(true)} onMouseLeave={() => index === 0 && setIsHovered(false)}>{String(supplier.supplierName).toUpperCase()}</p>
+                                                    )}
+                                                    {suppliersLoading == true &&
+                                                        <p className='product__category__options-scroll__loading' ><img src={Loading} /></p>
+                                                    }
+                                                </div>
+                                                <IoMdArrowDropup className='new-order__status__arrow' style={{ color: isHovered ? 'rgb(219, 219, 219)' : 'rgba(88, 88, 88, 0.1)' }} />
+                                            </div>
+                                        </>
+                                    }
                                 </div>
                             </div>
                             <div className="new-order__buyprice__textarea new-type__inputbox" id='new-type__input4'>
@@ -468,21 +492,28 @@ function NewOrder({ handleOpenWindow, closeWindow, item, option, id, showToastMe
                                 </div>
                             </div>
                             <div className="new-type__products__list" ref={productsDivRef} onScroll={handleScrollProducts}>
-
-                                {products.map((product, index) => (
-                                    <div className="new-type__products-item" key={product._id} id={product._id}>
-                                        <img src={`${apiUrl}:${apiPort}/assets/${product.picturePath}`} alt="product-img" className='new-type__product-img' />
-                                        <p className='new-type__product-name'>{product.productName.length > 50 ? product.productName.slice(0, 50) + "..." : product.productName}</p>
-                                        <p className='new-type__product-qnt'>{product.quantity}</p>
-                                        <div className="new-type__product-remove new-type__product-button" onClick={() => handleDecreaseProduct(index)}>
-                                            <MdRemove />
-                                        </div>
-                                        <div className="new-type__product-add new-type__product-button" onClick={() => handleIncreaseProduct(index)}>
-                                            <FaPlus />
-                                        </div>
+                                {products.length > 0 ?
+                                    <>
+                                        {products.map((product, index) => (
+                                            <div className="new-type__products-item" key={product._id} id={product._id}>
+                                                <img src={`${apiUrl}:${apiPort}/assets/${product.picturePath}`} alt="product-img" className='new-type__product-img' />
+                                                <p className='new-type__product-name'>{product.productName.length > 50 ? product.productName.slice(0, 50) + "..." : product.productName}</p>
+                                                <p className='new-type__product-qnt'>{product.quantity}</p>
+                                                <div className="new-type__product-remove new-type__product-button" onClick={() => handleDecreaseProduct(index)}>
+                                                    <MdRemove />
+                                                </div>
+                                                <div className="new-type__product-add new-type__product-button" onClick={() => handleIncreaseProduct(index)}>
+                                                    <FaPlus />
+                                                </div>
+                                            </div>
+                                        ))}
+                                        {productsLoading && <img src={Loading} className='new-type__product__loading' />}
+                                    </>
+                                    :
+                                    <div className='products-warning'>
+                                        No Products
                                     </div>
-                                ))}
-                                {productsLoading && <img src={Loading} className='new-type__product__loading' />}
+                                }
                             </div>
                         </div>
                     </div>

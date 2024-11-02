@@ -50,7 +50,8 @@ function Dashboard() {
     const [saleOrdersPrice, setSaleOrdersPrice] = useState(null);
     const [chartFilter, setChartFilter] = useState(0);
     const [isShowingChartPopup, setIsShowingChartPopup] = useState(false);
-    const [recentlyAddedProducts, setRecentlyAddedProducts] = useState([]);
+    const [recentlyAddedProducts, setRecentlyAddedProducts] = useState(0);
+    const [topSellProducts, setTopSellProducts] = useState(0);
     const [isLoadingChart, setIsLoadingChart] = useState(false);
 
     const handleGetLowStockProducts = () => {
@@ -205,6 +206,24 @@ function Dashboard() {
             })
     }
 
+    const handleGetTopSellProducts = () => {
+        const headers = {
+            'Authorization': `Bearer ${userInfo.token}`
+        }
+
+        const url = new URL(`${apiUrl}:${apiPort}/order/top-sell`);
+
+        axios.get(`${url}`, ({
+            headers
+        }))
+            .then((data) => {
+                setTopSellProducts(data.data.topSellingProducts);
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+    }
+
     function createRGBColor() {
         const r = Math.floor(Math.random() * 256);
         const g = Math.floor(Math.random() * 256);
@@ -320,7 +339,13 @@ function Dashboard() {
         handleGetLast30DaysBuyOrders();
         handleGetLast30DaysSaleOrders();
         handleGetRecentlyAddedProducts();
+        handleGetTopSellProducts();
     }, [])
+
+    /* useEffect(() => {
+        console.log(topSellProducts)
+        console.log(recentlyAddedProducts)
+    }, [topSellProducts, recentlyAddedProducts]) */
 
     useEffect(() => {
         handleGetOrders();
@@ -354,7 +379,7 @@ function Dashboard() {
 
     return (
         <>
-            {(lowStockProducts != null && stockProducts != null && buyOrdersPrice != null && saleOrdersPrice != null && recentlyAddedProducts.length > 0 && chartArr[0].length > 0 && chartArr[1].length > 0)
+            {(lowStockProducts != null && stockProducts != null && buyOrdersPrice != null && saleOrdersPrice != null && recentlyAddedProducts !== 0 && topSellProducts !== 0 && chartArr[0].length > 0 && chartArr[1].length > 0)
                 ?
                 <>
                     <div className="card card--sm dashboard__card--sm totalsales__card">
@@ -404,18 +429,9 @@ function Dashboard() {
                         </div>
                         <hr />
                         <div className="dashboard__topproducts topselling__products" ref={scrollContainerRef1}>
-                            <MdTopProducts isLast={false} />
-                            <MdTopProducts isLast={false} />
-                            <MdTopProducts isLast={false} />
-                            <MdTopProducts isLast={false} />
-                            <MdTopProducts isLast={false} />
-                            <MdTopProducts isLast={false} />
-                            <MdTopProducts isLast={false} />
-                            <MdTopProducts isLast={false} />
-                            <MdTopProducts isLast={false} />
-                            <MdTopProducts isLast={false} />
-                            <MdTopProducts isLast={false} />
-                            <MdTopProducts isLast={true} />
+                            {topSellProducts.map((topSellProduct, index) =>
+                                <MdTopProducts isLast={index + 1 == topSellProducts.length ? true : false} text={topSellProduct.productName} img={`${apiUrl}:${apiPort}/assets/${topSellProduct.picturePath}`} unity={topSellProduct.totalQuantitySold} />
+                            )}
                         </div>
                     </div>
                     <div className="card card--md dashboard__card--md recentlyadded__card">

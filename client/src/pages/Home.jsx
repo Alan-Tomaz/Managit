@@ -713,7 +713,7 @@ function Home({ showToastMessage }) {
                                                 <div className="notification__item" key={index}>
                                                     <div className="notification__img-box">
                                                         <span>
-                                                            {notification.type == "category" ? <MdCategory className='notification__img' /> : notification.type == "supplier" ? <FaBoxOpen className='notification__img' /> : notification.type == "product" ? <MdProductionQuantityLimits className='notification__img' /> : notification.type == "order" ? <FaCoins className='notification__img' /> : notification.type == "user" ? <FaUser className='notification__img' /> : notification.type == "log" ? <GoLog className='notification__img' /> : ""}
+                                                            {notification.type == "category" ? <MdCategory className='notification__img' /> : notification.type == "supplier" ? <FaBoxOpen className='notification__img' /> : notification.type == "product" ? <MdProductionQuantityLimits className='notification__img' /> : notification.type == "order" ? <FaCoins className='notification__img' /> : notification.type == "user" ? <FaUser className='notification__img' /> : notification.type == "register" ? <FaUser className='notification__img' /> : notification.type == "log" ? <GoLog className='notification__img' /> : ""}
                                                         </span>
                                                     </div>
                                                     <h3 className="notification__name">{notification.notification}</h3>

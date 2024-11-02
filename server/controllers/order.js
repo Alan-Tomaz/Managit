@@ -400,6 +400,68 @@ export const getOrdersByPeriod = async (req, res) => {
     }
 }
 
+/* TOP SELL PRODUCTS */
+export const getTopSellProducts = async (req, res) => {
+    try {
+
+        const endDate = new Date();
+        const startDate = new Date(); // Data inicial do período
+        startDate.setDate(startDate.getDate() - 30);
+
+        console.log(startDate)
+
+        const filters = [
+            {
+                $match: {
+                    type: "sale", // Filtra apenas ordens de venda
+                    status: "finished", // Considera apenas ordens finalizadas
+                    createdAt: { $gte: startDate, $lte: endDate } // Filtra o período de tempo
+                }
+            },
+            { $unwind: "$products" }, // Desagrega o array "products"
+            {
+                $group: {
+                    _id: "$products.product", // Agrupa pelo ID do produto
+                    totalQuantitySold: { $sum: "$products.quantity" } // Soma as quantidades
+                }
+            },
+            { $sort: { totalQuantitySold: -1 } }, // Ordena em ordem decrescente pela quantidade total vendida
+            {
+                $lookup: {
+                    from: "products", // Nome da coleção "Product" no MongoDB
+                    localField: "_id",
+                    foreignField: "_id",
+                    as: "productDetails"
+                }
+            },
+            { $unwind: "$productDetails" }, // Inclui os detalhes do produto
+            {
+                $project: {
+                    _id: 0,
+                    productId: "$_id",
+                    productName: "$productDetails.productName",
+                    productSupplier: "$productDetails.productSupplier",
+                    productCategory: "$productDetails.productCategory",
+                    sellPrice: "$productDetails.sellPrice",
+                    stock: "$productDetails.stock",
+                    description: "$productDetails.description",
+                    status: "$productDetails.status",
+                    picturePath: "$productDetails.picturePath",
+                    totalQuantitySold: 1
+                }
+            }
+        ]
+
+        const topSellingProducts = await Order.aggregate(filters);
+
+        res.status(200).json({ topSellingProducts });
+
+    } catch (error) {
+        console.log(error.message)
+        res.status(500).json({ error: "Something Wrong Ocurred. Try Again Later" });
+    }
+}
+
 /* UPDATE ORDER */
 export const updateOrder = async (req, res) => {
     try {

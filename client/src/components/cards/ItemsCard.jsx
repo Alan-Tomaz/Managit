@@ -902,13 +902,13 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                 break;
             case 'category':
                 if (filter.orderFilter.category == false) {
-                    if (option == 1) {
+                    if (option == 1 || option == 0) {
                         setItems(sortAlphabetical([...items], g => g.productCategory.categoryName));
                     } else {
                         setItems(sortAlphabetical([...items], g => g.categoryName));
                     }
                 } else {
-                    if (option == 1) {
+                    if (option == 1 || option == 0) {
                         setItems(sortAlphabetical([...items], g => g.productCategory.categoryName, 'desc'));
                     } else {
                         setItems(sortAlphabetical([...items], g => g.categoryName, 'desc'));
@@ -1084,17 +1084,25 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                 break;
             case 'quantity':
                 if (filter.orderFilter.quantity == false) {
-                    setItems(sortByGreater([...items], g => g.quantity));
+                    if (option == 0) {
+                        setItems(sortByGreater([...items], g => g.stock));
+                    } else {
+                        setItems(sortByGreater([...items], g => g.quantity));
+                    }
                 } else {
-                    setItems(sortByGreater([...items], g => g.quantity, 'desc'));
+                    if (option == 0) {
+                        setItems(sortByGreater([...items], g => g.stock, 'desc'));
+                    } else {
+                        setItems(sortByGreater([...items], g => g.quantity, 'desc'));
+                    }
                 }
                 setFilter(prev => ({
                     ...prev,
                     orderFilter: {
                         ...initialFilterObj.orderFilter,
-                        category: !filter.orderFilter.category,
-                        onFiltering: 'Category',
-                        onFilteringVar: 'category'
+                        quantity: !filter.orderFilter.quantity,
+                        onFiltering: 'Quantity',
+                        onFilteringVar: 'quantity'
                     },
                 }))
                 break;
@@ -2668,7 +2676,7 @@ function ItemsCard({ option = 0, handleOpenWindow, handleRemoveItem, reload }) {
                                 </div>
                             }
                             {((option == 0) && renderFilter.columns.price == true) &&
-                                < div className="stockitem__productsellprice stockitem__productsellprice--header stockitem__product--header" onClick={() => handleChangeOrder('price')}>
+                                < div className="stockitem__productsellprice stockitem__productsellprice--header stockitem__product--header" onClick={() => handleChangeOrder('sell-price')}>
                                     <span>Sell Price</span>
                                     <IoIosArrowDown className={`stockitem__product--header__arrow ${filter.orderFilter.price == true ? 'stockitem__product--header__arrow--show' : ''}`} />
                                     <IoIosArrowUp className={`stockitem__product--header__arrow ${filter.orderFilter.price == false ? 'stockitem__product--header__arrow--show' : ''}`} />

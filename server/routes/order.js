@@ -1,6 +1,6 @@
 import express from "express";
 import { verifyToken } from '../middlewares/auth.js'
-import { createOrder, deleteManyOrders, deleteOrder, getOrders, getOrdersByPeriod, getOrdersByTime, updateOrder } from "../controllers/order.js";
+import { createOrder, deleteManyOrders, deleteOrder, getOrders, getOrdersByPeriod, getOrdersByTime, getTopSellProducts, updateOrder } from "../controllers/order.js";
 
 const router = express.Router();
 
@@ -13,6 +13,8 @@ router.get("/", verifyToken, getOrders);
 router.get("/time", verifyToken, getOrdersByTime);
 /* Get Order By Time */
 router.get("/period", verifyToken, getOrdersByPeriod);
+/* Get Top Sell Products */
+router.get("/top-sell", verifyToken, getTopSellProducts);
 /* Update Order */
 router.put("/update/:id", verifyToken, updateOrder);
 /* Delete Many Order */

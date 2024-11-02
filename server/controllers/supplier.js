@@ -13,7 +13,7 @@ export const createSupplier = async (req, res) => {
 
         if ((supplierName == undefined || supplierName == '') || (supplierDesc == undefined || supplierDesc == '')) {
             res.status(401).json({ error: "Fill All Fields!" });
-        } else if (supplierName.length > 12) {
+        } else if (supplierName.length > 16) {
             res.status(401).json({ error: "Supplier Name Too Long!" });
         } else if (supplierDesc.length > 50) {
             res.status(401).json({ error: "Description Too Long!" });
@@ -174,7 +174,7 @@ export const deleteSupplier = async (req, res) => {
 
         const supplierToDelete = await Supplier.findById(id)
 
-        const itemDependent = await Product.findOne({ productCategory: supplierToDelete._id });
+        const itemDependent = await Product.findOne({ productSupplier: supplierToDelete._id });
         const itemDependent2 = await Order.findOne({ orderSupplier: supplierToDelete._id });
 
         if (itemDependent || itemDependent2) {

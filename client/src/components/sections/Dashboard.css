@@ -269,4 +269,8 @@
         min-width: 700px;
         max-height: 600px;
     }
+
+    .dashboard__card--md {
+        height: fit-content;
+    }
 }

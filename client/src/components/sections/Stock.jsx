@@ -28,6 +28,144 @@ function Stock({ handleOpenWindow, handleRemoveItem, reload }) {
     const [productsSupplier, setProductsSupplier] = useState([]);
     const [productsSupplierStock, setProductsSupplierStock] = useState([]);
     const [productsCategoryStock, setProductsCategoryStock] = useState([]);
+    const [dataCategory, setDataCategory] = useState()
+    const [dataSupplier, setDataSupplier] = useState()
+    const [dataCategoryStock, setDataCategoryStock] = useState()
+    const [dataSupplierStock, setDataSupplierStock] = useState()
+    const [pageIsLoad, setPageIsLoad] = useState({ items: [], quantity: 0 })
+    const [optionsCategory, setOptionsCategory] = useState({
+        plugins: {
+            legend: {
+                position: 'top'
+            },
+            datalabels: {
+                formatter: function (value) {
+                    let val = Math.round(value);
+                    return new Intl.NumberFormat("tr-TR").format(val); //for number format
+                },
+                color: "white",
+                font: {
+                    weight: 'bold',
+                    size: 0,
+                    family: 'Open Sans',
+                }
+            },
+            responsive: true,
+        },
+        cutout: "50%",
+    });
+    const [optionsSupplier, setOptionsSupplier] = useState({
+        plugins: {
+            legend: {
+                position: 'top'
+            },
+            datalabels: {
+                formatter: function (value) {
+                    let val = Math.round(value);
+                    return new Intl.NumberFormat("tr-TR").format(val); //for number format
+                },
+                color: "white",
+                font: {
+                    weight: 'bold',
+                    size: 0,
+                    family: 'Open Sans',
+                }
+            },
+            responsive: true,
+        },
+        cutout: "50%",
+    });
+    const [optionsCategoryStock, setOptionsCategoryStock] = useState({
+        plugins: {
+            legend: {
+                position: 'top'
+            },
+            datalabels: {
+                formatter: function (value) {
+                    let val = Math.round(value);
+                    return new Intl.NumberFormat("tr-TR").format(val); //for number format
+                },
+                color: "white",
+                font: {
+                    weight: 'bold',
+                    size: 0,
+                    family: 'Open Sans',
+                }
+            },
+            responsive: true,
+        },
+        cutout: "50%",
+    });
+    const [optionsSupplierStock, setOptionsSupplierStock] = useState({
+        plugins: {
+            legend: {
+                position: 'top'
+            },
+            datalabels: {
+                formatter: function (value) {
+                    let val = Math.round(value);
+                    return new Intl.NumberFormat("tr-TR").format(val); //for number format
+                },
+                color: "white",
+                font: {
+                    weight: 'bold',
+                    size: 0,
+                    family: 'Open Sans',
+                }
+            },
+            responsive: true,
+        },
+        cutout: "50%",
+    });
+    const [finalDataCategory, setFinalDataCategory] = useState({
+        labels: ["No Data"],
+        datasets: [
+            {
+                data: [0.000000001],
+                backgroundColor: colors[0],
+                borderColor: colors[0],
+                borderWidth: 1,
+                dataVisibility: [true],
+            },
+        ],
+    })
+    const [finalDataCategoryStock, setFinalDataCategoryStock] = useState({
+        labels: ["No Data"],
+        datasets: [
+            {
+                data: [0.000000001],
+                backgroundColor: colors[0],
+                borderColor: colors[0],
+                borderWidth: 1,
+                dataVisibility: [true],
+            },
+        ],
+    })
+    const [finalDataSupplier, setFinalDataSupplier] = useState({
+        labels: ["No Data"],
+        datasets: [
+            {
+                data: [0.000000001],
+                backgroundColor: colors[0],
+                borderColor: colors[0],
+                borderWidth: 1,
+                dataVisibility: [true],
+            },
+        ],
+    })
+    const [finalDataSupplierStock, setFinalDataSupplierStock] = useState({
+        labels: ["No Data"],
+        datasets: [
+            {
+                data: [0.000000001],
+                backgroundColor: colors[0],
+                borderColor: colors[0],
+                borderWidth: 1,
+                dataVisibility: [true],
+            },
+        ],
+    })
+
 
     const handleGetCategories = () => {
 
@@ -89,47 +227,89 @@ function Stock({ handleOpenWindow, handleRemoveItem, reload }) {
             'Authorization': `Bearer ${userInfo.token}`
         }
 
-        for (let i = 0; i < categoriesData.length; i++) {
+        if (categoriesData.length > 0) {
+            for (let i = 0; i < categoriesData.length; i++) {
 
-            const existingCategory = productsCategory.some(itemCategory => itemCategory.category === categoriesData[i].categoryName);
+                const existingCategory = productsCategory.some(itemCategory => itemCategory.category === categoriesData[i].categoryName);
 
 
-            if (!existingCategory) {
-                const productCategoriesObj = {
-                    category: categoriesData[i].categoryName,
-                    id: categoriesData[i]._id,
-                    categoryData: []
+                if (!existingCategory) {
+                    const productCategoriesObj = {
+                        category: categoriesData[i].categoryName,
+                        id: categoriesData[i]._id,
+                        categoryData: []
+                    }
+
+                    const filteringObj = {
+                        page: 1,
+                        limit: 100,
+                        searchBy: "category",
+                        id: categoriesData[i]._id
+                    }
+
+
+                    const url = new URL(`${apiUrl}:${apiPort}/product/`);
+                    url.search = new URLSearchParams(filteringObj)
+
+                    axios.get(`${url}`, ({
+                        headers
+                    }))
+                        .then((data) => {
+                            if (data.data.productsData.length > 0) {
+                                productCategoriesObj.categoryData = data.data.productsData;
+                                setProductsCategory(prev => {
+                                    let newProdCat;
+                                    prev.some(item => item.category === categoriesData[i].categoryName)
+                                        ? newProdCat = prev
+                                        : newProdCat = [...prev, productCategoriesObj]
+
+                                    updateDataChart1(newProdCat)
+
+                                    return newProdCat
+                                }
+                                );
+                                setPageIsLoad(prevPageIsLoad => {
+                                    if (prevPageIsLoad.items.indexOf("category") == -1) {
+                                        return {
+                                            items: [...prevPageIsLoad.items, 'category'],
+                                            quantity: prevPageIsLoad.quantity + 1
+
+                                        }
+                                    } else {
+                                        return { ...prevPageIsLoad }
+                                    }
+                                });
+                            } else {
+                                setPageIsLoad(prevPageIsLoad => {
+                                    if (prevPageIsLoad.items.indexOf("category") == -1) {
+                                        return {
+                                            items: [...prevPageIsLoad.items, 'category'],
+                                            quantity: prevPageIsLoad.quantity + 1
+
+                                        }
+                                    } else {
+                                        return { ...prevPageIsLoad }
+                                    }
+                                });
+                            }
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                        })
                 }
-
-                const filteringObj = {
-                    page: 1,
-                    limit: 100,
-                    searchBy: "category",
-                    id: categoriesData[i]._id
-                }
-
-
-                const url = new URL(`${apiUrl}:${apiPort}/product/`);
-                url.search = new URLSearchParams(filteringObj)
-
-                axios.get(`${url}`, ({
-                    headers
-                }))
-                    .then((data) => {
-                        if (data.data.productsData.length > 0) {
-                            productCategoriesObj.categoryData = data.data.productsData;
-                            setProductsCategory(prev =>
-                                prev.some(item => item.category === categoriesData[i].categoryName)
-                                    ? prev
-                                    : [...prev, productCategoriesObj]
-                            );
-
-                        }
-                    })
-                    .catch((err) => {
-                        console.log(err);
-                    })
             }
+        } else {
+            setPageIsLoad(prevPageIsLoad => {
+                if (prevPageIsLoad.items.indexOf("category") == -1) {
+                    return {
+                        items: [...prevPageIsLoad.items, 'category'],
+                        quantity: prevPageIsLoad.quantity + 1
+
+                    }
+                } else {
+                    return { ...prevPageIsLoad }
+                }
+            });
         }
     }
 
@@ -139,51 +319,95 @@ function Stock({ handleOpenWindow, handleRemoveItem, reload }) {
             'Authorization': `Bearer ${userInfo.token}`
         }
 
-        for (let i = 0; i < categoriesData.length; i++) {
+        if (categoriesData.length > 0) {
+            for (let i = 0; i < categoriesData.length; i++) {
 
-            const existingCategoryStock = productsCategoryStock.some(itemCategory => itemCategory.category === categoriesData[i].categoryName);
-
-
-            if (!existingCategoryStock) {
-                const productCategoriesStockObj = {
-                    category: categoriesData[i].categoryName,
-                    id: categoriesData[i]._id,
-                    categoryData: [],
-                    quantity: 0
-                }
-
-                const filteringObj = {
-                    page: 1,
-                    limit: 100,
-                    searchBy: "stock-category",
-                    id: categoriesData[i]._id
-                }
+                const existingCategoryStock = productsCategoryStock.some(itemCategory => itemCategory.category === categoriesData[i].categoryName);
 
 
-                const url = new URL(`${apiUrl}:${apiPort}/product/`);
-                url.search = new URLSearchParams(filteringObj)
+                if (!existingCategoryStock) {
+                    const productCategoriesStockObj = {
+                        category: categoriesData[i].categoryName,
+                        id: categoriesData[i]._id,
+                        categoryData: [],
+                        quantity: 0
+                    }
 
-                axios.get(`${url}`, ({
-                    headers
-                }))
-                    .then((data) => {
-                        if (data.data.productsData.length > 0) {
-                            productCategoriesStockObj.categoryData = data.data.productsData;
-                            for (let j = 0; j < data.data.productsData.length; j++) {
-                                productCategoriesStockObj.quantity += data.data.productsData[j].stock;
+                    const filteringObj = {
+                        page: 1,
+                        limit: 100,
+                        searchBy: "stock-category",
+                        id: categoriesData[i]._id
+                    }
+
+
+                    const url = new URL(`${apiUrl}:${apiPort}/product/`);
+                    url.search = new URLSearchParams(filteringObj)
+
+                    axios.get(`${url}`, ({
+                        headers
+                    }))
+                        .then((data) => {
+                            if (data.data.productsData.length > 0) {
+                                productCategoriesStockObj.categoryData = data.data.productsData;
+                                for (let j = 0; j < data.data.productsData.length; j++) {
+                                    productCategoriesStockObj.quantity += data.data.productsData[j].stock;
+                                }
+                                setProductsCategoryStock(prev => {
+                                    let newProdCatStock;
+
+                                    prev.some(item => item.category === categoriesData[i].categoryName)
+                                        ? newProdCatStock = prev
+                                        : newProdCatStock = [...prev, productCategoriesStockObj]
+
+
+                                    updateDataChart2(newProdCatStock)
+
+                                    return newProdCatStock
+                                }
+                                );
+                                setPageIsLoad(prevPageIsLoad => {
+                                    if (prevPageIsLoad.items.indexOf("category-stock") == -1) {
+                                        return {
+                                            items: [...prevPageIsLoad.items, 'category-stock'],
+                                            quantity: prevPageIsLoad.quantity + 1
+
+                                        }
+                                    } else {
+                                        return { ...prevPageIsLoad }
+                                    }
+                                });
+                            } else {
+                                setPageIsLoad(prevPageIsLoad => {
+                                    if (prevPageIsLoad.items.indexOf("category-stock") == -1) {
+                                        return {
+                                            items: [...prevPageIsLoad.items, 'category-stock'],
+                                            quantity: prevPageIsLoad.quantity + 1
+
+                                        }
+                                    } else {
+                                        return { ...prevPageIsLoad }
+                                    }
+                                });
                             }
-                            setProductsCategoryStock(prev =>
-                                prev.some(item => item.category === categoriesData[i].categoryName)
-                                    ? prev
-                                    : [...prev, productCategoriesStockObj]
-                            );
-
-                        }
-                    })
-                    .catch((err) => {
-                        console.log(err);
-                    })
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                        })
+                }
             }
+        } else {
+            setPageIsLoad(prevPageIsLoad => {
+                if (prevPageIsLoad.items.indexOf("category-stock") == -1) {
+                    return {
+                        items: [...prevPageIsLoad.items, 'category-stock'],
+                        quantity: prevPageIsLoad.quantity + 1
+
+                    }
+                } else {
+                    return { ...prevPageIsLoad }
+                }
+            });
         }
     }
 
@@ -193,46 +417,90 @@ function Stock({ handleOpenWindow, handleRemoveItem, reload }) {
             'Authorization': `Bearer ${userInfo.token}`
         }
 
-        for (let i = 0; i < suppliersData.length; i++) {
+        if (suppliersData.length > 0) {
+            for (let i = 0; i < suppliersData.length; i++) {
 
-            const existingSupplier = productsSupplier.some(itemSupplier => itemSupplier.supplier === suppliersData[i].supplierName);
+                const existingSupplier = productsSupplier.some(itemSupplier => itemSupplier.supplier === suppliersData[i].supplierName);
 
-            if (!existingSupplier) {
+                if (!existingSupplier) {
 
-                const productsSuppliersObj = {
-                    supplier: suppliersData[i].supplierName,
-                    id: suppliersData[i]._id,
-                    supplierData: []
+                    const productsSuppliersObj = {
+                        supplier: suppliersData[i].supplierName,
+                        id: suppliersData[i]._id,
+                        supplierData: []
+                    }
+
+                    const filteringObj = {
+                        page: 1,
+                        limit: 100,
+                        searchBy: "supplier",
+                        id: suppliersData[i]._id
+                    }
+
+
+                    const url = new URL(`${apiUrl}:${apiPort}/product/`);
+                    url.search = new URLSearchParams(filteringObj)
+
+                    axios.get(`${url}`, ({
+                        headers
+                    }))
+                        .then((data) => {
+                            if (data.data.productsData.length > 0) {
+                                productsSuppliersObj.supplierData = data.data.productsData;
+                                setProductsSupplier(prev => {
+                                    let newProdSup;
+
+                                    prev.some(item => item.supplier === suppliersData[i].supplierName)
+                                        ? newProdSup = prev
+                                        : newProdSup = [...prev, productsSuppliersObj]
+
+                                    updateDataChart3(newProdSup)
+
+                                    return newProdSup
+                                }
+                                );
+                                setPageIsLoad(prevPageIsLoad => {
+                                    if (prevPageIsLoad.items.indexOf("supplier") == -1) {
+                                        return {
+                                            items: [...prevPageIsLoad.items, 'supplier'],
+                                            quantity: prevPageIsLoad.quantity + 1
+
+                                        }
+                                    } else {
+                                        return { ...prevPageIsLoad }
+                                    }
+                                });
+                            } else {
+                                setPageIsLoad(prevPageIsLoad => {
+                                    if (prevPageIsLoad.items.indexOf("supplier") == -1) {
+                                        return {
+                                            items: [...prevPageIsLoad.items, 'supplier'],
+                                            quantity: prevPageIsLoad.quantity + 1
+
+                                        }
+                                    } else {
+                                        return { ...prevPageIsLoad }
+                                    }
+                                });
+                            }
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                        })
                 }
-
-                const filteringObj = {
-                    page: 1,
-                    limit: 100,
-                    searchBy: "supplier",
-                    id: suppliersData[i]._id
-                }
-
-
-                const url = new URL(`${apiUrl}:${apiPort}/product/`);
-                url.search = new URLSearchParams(filteringObj)
-
-                axios.get(`${url}`, ({
-                    headers
-                }))
-                    .then((data) => {
-                        if (data.data.productsData.length > 0) {
-                            productsSuppliersObj.supplierData = data.data.productsData;
-                            setProductsSupplier(prev =>
-                                prev.some(item => item.supplier === suppliersData[i].supplierName)
-                                    ? prev
-                                    : [...prev, productsSuppliersObj]
-                            );
-                        }
-                    })
-                    .catch((err) => {
-                        console.log(err);
-                    })
             }
+        } else {
+            setPageIsLoad(prevPageIsLoad => {
+                if (prevPageIsLoad.items.indexOf("supplier") == -1) {
+                    return {
+                        items: [...prevPageIsLoad.items, 'supplier'],
+                        quantity: prevPageIsLoad.quantity + 1
+
+                    }
+                } else {
+                    return { ...prevPageIsLoad }
+                }
+            });
         }
     }
 
@@ -242,51 +510,94 @@ function Stock({ handleOpenWindow, handleRemoveItem, reload }) {
             'Authorization': `Bearer ${userInfo.token}`
         }
 
-        for (let i = 0; i < suppliersData.length; i++) {
+        if (suppliersData.length > 0) {
+            for (let i = 0; i < suppliersData.length; i++) {
 
-            const existingSupplierStock = productsSupplierStock.some(itemSupplier => itemSupplier.supplier === suppliersData[i].supplierName);
-
-
-            if (!existingSupplierStock) {
-                const productsSuppliersStockObj = {
-                    supplier: suppliersData[i].supplierName,
-                    id: suppliersData[i]._id,
-                    supplierData: [],
-                    quantity: 0
-                }
-
-                const filteringObj = {
-                    page: 1,
-                    limit: 100,
-                    searchBy: "stock-supplier",
-                    id: suppliersData[i]._id
-                }
+                const existingSupplierStock = productsSupplierStock.some(itemSupplier => itemSupplier.supplier === suppliersData[i].supplierName);
 
 
-                const url = new URL(`${apiUrl}:${apiPort}/product/`);
-                url.search = new URLSearchParams(filteringObj)
+                if (!existingSupplierStock) {
+                    const productsSuppliersStockObj = {
+                        supplier: suppliersData[i].supplierName,
+                        id: suppliersData[i]._id,
+                        supplierData: [],
+                        quantity: 0
+                    }
 
-                axios.get(`${url}`, ({
-                    headers
-                }))
-                    .then((data) => {
-                        if (data.data.productsData.length > 0) {
-                            productsSuppliersStockObj.supplierData = data.data.productsData;
-                            for (let j = 0; j < data.data.productsData.length; j++) {
-                                productsSuppliersStockObj.quantity += data.data.productsData[j].stock;
+                    const filteringObj = {
+                        page: 1,
+                        limit: 100,
+                        searchBy: "stock-supplier",
+                        id: suppliersData[i]._id
+                    }
+
+
+                    const url = new URL(`${apiUrl}:${apiPort}/product/`);
+                    url.search = new URLSearchParams(filteringObj)
+
+                    axios.get(`${url}`, ({
+                        headers
+                    }))
+                        .then((data) => {
+                            if (data.data.productsData.length > 0) {
+                                productsSuppliersStockObj.supplierData = data.data.productsData;
+                                for (let j = 0; j < data.data.productsData.length; j++) {
+                                    productsSuppliersStockObj.quantity += data.data.productsData[j].stock;
+                                }
+                                setProductsSupplierStock(prev => {
+                                    let newProdSupStock;
+
+                                    prev.some(item => item.supplier === suppliersData[i].supplierName)
+                                        ? newProdSupStock = prev
+                                        : newProdSupStock = [...prev, productsSuppliersStockObj]
+
+                                    updateDataChart4(newProdSupStock)
+
+                                    return newProdSupStock
+                                }
+                                );
+                                setPageIsLoad(prevPageIsLoad => {
+                                    if (prevPageIsLoad.items.indexOf("supplier-stock") == -1) {
+                                        return {
+                                            items: [...prevPageIsLoad.items, 'supplier-stock'],
+                                            quantity: prevPageIsLoad.quantity + 1
+
+                                        }
+                                    } else {
+                                        return { ...prevPageIsLoad }
+                                    }
+                                });
+                            } else {
+                                setPageIsLoad(prevPageIsLoad => {
+                                    if (prevPageIsLoad.items.indexOf("supplier-stock") == -1) {
+                                        return {
+                                            items: [...prevPageIsLoad.items, 'supplier-stock'],
+                                            quantity: prevPageIsLoad.quantity + 1
+
+                                        }
+                                    } else {
+                                        return { ...prevPageIsLoad }
+                                    }
+                                });
                             }
-                            setProductsSupplierStock(prev =>
-                                prev.some(item => item.supplier === suppliersData[i].supplierName)
-                                    ? prev
-                                    : [...prev, productsSuppliersStockObj]
-                            );
-
-                        }
-                    })
-                    .catch((err) => {
-                        console.log(err);
-                    })
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                        })
+                }
             }
+        } else {
+            setPageIsLoad(prevPageIsLoad => {
+                if (prevPageIsLoad.items.indexOf("supplier-stock") == -1) {
+                    return {
+                        items: [...prevPageIsLoad.items, 'supplier-stock'],
+                        quantity: prevPageIsLoad.quantity + 1
+
+                    }
+                } else {
+                    return { ...prevPageIsLoad }
+                }
+            });
         }
     }
 
@@ -296,183 +607,6 @@ function Stock({ handleOpenWindow, handleRemoveItem, reload }) {
         const b = Math.floor(Math.random() * 256);
         return `rgb(${r}, ${g}, ${b})`;
     }
-
-    const dataCategory = productsCategory.map((productCategory, index) => {
-        return {
-            label: productCategory.category,
-            value: productCategory.categoryData.length,
-            color: colors[index] == undefined ? createRGBColor() : colors[index],
-            cutout: "50%",
-        }
-    })
-
-    const dataCategoryStock = productsCategoryStock.map((productCategory, index) => {
-        return {
-            label: productCategory.category,
-            value: productCategory.quantity,
-            color: colors1[index] == undefined ? createRGBColor() : colors1[index],
-            cutout: "50%",
-        }
-    })
-
-    const dataSupplier = productsSupplier.map((productSupplier, index) => {
-        return {
-            label: productSupplier.supplier,
-            value: productSupplier.supplierData.length,
-            color: colors2[index] == undefined ? createRGBColor() : colors2[index],
-            cutout: "50%",
-        }
-    })
-
-    const dataSupplierStock = productsSupplierStock.map((productSupplier, index) => {
-        return {
-            label: productSupplier.supplier,
-            value: productSupplier.quantity,
-            color: colors3[index] == undefined ? createRGBColor() : colors3[index],
-            cutout: "50%",
-        }
-    })
-
-    const optionsCategory = {
-        plugins: {
-            legend: {
-                position: 'top'
-            },
-            datalabels: {
-                formatter: function (value) {
-                    let val = Math.round(value);
-                    return new Intl.NumberFormat("tr-TR").format(val); //for number format
-                },
-                color: "white",
-                font: {
-                    weight: 'bold',
-                    size: 14,
-                    family: 'Open Sans',
-                }
-            },
-            responsive: true,
-        },
-        cutout: dataCategory.map((item) => item.cutout),
-    };
-
-    const optionsCategoryStock = {
-        plugins: {
-            legend: {
-                position: 'top'
-            },
-            datalabels: {
-                formatter: function (value) {
-                    let val = Math.round(value);
-                    return new Intl.NumberFormat("tr-TR").format(val); //for number format
-                },
-                color: "white",
-                font: {
-                    weight: 'bold',
-                    size: 14,
-                    family: 'Open Sans',
-                }
-            },
-            responsive: true,
-        },
-        cutout: dataCategoryStock.map((item) => item.cutout),
-    };
-
-    const optionsSupplier = {
-        plugins: {
-            legend: {
-                position: 'top'
-            },
-            datalabels: {
-                formatter: function (value) {
-                    let val = Math.round(value);
-                    return new Intl.NumberFormat("tr-TR").format(val); //for number format
-                },
-                color: "white",
-                font: {
-                    weight: 'bold',
-                    size: 14,
-                    family: 'Open Sans',
-                }
-            },
-            responsive: true,
-        },
-        cutout: dataSupplier.map((item) => item.cutout),
-    };
-
-    const optionsSupplierStock = {
-        plugins: {
-            legend: {
-                position: 'top'
-            },
-            datalabels: {
-                formatter: function (value) {
-                    let val = Math.round(value);
-                    return new Intl.NumberFormat("tr-TR").format(val); //for number format
-                },
-                color: "white",
-                font: {
-                    weight: 'bold',
-                    size: 14,
-                    family: 'Open Sans',
-                }
-            },
-            responsive: true,
-        },
-        cutout: dataSupplierStock.map((item) => item.cutout),
-    };
-
-
-    const finalDataCategory = {
-        labels: dataCategory.map((item) => item.label),
-        datasets: [
-            {
-                data: dataCategory.map((item) => Math.round(item.value)),
-                backgroundColor: dataCategory.map((item) => item.color),
-                borderColor: dataCategory.map((item) => item.color),
-                borderWidth: 1,
-                dataVisibility: new Array(dataCategory.length).fill(true),
-            },
-        ],
-    };
-
-    const finalDataCategoryStock = {
-        labels: dataCategoryStock.map((item) => item.label),
-        datasets: [
-            {
-                data: dataCategoryStock.map((item) => Math.round(item.value)),
-                backgroundColor: dataCategoryStock.map((item) => item.color),
-                borderColor: dataCategoryStock.map((item) => item.color),
-                borderWidth: 1,
-                dataVisibility: new Array(dataCategoryStock.length).fill(true),
-            },
-        ],
-    };
-
-    const finalDataSupplierStock = {
-        labels: dataSupplierStock.map((item) => item.label),
-        datasets: [
-            {
-                data: dataSupplierStock.map((item) => Math.round(item.value)),
-                backgroundColor: dataSupplierStock.map((item) => item.color),
-                borderColor: dataSupplierStock.map((item) => item.color),
-                borderWidth: 1,
-                dataVisibility: new Array(dataSupplierStock.length).fill(true),
-            },
-        ],
-    };
-
-    const finalDataSupplier = {
-        labels: dataSupplier.map((item) => item.label),
-        datasets: [
-            {
-                data: dataSupplier.map((item) => Math.round(item.value)),
-                backgroundColor: dataSupplier.map((item) => item.color),
-                borderColor: dataSupplier.map((item) => item.color),
-                borderWidth: 1,
-                dataVisibility: new Array(dataSupplier.length).fill(true),
-            },
-        ],
-    };
 
     useEffect(() => {
         handleGetCategories();
@@ -489,6 +623,225 @@ function Stock({ handleOpenWindow, handleRemoveItem, reload }) {
         handleGetSupplierProductsStock(suppliers)
     }, [suppliers])
 
+    const updateDataChart1 = (chartData1) => {
+        setDataCategory(prev => {
+            const dataChartObj = chartData1.map((productCategory, index) => {
+                return {
+                    label: productCategory.category,
+                    value: productCategory.categoryData.length,
+                    color: colors[index] == undefined ? createRGBColor() : colors[index],
+                    cutout: "50%",
+                }
+            })
+
+
+            updateChartConfig1(dataChartObj)
+
+            return dataChartObj
+        })
+    }
+
+    const updateChartConfig1 = (chartConfig1) => {
+        setOptionsCategory({
+            plugins: {
+                legend: {
+                    position: 'top'
+                },
+                datalabels: {
+                    formatter: function (value) {
+                        let val = Math.round(value);
+                        return new Intl.NumberFormat("tr-TR").format(val); //for number format
+                    },
+                    color: "white",
+                    font: {
+                        weight: 'bold',
+                        size: 14,
+                        family: 'Open Sans',
+                    }
+                },
+                responsive: true,
+            },
+            cutout: chartConfig1.map((item) => item.cutout),
+        })
+        setFinalDataCategory({
+            labels: chartConfig1.map((item) => item.label),
+            datasets: [
+                {
+                    data: chartConfig1.map((item) => Math.round(item.value)),
+                    backgroundColor: chartConfig1.map((item) => item.color),
+                    borderColor: chartConfig1.map((item) => item.color),
+                    borderWidth: 1,
+                    dataVisibility: new Array(chartConfig1.length).fill(true),
+                },
+            ],
+        })
+    }
+
+    const updateDataChart2 = (chartData2) => {
+        setDataCategoryStock(prev => {
+            const dataChartObj = chartData2.map((productCategory, index) => {
+                return {
+                    label: productCategory.category,
+                    value: productCategory.quantity,
+                    color: colors1[index] == undefined ? createRGBColor() : colors1[index],
+                    cutout: "50%",
+                }
+            })
+
+            updateChartConfig2(dataChartObj)
+
+            return dataChartObj
+        })
+    }
+
+    const updateChartConfig2 = (chartConfig2) => {
+        setOptionsCategoryStock(
+            {
+                plugins: {
+                    legend: {
+                        position: 'top'
+                    },
+                    datalabels: {
+                        formatter: function (value) {
+                            let val = Math.round(value);
+                            return new Intl.NumberFormat("tr-TR").format(val); //for number format
+                        },
+                        color: "white",
+                        font: {
+                            weight: 'bold',
+                            size: 14,
+                            family: 'Open Sans',
+                        }
+                    },
+                    responsive: true,
+                },
+                cutout: chartConfig2.map((item) => item.cutout),
+            }
+        )
+        setFinalDataCategoryStock({
+            labels: chartConfig2.map((item) => item.label),
+            datasets: [
+                {
+                    data: chartConfig2.map((item) => Math.round(item.value)),
+                    backgroundColor: chartConfig2.map((item) => item.color),
+                    borderColor: chartConfig2.map((item) => item.color),
+                    borderWidth: 1,
+                    dataVisibility: new Array(chartConfig2.length).fill(true),
+                },
+            ],
+        })
+    }
+
+    const updateDataChart3 = (chartData3) => {
+        setDataSupplier(prev => {
+            const dataChartObj = chartData3.map((productSupplier, index) => {
+                return {
+                    label: productSupplier.supplier,
+                    value: productSupplier.supplierData.length,
+                    color: colors2[index] == undefined ? createRGBColor() : colors2[index],
+                    cutout: "50%",
+                }
+            })
+
+            updateChartConfig3(dataChartObj)
+
+            return dataChartObj
+        })
+    }
+
+    const updateChartConfig3 = (chartConfig3) => {
+        setOptionsSupplier(
+            {
+                plugins: {
+                    legend: {
+                        position: 'top'
+                    },
+                    datalabels: {
+                        formatter: function (value) {
+                            let val = Math.round(value);
+                            return new Intl.NumberFormat("tr-TR").format(val); //for number format
+                        },
+                        color: "white",
+                        font: {
+                            weight: 'bold',
+                            size: 14,
+                            family: 'Open Sans',
+                        }
+                    },
+                    responsive: true,
+                },
+                cutout: chartConfig3.map((item) => item.cutout),
+            }
+        )
+        setFinalDataSupplier({
+            labels: chartConfig3.map((item) => item.label),
+            datasets: [
+                {
+                    data: chartConfig3.map((item) => Math.round(item.value)),
+                    backgroundColor: chartConfig3.map((item) => item.color),
+                    borderColor: chartConfig3.map((item) => item.color),
+                    borderWidth: 1,
+                    dataVisibility: new Array(chartConfig3.length).fill(true),
+                },
+            ],
+        })
+    }
+
+    const updateDataChart4 = (chartData4) => {
+        setDataSupplierStock(prev => {
+            const dataChartObj = chartData4.map((productSupplier, index) => {
+                return {
+                    label: productSupplier.supplier,
+                    value: productSupplier.quantity,
+                    color: colors3[index] == undefined ? createRGBColor() : colors3[index],
+                    cutout: "50%",
+                }
+            })
+
+            updateChartConfig4(dataChartObj)
+
+            return dataChartObj
+        })
+    }
+
+    const updateChartConfig4 = (chartConfig4) => {
+        setOptionsSupplierStock(
+            {
+                plugins: {
+                    legend: {
+                        position: 'top'
+                    },
+                    datalabels: {
+                        formatter: function (value) {
+                            let val = Math.round(value);
+                            return new Intl.NumberFormat("tr-TR").format(val); //for number format
+                        },
+                        color: "white",
+                        font: {
+                            weight: 'bold',
+                            size: 14,
+                            family: 'Open Sans',
+                        }
+                    },
+                    responsive: true,
+                },
+                cutout: chartConfig4.map((item) => item.cutout),
+            }
+        )
+        setFinalDataSupplierStock({
+            labels: chartConfig4.map((item) => item.label),
+            datasets: [
+                {
+                    data: chartConfig4.map((item) => Math.round(item.value)),
+                    backgroundColor: chartConfig4.map((item) => item.color),
+                    borderColor: chartConfig4.map((item) => item.color),
+                    borderWidth: 1,
+                    dataVisibility: new Array(chartConfig4.length).fill(true),
+                },
+            ],
+        })
+    }
+
     /*     useEffect(() => {
             console.log(productsCategory)
             console.log(productsCategoryStock)
@@ -499,7 +852,7 @@ function Stock({ handleOpenWindow, handleRemoveItem, reload }) {
 
     return (
         <>
-            {(productsCategory.length > 0 && productsCategoryStock.length > 0 && productsSupplier.length > 0 && productsSupplierStock.length > 0)
+            {(pageIsLoad.quantity == 4)
                 ?
                 <>
                     <div className="card card--sm doughnut-chart__info">

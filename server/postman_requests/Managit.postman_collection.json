@@ -7,6 +7,1713 @@
 	},
 	"item": [
 		{
+			"name": "Auth Routes",
+			"item": [
+				{
+					"name": "/auth/register - Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Alan",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "alan4tomaz8@gmail.comgfh",
+									"type": "text"
+								},
+								{
+									"key": "phoneNumber",
+									"value": "(31) 9 8888-8887",
+									"type": "text"
+								},
+								{
+									"key": "birthDate",
+									"value": "2000-12-24",
+									"type": "text"
+								},
+								{
+									"key": "location",
+									"value": "526115645641",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "46546456456",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "12345678aA!",
+									"type": "text"
+								},
+								{
+									"key": "picture",
+									"type": "file",
+									"src": "postman-cloud:///1ef2a6a0-50e5-44e0-b0b8-d8063f2d1a55"
+								},
+								{
+									"key": "countryCode",
+									"value": "55",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{URL}}/auth/register",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/auth/login - Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"kath@gmail.com\",\r\n    \"password\": \"12345678aA!\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/auth/login",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Product Routes",
+			"item": [
+				{
+					"name": "/product/ - Get Products",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/product/",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"product",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/product/low-stock - Get Low Stock Products",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/product/low-stock",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"product",
+								"low-stock"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/product/stock - Get Stock Products",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/product/stock",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"product",
+								"stock"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/product/recently-added - Get Recently Added Products",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/product/recently-added",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"product",
+								"recently-added"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/product/update/:id - Update Products",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "productName",
+									"value": "Jeans",
+									"type": "text"
+								},
+								{
+									"key": "productSupplier",
+									"value": "66ef50e624cddeffcf13684a",
+									"type": "text"
+								},
+								{
+									"key": "productCategory",
+									"value": "66ef50b724cddeffcf136839",
+									"type": "text"
+								},
+								{
+									"key": "sellPrice",
+									"value": "20.50",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Jeans",
+									"type": "text"
+								},
+								{
+									"key": "picture",
+									"type": "file",
+									"src": "postman-cloud:///1ef7928a-b598-4c40-a96e-3aca6a6edd27"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{URL}}/product/update/66f07ef174d704a726ed7c29",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"product",
+								"update",
+								"66f07ef174d704a726ed7c29"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/product/remove/many? - Remove Many Products",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/product/remove/many?idsToDelete[]=66f09aa14117f576ee79de2c&idsToDelete[]=66f09a9b4117f576ee79de1b",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"product",
+								"remove",
+								"many"
+							],
+							"query": [
+								{
+									"key": "idsToDelete[]",
+									"value": "66f09aa14117f576ee79de2c"
+								},
+								{
+									"key": "idsToDelete[]",
+									"value": "66f09a9b4117f576ee79de1b"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/product/remove/ïd - Remove a Product",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/product/remove/66f09a7f4117f576ee79ddfc",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"product",
+								"remove",
+								"66f09a7f4117f576ee79ddfc"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/product/add - Add Product",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "productName",
+									"value": "Cotton shirt",
+									"type": "text"
+								},
+								{
+									"key": "productSupplier",
+									"value": "66ef50e624cddeffcf13684a",
+									"type": "text"
+								},
+								{
+									"key": "productCategory",
+									"value": "66ef50b724cddeffcf136839",
+									"type": "text"
+								},
+								{
+									"key": "sellPrice",
+									"value": "25.50",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "A Cotton Shirt",
+									"type": "text"
+								},
+								{
+									"key": "picture",
+									"type": "file",
+									"src": "postman-cloud:///1ef79100-5ec6-41f0-8d9b-ace3bb0d945b"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{URL}}/product/add",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"product",
+								"add"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Category Routes",
+			"item": [
+				{
+					"name": "/category/add - Add Category",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"categoryName\":\"T-Shirt\",\r\n    \"categoryDesc\": \"T-Shirt\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/category/add",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"category",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/category/ - Get Categories",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/category?search=&page=1&limit=10",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"category"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": ""
+								},
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/category/update/:id - Update Category",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"categoryName\": \"t-shirt\",\r\n    \"categoryDesc\":\"T-shirt\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/category/update/66ddcdf9d8418ec9f47406e4",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"category",
+								"update",
+								"66ddcdf9d8418ec9f47406e4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/category/remove/many? - Remove Many Categories",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/category/remove/many?idsToDelete[]=66e4ea4117d6a9fd489fa9c8&idsToDelete[]=66de035b6d4dfd3a8025a16f",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"category",
+								"remove",
+								"many"
+							],
+							"query": [
+								{
+									"key": "idsToDelete[]",
+									"value": "66e4ea4117d6a9fd489fa9c8"
+								},
+								{
+									"key": "idsToDelete[]",
+									"value": "66de035b6d4dfd3a8025a16f"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/category/remove/:id - Remove Category",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/category/remove/66e70d36f25a21f21bae3265",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"category",
+								"remove",
+								"66e70d36f25a21f21bae3265"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Supplier Routes",
+			"item": [
+				{
+					"name": "/supplier/add - Add Supplier",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"supplierName\": \"ABC\",\r\n    \"supplierDesc\":\"ABC\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/supplier/add",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"supplier",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/supplier/ - Get Suppliers",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/supplier?search=&page=1&limit=3",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"supplier"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": ""
+								},
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "3"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/supplier/update/:id - Update Suppliers",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"supplierName\":\"Z\",\r\n    \"supplierDesc\": \"B\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/supplier/update/66ee20da8fa71682bceada73",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"supplier",
+								"update",
+								"66ee20da8fa71682bceada73"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/supplier/remove/many? - Remove Many Suppliers",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/supplier/remove/many?idsToDelete[]=66ef2dc4e410d0591a5cffde&idsToDelete[]=66ef2e0909d46985caae4cc8",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"supplier",
+								"remove",
+								"many"
+							],
+							"query": [
+								{
+									"key": "idsToDelete[]",
+									"value": "66ef2dc4e410d0591a5cffde"
+								},
+								{
+									"key": "idsToDelete[]",
+									"value": "66ef2e0909d46985caae4cc8"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/supplier/remove/:id - Remove a Supplier",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/supplier/remove/66ee2207bc413084ce09a746",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"supplier",
+								"remove",
+								"66ee2207bc413084ce09a746"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Order Routes",
+			"item": [
+				{
+					"name": "/order/add - Add Buy Order",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"type\": \"buy\",\r\n    \"price\": 80,\r\n    \"status\": \"in progress\",\r\n    \"orderSupplier\": \"66ef50e624cddeffcf13684a\",\r\n    \"products\": [{\"product\": \"66f083f374d704a726ed7cca\", \"quantity\": 2}, {\"product\": \"66f0611274d704a726ed79f9\", \"quantity\": 1}],\r\n    \"description\": \"Some Order\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/order/add",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"order",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/order/add - Add Sell Order",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"type\": \"sale\",\r\n    \"price\": 100,\r\n    \"status\": \"finished\",\r\n    \"orderSupplier\": \"66ef50e624cddeffcf13684a\",\r\n    \"products\": [{\"product\": \"66f083f374d704a726ed7cca\", \"quantity\": 2}, {\"product\": \"66f0611274d704a726ed79f9\", \"quantity\": 1}],\r\n    \"description\": \"Some Order\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/order/add",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"order",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/order/ - Get Orders",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/order?type=buy",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"order"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "buy"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/order/time - Get Orders By Time",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/order/time?type=buy&time=60&leastTime=30",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"order",
+								"time"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "buy"
+								},
+								{
+									"key": "time",
+									"value": "60"
+								},
+								{
+									"key": "leastTime",
+									"value": "30"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/order/period - Get Orders By Period",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/order/period?option=0",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"order",
+								"period"
+							],
+							"query": [
+								{
+									"key": "option",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/order/top-sell - Get Top Sell Products",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/order/top-sell",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"order",
+								"top-sell"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/order/update/:id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"type\": \"sale\",\r\n    \"price\": 100,\r\n    \"status\": \"finished\",\r\n    \"orderSupplier\": \"66ef50e624cddeffcf13684a\",\r\n    \"products\": [{\"product\": \"66f083f374d704a726ed7cca\", \"quantity\": 2}, {\"product\": \"66f0611274d704a726ed79f9\", \"quantity\": 1}],\r\n    \"description\": \"Some Order\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/order/update/6701c00ed94748ca2f36fc38",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"order",
+								"update",
+								"6701c00ed94748ca2f36fc38"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/order/remove/many? - Remove Many Orders",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/order/remove/many?idsToDelete[]=670abc8f8b8b05249b5bab97&idsToDelete[]=670abc7b8b8b05249b5bab5b",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"order",
+								"remove",
+								"many"
+							],
+							"query": [
+								{
+									"key": "idsToDelete[]",
+									"value": "670abc8f8b8b05249b5bab97"
+								},
+								{
+									"key": "idsToDelete[]",
+									"value": "670abc7b8b8b05249b5bab5b"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/order/remove/id - Remove Order",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/order/remove/670abadb3aee99226de883f8",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"order",
+								"remove",
+								"670abadb3aee99226de883f8"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User Routes",
+			"item": [
+				{
+					"name": "/user/add - Add User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Alan",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "alan4tomaz10@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "phoneNumber",
+									"value": "(31) 9 8888-8887",
+									"type": "text"
+								},
+								{
+									"key": "birthDate",
+									"value": "2000-12-24",
+									"type": "text"
+								},
+								{
+									"key": "location",
+									"value": "Some Location",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Some Bio",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "12345678aA!",
+									"type": "text"
+								},
+								{
+									"key": "countryCode",
+									"value": "55",
+									"type": "text"
+								},
+								{
+									"key": "adminLevel",
+									"value": "0",
+									"type": "text"
+								},
+								{
+									"key": "blocked",
+									"value": "0",
+									"type": "text"
+								},
+								{
+									"key": "picture",
+									"type": "file",
+									"src": "postman-cloud:///1ef79100-5ec6-41f0-8d9b-ace3bb0d945b"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{URL}}/user/add",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"user",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/user/me - Get Your Profile",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/user/me/",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"user",
+								"me",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/user/  - Get Users",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/user/",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"user",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/user/update/me/:id - Update Your Own User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"blocked\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/user/update/me/666ca0ffba01ea4f8c414ae1",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"user",
+								"update",
+								"me",
+								"666ca0ffba01ea4f8c414ae1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/user/update/:id - Update User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Teste",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "teste2@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "phoneNumber",
+									"value": "(31) 9 9999-9999",
+									"type": "text"
+								},
+								{
+									"key": "birthDate",
+									"value": "2009-10-25",
+									"type": "text"
+								},
+								{
+									"key": "location",
+									"value": "SP, Brazil",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Some Description",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "12345678aA!",
+									"type": "text"
+								},
+								{
+									"key": "picture",
+									"type": "file",
+									"src": "/C:/Users/alan4/Downloads/FP3ZAsAWYAMsNjl.png"
+								},
+								{
+									"key": "countryCode",
+									"value": "55",
+									"type": "text"
+								},
+								{
+									"key": "adminLevel",
+									"value": "0",
+									"type": "text"
+								},
+								{
+									"key": "blocked",
+									"value": "false",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{URL}}/user/update/6713b12dc5cb7f46b43320d2",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"user",
+								"update",
+								"6713b12dc5cb7f46b43320d2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/user/remove/many? Remove Many Users",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/user/remove/many?idsToDelete[]=670c15d6fe5e87d4c7d902ca&idsToDelete[]=670c099aa077f8e995334801",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"user",
+								"remove",
+								"many"
+							],
+							"query": [
+								{
+									"key": "idsToDelete[]",
+									"value": "670c15d6fe5e87d4c7d902ca"
+								},
+								{
+									"key": "idsToDelete[]",
+									"value": "670c099aa077f8e995334801"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/user/remove/:id - Remove a User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/user/remove/66ef4e2288895622db794c62",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"user",
+								"remove",
+								"66ef4e2288895622db794c62"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Log Routes",
+			"item": [
+				{
+					"name": "/log/add - Add Log",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"type\": \"A\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/log/add",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"log",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/log/ - Get Logs",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/log/",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"log",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/log/notifications - Get Notifications",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/log/notifications/",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"log",
+								"notifications",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/log/remove/many? - Remove Many Logs",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/log/remove/many?idsToDelete[]=6715031187d1d2141c12eb3a&idsToDelete[]=6715030f87d1d2141c12eb2e",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"log",
+								"remove",
+								"many"
+							],
+							"query": [
+								{
+									"key": "idsToDelete[]",
+									"value": "6715031187d1d2141c12eb3a"
+								},
+								{
+									"key": "idsToDelete[]",
+									"value": "6715030f87d1d2141c12eb2e"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/log/remove/:id - Remove Log",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/log/remove/6715597b7f47cc9aadeb942d",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"log",
+								"remove",
+								"6715597b7f47cc9aadeb942d"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/log/clear/ - Clear Log",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/log/clear",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"log",
+								"clear"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "/ - Root",
 			"request": {
 				"method": "GET",
@@ -15,233 +1722,6 @@
 					"raw": "{{URL}}",
 					"host": [
 						"{{URL}}"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "/auth/register - Register",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "name",
-							"value": "Alan",
-							"type": "text"
-						},
-						{
-							"key": "email",
-							"value": "alan4tomaz8@gmail.comgfh",
-							"type": "text"
-						},
-						{
-							"key": "phoneNumber",
-							"value": "(31) 9 8888-8887",
-							"type": "text"
-						},
-						{
-							"key": "birthDate",
-							"value": "2000-12-24",
-							"type": "text"
-						},
-						{
-							"key": "location",
-							"value": "526115645641",
-							"type": "text"
-						},
-						{
-							"key": "description",
-							"value": "46546456456",
-							"type": "text"
-						},
-						{
-							"key": "password",
-							"value": "12345678aA!",
-							"type": "text"
-						},
-						{
-							"key": "picture",
-							"type": "file",
-							"src": "postman-cloud:///1ef2a6a0-50e5-44e0-b0b8-d8063f2d1a55"
-						},
-						{
-							"key": "countryCode",
-							"value": "55",
-							"type": "text"
-						}
-					]
-				},
-				"url": {
-					"raw": "{{URL}}/auth/register",
-					"host": [
-						"{{URL}}"
-					],
-					"path": [
-						"auth",
-						"register"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "/auth/login - Login",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"email\": \"kath@gmail.com\",\r\n    \"password\": \"12345678aA!\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{URL}}/auth/login",
-					"host": [
-						"{{URL}}"
-					],
-					"path": [
-						"auth",
-						"login"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "/category/add - Add Category",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{TOKEN}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"categoryName\":\"T-Shirt\",\r\n    \"categoryDesc\": \"T-Shirt\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{URL}}/category/add",
-					"host": [
-						"{{URL}}"
-					],
-					"path": [
-						"category",
-						"add"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "/category/ - Get Categories",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{TOKEN}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{URL}}/category/",
-					"host": [
-						"{{URL}}"
-					],
-					"path": [
-						"category",
-						""
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "/category/update/:id - Update Category",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{TOKEN}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "PUT",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"categoryName\": \"t-shirt\",\r\n    \"categoryDesc\":\"T-shirt\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{URL}}/category/update/66ddcdf9d8418ec9f47406e4",
-					"host": [
-						"{{URL}}"
-					],
-					"path": [
-						"category",
-						"update",
-						"66ddcdf9d8418ec9f47406e4"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "/category/remove/:id - Remove Category",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{TOKEN}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "DELETE",
-				"header": [],
-				"url": {
-					"raw": "{{URL}}/category/remove/66ddb55bc63672c0d2d9f191",
-					"host": [
-						"{{URL}}"
-					],
-					"path": [
-						"category",
-						"remove",
-						"66ddb55bc63672c0d2d9f191"
 					]
 				}
 			},
@@ -278,7 +1758,8 @@
 		},
 		{
 			"key": "TOKEN",
-			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NmNhMWZjYmEwMWVhNGY4YzQxNGFlOCIsImlhdCI6MTcyNTc1ODU1NH0.wIOH27AJsvPDvT7VpsdMsMmhg8VsfDJoCfZBZnA6DhE"
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NmNhMGZmYmEwMWVhNGY4YzQxNGFlMSIsImlhdCI6MTcyOTM1MTg5NX0.9-S5vvmmtkhUDKeFK38SvbVRiDFDd-9jbF_ZxW1r3sg",
+			"type": "string"
 		}
 	]
 }

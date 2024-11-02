@@ -93,8 +93,8 @@ export const createLogMiddleware = async (req) => {
 
         switch (logType) {
             case "register":
-                description = `New record: User: ${info.name} , Email: ${info.email} `;
-                notification = `New record: User: ${info.name} , Email: ${info.email} `;
+                description = `New record: User: ${info.name}, Email: ${info.email} `;
+                notification = `New record: User: ${info.name}, Email: ${info.email} `;
                 type = "register";
                 break;
             case "create-category":
@@ -239,11 +239,9 @@ export const getLogs = async (req, res) => {
 
         const logsData = await Log.find(filters)
             .populate('userGuilty')
-            .sort({ seqNum: 1 })
+            .sort({ seqNum: -1 })
             .skip((page - 1) * limit)
             .limit(parseInt(limit));
-
-        console.log(logsData);
 
         for (let i = 0; i < logsData.length; i++) {
             if (logsData[i].userGuilty == null) {
@@ -272,12 +270,13 @@ export const getNotifications = async (req, res) => {
         if (user.adminLevel == 1) {
             filterTypes.push("user");
             filterTypes.push("log");
+            filterTypes.push("register");
         }
 
         const filters = { type: { $in: filterTypes }, userGuilty: { $nin: user._id } };
 
         const logsData = await Log.find(filters)
-            .sort({ seqNum: 1 })
+            .sort({ seqNum: -1 })
             .skip((page - 1) * limit)
             .limit(parseInt(limit));
 

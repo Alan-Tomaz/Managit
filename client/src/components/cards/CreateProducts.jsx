@@ -22,6 +22,7 @@ function CreateProducts({ closeWindow, item, option, id, showToastMessage, setRe
     const [picturePath, setPicturePath] = useState(option == 1 ? item.picturePath : '');
     const [picture, setPicture] = useState()
 
+    const [pageIsLoad, setPageIsLoad] = useState([])
     const [categories, setCategories] = useState([]);
     const [suppliers, setSuppliers] = useState([]);
     const [isHovered, setIsHovered] = useState(false);
@@ -75,6 +76,13 @@ function CreateProducts({ closeWindow, item, option, id, showToastMessage, setRe
                     );
                     return [...prevCategories, ...uniqueCategories]
                 });
+                setPageIsLoad(prevPageIsLoad => {
+                    if (prevPageIsLoad.indexOf("category") == -1) {
+                        return [...prevPageIsLoad, 'category']
+                    } else {
+                        return [...prevPageIsLoad]
+                    }
+                });
                 if (productCategory && productCategory._id) {
                     const selectedCategory = newCategories.find((elem => elem._id === productCategory._id))
                     if (selectedCategory) {
@@ -119,6 +127,13 @@ function CreateProducts({ closeWindow, item, option, id, showToastMessage, setRe
                         !prevSuppliers.some(prev => prev._id === supplier._id)
                     );
                     return [...prevSuppliers, ...uniqueSuppliers]
+                });
+                setPageIsLoad(prevPageIsLoad => {
+                    if (prevPageIsLoad.indexOf("supplier") == -1) {
+                        return [...prevPageIsLoad, 'supplier']
+                    } else {
+                        return [...prevPageIsLoad]
+                    }
                 });
                 if (productSupplier && productSupplier._id) {
                     const selectedSupplier = newSuppliers.find((elem => elem._id === productSupplier._id))
@@ -170,27 +185,35 @@ function CreateProducts({ closeWindow, item, option, id, showToastMessage, setRe
             'Authorization': `Bearer ${userInfo.token}`
         }
 
-        const formData = new FormData();
-        for (let value in values) {
-            formData.append(value, values[value]);
+
+        if (productCategory == undefined) {
+            setReqError("Please Select a Category");
+        } else if (productSupplier == undefined) {
+            setReqError("Please Select a Supplier");
+        } else {
+
+            const formData = new FormData();
+            for (let value in values) {
+                formData.append(value, values[value]);
+            }
+
+            formData.append("productSupplier", productSupplier._id);
+            formData.append("productCategory", productCategory._id);
+
+            axios.post(`${apiUrl}:${apiPort}/product/add`, formData, {
+                headers
+            })
+                .then((data) => {
+                    console.log(data);
+                    showToastMessage('success', 'Product Created Successfully');
+                    setReload();
+                    closeWindow();
+                })
+                .catch((err) => {
+                    console.log(err);
+                    setReqError(err.response.data.error);
+                })
         }
-
-        formData.append("productSupplier", productSupplier._id);
-        formData.append("productCategory", productCategory._id);
-
-        axios.post(`${apiUrl}:${apiPort}/product/add`, formData, {
-            headers
-        })
-            .then((data) => {
-                console.log(data);
-                showToastMessage('success', 'Product Created Successfully');
-                setReload();
-                closeWindow();
-            })
-            .catch((err) => {
-                console.log(err);
-                setReqError(err.response.data.error);
-            })
     }
 
     const handleUpdateProduct = async (e, values) => {
@@ -275,7 +298,7 @@ function CreateProducts({ closeWindow, item, option, id, showToastMessage, setRe
 
     return (
         <>
-            {(categories.length > 0 && suppliers.length > 0) ?
+            {((pageIsLoad[0] === 'category' && pageIsLoad[1] === 'supplier') || (pageIsLoad[0] === 'supplier' && pageIsLoad[1] === 'category')) ?
                 <div className="create-products" >
                     <div className="create-products__container">
                         <div className="create-products__close">
@@ -290,36 +313,54 @@ function CreateProducts({ closeWindow, item, option, id, showToastMessage, setRe
                         <form className="create-products__form" onSubmit={(e) => option == 0 ? handleCreateProduct(e, { productName, sellPrice, description, picture }) : option == 1 ? handleUpdateProduct(e, { productName, sellPrice, description, picture }) : ''}>
                             <input type="text" name="product__name" id="product__name" className="create-products__input product__name" placeholder='Product Name:' onChange={(e) => setProductName(e.target.value)} value={productName} />
                             <div className="product__category" id='product__category' ref={categorySelectionRef} onClick={() => setShowCategories(!showCategories)}>
-                                <span>{String(productCategory.categoryName).toUpperCase()}</span>
-                                <IoMdArrowDropdown style={{ display: showCategories == false ? 'flex' : 'none' }} className='product__category-icon' />
-                                <IoMdArrowDropup style={{ display: showCategories == true ? 'flex' : 'none' }} className='product__category-icon' />
-                                <div className="product__category__options" style={{ display: showCategories == true ? 'flex' : 'none' }}>
-                                    <div className="product__category__options-scroll" ref={categoriesDivRef} onScroll={handleScrollCategories}>
-                                        {categories.map((category, index) =>
-                                            <p onClick={() => setProductCategory(category)} key={index} onMouseEnter={() => index === 0 && setIsHovered(true)} onMouseLeave={() => index === 0 && setIsHovered(false)}>{category.categoryName.toUpperCase()}</p>
-                                        )}
-                                        {categoriesLoading == true &&
-                                            <p className='product__category__options-scroll__loading'><img src={Loading} /></p>
-                                        }
-                                    </div>
-                                    <IoMdArrowDropup className='product__category__options-arrow' style={{ color: isHovered ? 'rgb(219, 219, 219)' : 'rgba(88, 88, 88, 0.1)' }} />
-                                </div>
+                                {productCategory == null
+                                    ?
+                                    <>
+                                        <span>No Categories</span>
+                                    </>
+                                    :
+                                    <>
+                                        <span>{String(productCategory.categoryName).toUpperCase()}</span>
+                                        <IoMdArrowDropdown style={{ display: showCategories == false ? 'flex' : 'none' }} className='product__category-icon' />
+                                        <IoMdArrowDropup style={{ display: showCategories == true ? 'flex' : 'none' }} className='product__category-icon' />
+                                        <div className="product__category__options" style={{ display: showCategories == true ? 'flex' : 'none' }}>
+                                            <div className="product__category__options-scroll" ref={categoriesDivRef} onScroll={handleScrollCategories}>
+                                                {categories.map((category, index) =>
+                                                    <p onClick={() => setProductCategory(category)} key={index} onMouseEnter={() => index === 0 && setIsHovered(true)} onMouseLeave={() => index === 0 && setIsHovered(false)}>{category.categoryName.toUpperCase()}</p>
+                                                )}
+                                                {categoriesLoading == true &&
+                                                    <p className='product__category__options-scroll__loading'><img src={Loading} /></p>
+                                                }
+                                            </div>
+                                            <IoMdArrowDropup className='product__category__options-arrow' style={{ color: isHovered ? 'rgb(219, 219, 219)' : 'rgba(88, 88, 88, 0.1)' }} />
+                                        </div>
+                                    </>
+                                }
                             </div>
                             <div className="product__suppliers product__category" id='product__supplier' ref={employeeSelectionRef} onClick={() => setShowEmployees(!showEmployees)}>
-                                <span>{String(productSupplier.supplierName).toUpperCase()}</span>
-                                <IoMdArrowDropdown style={{ display: showEmployees == false ? 'flex' : 'none' }} className='product__category-icon' />
-                                <IoMdArrowDropup style={{ display: showEmployees == true ? 'flex' : 'none' }} className='product__category-icon' />
-                                <div className="product__suppliers__options product__category__options" style={{ display: showEmployees == true ? 'flex' : 'none' }}>
-                                    <div className="product__category__options-scroll" ref={suppliersDivRef} onScroll={handleScrollSuppliers}>
-                                        {suppliers.map((supplier, index) =>
-                                            <p onClick={() => setProductSupplier(supplier)} key={index} onMouseEnter={() => index === 0 && setIsHovered(true)} onMouseLeave={() => index === 0 && setIsHovered(false)} >{supplier.supplierName.toUpperCase()}</p>
-                                        )}
-                                        {suppliersLoading == true &&
-                                            <p className='product__category__options-scroll__loading' ><img src={Loading} /></p>
-                                        }
-                                    </div>
-                                    <IoMdArrowDropup className='product__category__options-arrow' style={{ color: isHovered ? 'rgb(219, 219, 219)' : 'rgba(88, 88, 88, 0.1)' }} />
-                                </div>
+                                {productSupplier == null
+                                    ?
+                                    <>
+                                        <span>No Suppliers</span>
+                                    </>
+                                    :
+                                    <>
+                                        <span>{String(productSupplier.supplierName).toUpperCase()}</span>
+                                        <IoMdArrowDropdown style={{ display: showEmployees == false ? 'flex' : 'none' }} className='product__category-icon' />
+                                        <IoMdArrowDropup style={{ display: showEmployees == true ? 'flex' : 'none' }} className='product__category-icon' />
+                                        <div className="product__suppliers__options product__category__options" style={{ display: showEmployees == true ? 'flex' : 'none' }}>
+                                            <div className="product__category__options-scroll" ref={suppliersDivRef} onScroll={handleScrollSuppliers}>
+                                                {suppliers.map((supplier, index) =>
+                                                    <p onClick={() => setProductSupplier(supplier)} key={index} onMouseEnter={() => index === 0 && setIsHovered(true)} onMouseLeave={() => index === 0 && setIsHovered(false)} >{supplier.supplierName.toUpperCase()}</p>
+                                                )}
+                                                {suppliersLoading == true &&
+                                                    <p className='product__category__options-scroll__loading' ><img src={Loading} /></p>
+                                                }
+                                            </div>
+                                            <IoMdArrowDropup className='product__category__options-arrow' style={{ color: isHovered ? 'rgb(219, 219, 219)' : 'rgba(88, 88, 88, 0.1)' }} />
+                                        </div>
+                                    </>
+                                }
                             </div>
                             <div className="product__vl"></div>
                             <input type="number" name="" id="product__sellprice" className="product__sellprice create-products__input" placeholder='Sell Price' onChange={(e) => setSellPrice(e.target.value)} value={sellPrice} />

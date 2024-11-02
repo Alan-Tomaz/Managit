@@ -735,4 +735,9 @@
     .modal__window {
         padding: 2rem 1rem;
     }
+
+    .profile__container {
+        justify-content: end;
+        min-width: fit-content;
+    }
 }
