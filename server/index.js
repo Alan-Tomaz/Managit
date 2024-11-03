@@ -49,9 +49,6 @@ const port = process.env.PORT || 3000;
 mongoose.connect(process.env.MONGO_URL)
     .then(() => {
         console.log("Database Connected");
-        /* VERCEL SERVER START */
-        module.exports = app;
-        console.log(`App Started`);
         /* NORMAL SERVER START */
         /*   app.listen(port, () => {
               console.log(`App is Listening to port: ${port}`);
@@ -59,3 +56,7 @@ mongoose.connect(process.env.MONGO_URL)
     }).catch((err) => {
         console.log(err)
     })
+
+/* VERCEL SERVER START */
+module.exports = app;
+console.log(`App Started`);
