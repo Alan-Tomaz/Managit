@@ -22,7 +22,6 @@ app.use(express.json());
 app.use(cors({
     origin: ["https://managit-dun.vercel.app"],
     methods: ["POST", "GET", "PUT", "PATCH", "DELETE"],
-    credentials: true
 }
 ));
 /* GET THE DIRECTORY */
