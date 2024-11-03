@@ -6,8 +6,6 @@ const initialState = {
     timeouts: []
 }
 
-console.log(import.meta.env)
-
 const MiscSlice = createSlice({
     name: "Misc",
     initialState,
