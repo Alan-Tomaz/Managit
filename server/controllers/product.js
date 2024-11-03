@@ -8,78 +8,73 @@ import { createLogMiddleware } from './log.js';
 /* CREATE PRODUCT */
 export const createProduct = async (req, res) => {
     try {
-        const {
-            productName,
-            productSupplier,
-            productCategory,
-            sellPrice,
-            description,
-            picturePath
-        } = req.body
-
-        const filePath = `./public/assets/${picturePath}`;
-
-        if ((productName == undefined || productName == '') || (productSupplier == undefined || productSupplier == '') || (productCategory == undefined || productCategory == '') || (sellPrice == undefined || sellPrice == '') || (description == undefined || description == '') || (picturePath == undefined || picturePath == '')) {
-            res.status(401).json({ error: "Fill All Fields!" });
-            /* DELETE THE UPLOADED FILE */
-            fs.unlink(filePath, (err) => { if (err) { console.log(err) } else { console.log("File is Deleted") } });
-        } else if (productName.length > 30) {
-            res.status(401).json({ error: "Product Name Too Long!" });
-            /* DELETE THE UPLOADED FILE */
-            fs.unlink(filePath, (err) => { if (err) { console.log(err) } else { console.log("File is Deleted") } });
-        } else if (description.length > 50) {
-            res.status(401).json({ error: "Description Too Long!" });
-            /* DELETE THE UPLOADED FILE */
-            fs.unlink(filePath, (err) => { if (err) { console.log(err) } else { console.log("File is Deleted") } });
-        } else if (sellPrice > 200) {
-            res.status(401).json({ error: "Sell Price Very Expensive!" });
-            /* DELETE THE UPLOADED FILE */
-            fs.unlink(filePath, (err) => { if (err) { console.log(err) } else { console.log("File is Deleted") } });
-        }
-        else {
-
-            const categoryFinded = await Category.findOne({ _id: productCategory });
-            const supplierFinded = await Supplier.findOne({ _id: productSupplier });
-
-            if (categoryFinded == null) {
-                res.status(401).json({ error: "Category Does Not Exists" });
-                /* DELETE THE UPLOADED FILE */
+        res.status(201).json({ msg: "Due to the nature of the vercel platform, adding images cannot be done" });
+        /*     const {
+                productName,
+                productSupplier,
+                productCategory,
+                sellPrice,
+                description,
+                picturePath
+            } = req.body
+    
+            const filePath = `./public/assets/${picturePath}`;
+    
+            if ((productName == undefined || productName == '') || (productSupplier == undefined || productSupplier == '') || (productCategory == undefined || productCategory == '') || (sellPrice == undefined || sellPrice == '') || (description == undefined || description == '') || (picturePath == undefined || picturePath == '')) {
+                res.status(401).json({ error: "Fill All Fields!" });
                 fs.unlink(filePath, (err) => { if (err) { console.log(err) } else { console.log("File is Deleted") } });
-            } else if (supplierFinded == null) {
-                res.status(401).json({ error: "Supplier Does Not Exists" });
-                /* DELETE THE UPLOADED FILE */
+            } else if (productName.length > 30) {
+                res.status(401).json({ error: "Product Name Too Long!" });
                 fs.unlink(filePath, (err) => { if (err) { console.log(err) } else { console.log("File is Deleted") } });
-            } else {
-
-                const newProduct = new Product({
-                    productName,
-                    productSupplier: productSupplier,
-                    productCategory: productCategory,
-                    sellPrice,
-                    description,
-                    picturePath
-                })
-
-                const productFinded = await Product.findOne({ productName })
-
-                if (productFinded) {
-                    res.status(401).json({ error: "Product Already Exists" });
+            } else if (description.length > 50) {
+                res.status(401).json({ error: "Description Too Long!" });
+                fs.unlink(filePath, (err) => { if (err) { console.log(err) } else { console.log("File is Deleted") } });
+            } else if (sellPrice > 200) {
+                res.status(401).json({ error: "Sell Price Very Expensive!" });
+                fs.unlink(filePath, (err) => { if (err) { console.log(err) } else { console.log("File is Deleted") } });
+            }
+            else {
+    
+                const categoryFinded = await Category.findOne({ _id: productCategory });
+                const supplierFinded = await Supplier.findOne({ _id: productSupplier });
+    
+                if (categoryFinded == null) {
+                    res.status(401).json({ error: "Category Does Not Exists" });
+                    fs.unlink(filePath, (err) => { if (err) { console.log(err) } else { console.log("File is Deleted") } });
+                } else if (supplierFinded == null) {
+                    res.status(401).json({ error: "Supplier Does Not Exists" });
                     fs.unlink(filePath, (err) => { if (err) { console.log(err) } else { console.log("File is Deleted") } });
                 } else {
-                    const savedProduct = await newProduct.save()
+    
+                    const newProduct = new Product({
+                        productName,
+                        productSupplier: productSupplier,
+                        productCategory: productCategory,
+                        sellPrice,
+                        description,
+                        picturePath
+                    })
+    
+                    const productFinded = await Product.findOne({ productName })
+    
+                    if (productFinded) {
+                        res.status(401).json({ error: "Product Already Exists" });
+                        fs.unlink(filePath, (err) => { if (err) { console.log(err) } else { console.log("File is Deleted") } });
+                    } else {
+                        const savedProduct = await newProduct.save()
+    */
+        /* LOG PARAMETERS 
+        req.body.info = savedProduct;
+        req.body.type = "create-product";
 
-                    /* LOG PARAMETERS */
-                    req.body.info = savedProduct;
-                    req.body.type = "create-product";
+        res.status(201).json({ product: savedProduct });
 
-                    res.status(201).json({ product: savedProduct });
-
-                    setTimeout(() => {
-                        createLogMiddleware(req);
-                    }, 0);
-                }
-            }
-        }
+        setTimeout(() => {
+            createLogMiddleware(req);
+        }, 0);
+    }
+}
+} */
 
     } catch (error) {
 
@@ -272,6 +267,7 @@ export const updateProduct = async (req, res) => {
                         description
                     };
                     if (picturePath != undefined) {
+                        return res.status(200).json({ msg: "Due to the nature of the vercel platform, adding images cannot be done" });
                         newProductValues.picturePath = picturePath;
                     }
 
@@ -308,40 +304,41 @@ export const updateProduct = async (req, res) => {
 /* DELETE MANY PRODUCTS */
 export const deleteManyProducts = async (req, res) => {
     try {
-        const { idsToDelete } = req.query;
+        res.status(200).json({ msg: "Due to the nature of the vercel platform, deleting items with images should not be done." });
+        /*  const { idsToDelete } = req.query;
+ 
+         const productsToDelete = await Product.find({ _id: { $in: idsToDelete } })
+ 
+         for (let i = 0; i < productsToDelete.length; i++) {
+             const itemDependent = await Order.findOne({ "products.product": productsToDelete[i]._id });
+ 
+             if (itemDependent) {
+                 return res.status(404).json({ error: `The  product ${productsToDelete[i].productName} cannot be deleted because it is linked to other records.` });
+             }
+         }
+ 
+         const result = await Product.deleteMany({
+             _id: { $in: idsToDelete }
+         });
+ 
+         if (!result) {
+             return res.status(404).json({ error: "Products not Found" });
+         } else {
+             productsToDelete.map((product, index) => {
+                 const filePath = `./public/assets/${product.picturePath}`;
+                 fs.unlink(filePath, (err) => { if (err) { console.log(err) } else { console.log(`File ${index + 1} is Deleted`) } });
+             })
+  */
+        /* LOG PARAMETERS */
+        /*   req.body.info = productsToDelete;
+          req.body.type = "delete-many-products";
 
-        const productsToDelete = await Product.find({ _id: { $in: idsToDelete } })
+          res.status(200).json({ msg: "Products Successfully Deleted" });
 
-        for (let i = 0; i < productsToDelete.length; i++) {
-            const itemDependent = await Order.findOne({ "products.product": productsToDelete[i]._id });
-
-            if (itemDependent) {
-                return res.status(404).json({ error: `The  product ${productsToDelete[i].productName} cannot be deleted because it is linked to other records.` });
-            }
-        }
-
-        const result = await Product.deleteMany({
-            _id: { $in: idsToDelete }
-        });
-
-        if (!result) {
-            return res.status(404).json({ error: "Products not Found" });
-        } else {
-            productsToDelete.map((product, index) => {
-                const filePath = `./public/assets/${product.picturePath}`;
-                fs.unlink(filePath, (err) => { if (err) { console.log(err) } else { console.log(`File ${index + 1} is Deleted`) } });
-            })
-
-            /* LOG PARAMETERS */
-            req.body.info = productsToDelete;
-            req.body.type = "delete-many-products";
-
-            res.status(200).json({ msg: "Products Successfully Deleted" });
-
-            setTimeout(() => {
-                createLogMiddleware(req);
-            }, 0)
-        }
+          setTimeout(() => {
+              createLogMiddleware(req);
+          }, 0) 
+    }*/
 
     } catch (error) {
         console.log(error);
@@ -353,7 +350,7 @@ export const deleteManyProducts = async (req, res) => {
 export const deleteProduct = async (req, res) => {
     try {
 
-        res.status(400).json({ msg: "Due to the nature of the vercel platform, deleting items with images should not be done." });
+        res.status(200).json({ msg: "Due to the nature of the vercel platform, deleting items with images should not be done." });
 
         /*     const { id } = req.params;
     
