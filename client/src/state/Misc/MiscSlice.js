@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     apiUrl: import.meta.env.VITE_API_URL || "http://localhost",
-    apiPort: import.meta.env.VITE_API_PORT || "3000",
+    apiPort: import.meta.env.VITE_API_PORT || "",
     timeouts: []
 }
 
