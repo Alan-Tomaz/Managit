@@ -8,7 +8,7 @@ import { createLogMiddleware } from './log.js';
 /* CREATE PRODUCT */
 export const createProduct = async (req, res) => {
     try {
-        res.status(201).json({ msg: "Due to the nature of the vercel platform, adding images cannot be done" });
+        res.status(401).json({ error: "Due to the nature of the vercel platform, adding images cannot be done" });
         /*     const {
                 productName,
                 productSupplier,
@@ -267,7 +267,7 @@ export const updateProduct = async (req, res) => {
                         description
                     };
                     if (picturePath != undefined) {
-                        return res.status(200).json({ msg: "Due to the nature of the vercel platform, adding images cannot be done" });
+                        return res.status(401).json({ error: "Due to the nature of the vercel platform, adding images cannot be done" });
                         newProductValues.picturePath = picturePath;
                     }
 
@@ -304,7 +304,7 @@ export const updateProduct = async (req, res) => {
 /* DELETE MANY PRODUCTS */
 export const deleteManyProducts = async (req, res) => {
     try {
-        res.status(200).json({ msg: "Due to the nature of the vercel platform, deleting items with images should not be done." });
+        res.status(404).json({ error: "Due to the nature of the vercel platform, deleting items with images should not be done." });
         /*  const { idsToDelete } = req.query;
  
          const productsToDelete = await Product.find({ _id: { $in: idsToDelete } })
@@ -350,7 +350,7 @@ export const deleteManyProducts = async (req, res) => {
 export const deleteProduct = async (req, res) => {
     try {
 
-        res.status(200).json({ msg: "Due to the nature of the vercel platform, deleting items with images should not be done." });
+        res.status(404).json({ error: "Due to the nature of the vercel platform, deleting items with images should not be done." });
 
         /*     const { id } = req.params;
     
