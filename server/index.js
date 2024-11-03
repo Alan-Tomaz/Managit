@@ -19,7 +19,12 @@ dotenv.config();
 /* USE JSON REQUESTS */
 app.use(express.json());
 /* CORS RULES */
-app.use(cors());
+app.use(cors({
+    origin: ["https://managit-dun.vercel.app"],
+    methods: ["POST", "GET", "PUT", "PATCH", "DELETE"],
+    credentials: true
+}
+));
 /* GET THE DIRECTORY */
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
