@@ -94,7 +94,7 @@ The following libraries were used to develop the site:
 - **[Dot env](https://www.npmjs.com/package/dotenv)** (creation and reading of environment variables);
 - **[JSON Web Token](https://jwt.io)** (session token creation);
 - **[Mongoose](https://mongoosejs.com)** (MongoDB database manipulation);
-- **[Multer](hhttps://www.npmjs.com/package/multer)** (file upload to server);
+- **[Multer](https://www.npmjs.com/package/multer)** (file upload to server);
 - **[Nodemon](https://www.npmjs.com/package/nodemon)** (Automatic Server Re-running);
 
 The website design was created using **[Figma](https://www.figma.com/pt-br/)** (one day I will make better designs).
