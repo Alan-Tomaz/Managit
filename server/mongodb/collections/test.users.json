@@ -1,0 +1,48 @@
+[{
+  "_id": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "name": "Dean Winchester",
+  "email": "dean.winchester@gmail.com",
+  "phoneNumber": "+1 (785) 554-9548",
+  "password": "$2b$10$LKSSBoYNaQX2o9uKHpubIeSz.KXxQj8YF3.gSujgmfgk4f2esXG9m",
+  "picturePath": "1730570535628-images4.jpeg",
+  "birthDate": {
+    "$date": "1979-01-24T00:00:00.000Z"
+  },
+  "location": "Lawrence, Kansas",
+  "description": "Family business",
+  "adminLevel": 1,
+  "blocked": false,
+  "createdAt": {
+    "$date": "2024-11-02T18:02:15.706Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T23:24:49.691Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67267ce57ebc1be0ad751f65"
+  },
+  "name": "Alice",
+  "email": "alice@gmail.com",
+  "phoneNumber": "+1 (687) 456-1132",
+  "password": "$2b$10$MxXlzOLArdkxDoPvasxwTOv3z..x4GYTsSx3cTCUQ.DT.czaciN9C",
+  "picturePath": "1730575589828-Alice_Kingsleigh.png",
+  "birthDate": {
+    "$date": "1989-10-25T00:00:00.000Z"
+  },
+  "location": "Wonderland",
+  "description": "Alice in Wonderland",
+  "adminLevel": 0,
+  "blocked": false,
+  "createdAt": {
+    "$date": "2024-11-02T19:26:29.905Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T19:26:29.905Z"
+  },
+  "__v": 0
+}]

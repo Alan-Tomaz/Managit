@@ -1,0 +1,791 @@
+[{
+  "_id": {
+    "$oid": "6726aeb99004387fd7088ab1"
+  },
+  "type": "buy",
+  "price": 280,
+  "status": "finished",
+  "orderSupplier": {
+    "$oid": "6726ae3d9004387fd7088798"
+  },
+  "products": [
+    {
+      "product": {
+        "$oid": "6726aeac9004387fd7088a93"
+      },
+      "quantity": 4,
+      "_id": {
+        "$oid": "6726aeb99004387fd7088ab2"
+      }
+    }
+  ],
+  "description": "Wristwatch Buy",
+  "uniqueId": "17305883459968",
+  "createdAt": {
+    "$date": "2024-07-02T22:59:05.997Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T22:59:05.997Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726affa9004387fd7088cc8"
+  },
+  "type": "buy",
+  "price": 110,
+  "status": "finished",
+  "orderSupplier": {
+    "$oid": "6726af439004387fd7088b42"
+  },
+  "products": [
+    {
+      "product": {
+        "$oid": "6726af829004387fd7088b86"
+      },
+      "quantity": 2,
+      "_id": {
+        "$oid": "6726affa9004387fd7088cc9"
+      }
+    },
+    {
+      "product": {
+        "$oid": "6726afbb9004387fd7088bc8"
+      },
+      "quantity": 1,
+      "_id": {
+        "$oid": "6726affa9004387fd7088cca"
+      }
+    },
+    {
+      "product": {
+        "$oid": "6726afad9004387fd7088bb2"
+      },
+      "quantity": 1,
+      "_id": {
+        "$oid": "6726affa9004387fd7088ccb"
+      }
+    }
+  ],
+  "description": "Clothing Items",
+  "uniqueId": "17305886661170",
+  "createdAt": {
+    "$date": "2024-11-02T23:04:26.118Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T23:04:26.118Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726b0079004387fd7088cf2"
+  },
+  "type": "buy",
+  "price": 150,
+  "status": "finished",
+  "orderSupplier": {
+    "$oid": "6726af489004387fd7088b4c"
+  },
+  "products": [
+    {
+      "product": {
+        "$oid": "6726af959004387fd7088b9c"
+      },
+      "quantity": 3,
+      "_id": {
+        "$oid": "6726b0549004387fd7088e6b"
+      }
+    }
+  ],
+  "description": "Shoes Buy",
+  "uniqueId": "17305886791523",
+  "createdAt": {
+    "$date": "2024-04-02T23:04:39.153Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T23:05:56.788Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726b0189004387fd7088d1b"
+  },
+  "type": "buy",
+  "price": 360,
+  "status": "finished",
+  "orderSupplier": {
+    "$oid": "6726ae3d9004387fd7088798"
+  },
+  "products": [
+    {
+      "product": {
+        "$oid": "6726af729004387fd7088b70"
+      },
+      "quantity": 3,
+      "_id": {
+        "$oid": "6726b0189004387fd7088d1c"
+      }
+    },
+    {
+      "product": {
+        "$oid": "6726aeac9004387fd7088a93"
+      },
+      "quantity": 3,
+      "_id": {
+        "$oid": "6726b0189004387fd7088d1d"
+      }
+    }
+  ],
+  "description": "Acessories",
+  "uniqueId": "17305886964380",
+  "createdAt": {
+    "$date": "2024-09-15T23:04:56.439Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T23:04:56.439Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726b02a9004387fd7088d45"
+  },
+  "type": "buy",
+  "price": 190,
+  "status": "finished",
+  "orderSupplier": {
+    "$oid": "6726af489004387fd7088b4c"
+  },
+  "products": [
+    {
+      "product": {
+        "$oid": "6726af829004387fd7088b86"
+      },
+      "quantity": 2,
+      "_id": {
+        "$oid": "6726b02a9004387fd7088d46"
+      }
+    },
+    {
+      "product": {
+        "$oid": "6726af959004387fd7088b9c"
+      },
+      "quantity": 2,
+      "_id": {
+        "$oid": "6726b02a9004387fd7088d47"
+      }
+    },
+    {
+      "product": {
+        "$oid": "6726afad9004387fd7088bb2"
+      },
+      "quantity": 1,
+      "_id": {
+        "$oid": "6726b02a9004387fd7088d48"
+      }
+    },
+    {
+      "product": {
+        "$oid": "6726af729004387fd7088b70"
+      },
+      "quantity": 1,
+      "_id": {
+        "$oid": "6726b02a9004387fd7088d49"
+      }
+    }
+  ],
+  "description": "Some Acessories, Clothes and Shoes",
+  "uniqueId": "17305887141663",
+  "createdAt": {
+    "$date": "2024-11-02T23:05:14.167Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T23:05:14.167Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726b03d9004387fd7088e0c"
+  },
+  "type": "buy",
+  "price": 30,
+  "status": "finished",
+  "orderSupplier": {
+    "$oid": "6726af439004387fd7088b42"
+  },
+  "products": [
+    {
+      "product": {
+        "$oid": "6726af829004387fd7088b86"
+      },
+      "quantity": 3,
+      "_id": {
+        "$oid": "6726b3019004387fd708a208"
+      }
+    }
+  ],
+  "description": "Some T Shirts",
+  "uniqueId": "17305887333037",
+  "createdAt": {
+    "$date": "2024-10-02T23:05:33.303Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T23:17:21.197Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726b0509004387fd7088e38"
+  },
+  "type": "buy",
+  "price": 210,
+  "status": "finished",
+  "orderSupplier": {
+    "$oid": "6726af489004387fd7088b4c"
+  },
+  "products": [
+    {
+      "product": {
+        "$oid": "6726afbb9004387fd7088bc8"
+      },
+      "quantity": 3,
+      "_id": {
+        "$oid": "6726b0509004387fd7088e39"
+      }
+    }
+  ],
+  "description": "Jacket Buy",
+  "uniqueId": "17305887520352",
+  "createdAt": {
+    "$date": "2024-11-02T23:05:52.035Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T23:05:52.035Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726b0ba9004387fd7089272"
+  },
+  "type": "sale",
+  "price": 170,
+  "status": "finished",
+  "orderSupplier": {
+    "$oid": "6726af439004387fd7088b42"
+  },
+  "products": [
+    {
+      "product": {
+        "$oid": "6726af829004387fd7088b86"
+      },
+      "quantity": 1,
+      "_id": {
+        "$oid": "6726b0ba9004387fd7089273"
+      }
+    },
+    {
+      "product": {
+        "$oid": "6726afbb9004387fd7088bc8"
+      },
+      "quantity": 1,
+      "_id": {
+        "$oid": "6726b0ba9004387fd7089274"
+      }
+    },
+    {
+      "product": {
+        "$oid": "6726afad9004387fd7088bb2"
+      },
+      "quantity": 1,
+      "_id": {
+        "$oid": "6726b0ba9004387fd7089275"
+      }
+    }
+  ],
+  "description": "Clothes Sell",
+  "uniqueId": "17305888587569",
+  "createdAt": {
+    "$date": "2024-11-02T23:07:38.757Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T23:07:38.757Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726b0e49004387fd708934e"
+  },
+  "type": "sale",
+  "price": 180,
+  "status": "finished",
+  "orderSupplier": {
+    "$oid": "6726ae3d9004387fd7088798"
+  },
+  "products": [
+    {
+      "product": {
+        "$oid": "6726af729004387fd7088b70"
+      },
+      "quantity": 1,
+      "_id": {
+        "$oid": "6726b0e49004387fd708934f"
+      }
+    },
+    {
+      "product": {
+        "$oid": "6726aeac9004387fd7088a93"
+      },
+      "quantity": 1,
+      "_id": {
+        "$oid": "6726b0e49004387fd7089350"
+      }
+    }
+  ],
+  "description": "Acessories Sell",
+  "uniqueId": "17305889004008",
+  "createdAt": {
+    "$date": "2024-09-17T23:08:20.401Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T23:08:20.401Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726b0fd9004387fd7089374"
+  },
+  "type": "sale",
+  "price": 180,
+  "status": "finished",
+  "orderSupplier": {
+    "$oid": "6726af439004387fd7088b42"
+  },
+  "products": [
+    {
+      "product": {
+        "$oid": "6726af959004387fd7088b9c"
+      },
+      "quantity": 1,
+      "_id": {
+        "$oid": "6726b0fd9004387fd7089375"
+      }
+    },
+    {
+      "product": {
+        "$oid": "6726af829004387fd7088b86"
+      },
+      "quantity": 1,
+      "_id": {
+        "$oid": "6726b0fd9004387fd7089376"
+      }
+    },
+    {
+      "product": {
+        "$oid": "6726afbb9004387fd7088bc8"
+      },
+      "quantity": 1,
+      "_id": {
+        "$oid": "6726b0fd9004387fd7089377"
+      }
+    },
+    {
+      "product": {
+        "$oid": "6726afad9004387fd7088bb2"
+      },
+      "quantity": 1,
+      "_id": {
+        "$oid": "6726b0fd9004387fd7089378"
+      }
+    }
+  ],
+  "description": "Clothes Sell",
+  "uniqueId": "17305889256886",
+  "createdAt": {
+    "$date": "2024-11-02T23:08:45.689Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T23:08:45.689Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726b1059004387fd70893a3"
+  },
+  "type": "sale",
+  "price": 160,
+  "status": "finished",
+  "orderSupplier": {
+    "$oid": "6726af489004387fd7088b4c"
+  },
+  "products": [
+    {
+      "product": {
+        "$oid": "6726af959004387fd7088b9c"
+      },
+      "quantity": 2,
+      "_id": {
+        "$oid": "6726b3789004387fd708a4a4"
+      }
+    }
+  ],
+  "description": "Shoes Sell",
+  "uniqueId": "17305889331648",
+  "createdAt": {
+    "$date": "2024-04-03T23:08:53.165Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T23:19:20.918Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726b1229004387fd70894fa"
+  },
+  "type": "buy",
+  "price": 200,
+  "status": "finished",
+  "orderSupplier": {
+    "$oid": "6726af439004387fd7088b42"
+  },
+  "products": [
+    {
+      "product": {
+        "$oid": "6726afbb9004387fd7088bc8"
+      },
+      "quantity": 2,
+      "_id": {
+        "$oid": "6726b1229004387fd70894fb"
+      }
+    },
+    {
+      "product": {
+        "$oid": "6726afad9004387fd7088bb2"
+      },
+      "quantity": 3,
+      "_id": {
+        "$oid": "6726b1229004387fd70894fc"
+      }
+    }
+  ],
+  "description": "Clothes Buy",
+  "uniqueId": "17305889628415",
+  "createdAt": {
+    "$date": "2024-11-02T23:09:22.843Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T23:09:22.843Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726b1339004387fd7089543"
+  },
+  "type": "sale",
+  "price": 160,
+  "status": "finished",
+  "orderSupplier": {
+    "$oid": "6726af439004387fd7088b42"
+  },
+  "products": [
+    {
+      "product": {
+        "$oid": "6726afad9004387fd7088bb2"
+      },
+      "quantity": 1,
+      "_id": {
+        "$oid": "6726b1539004387fd70895fe"
+      }
+    },
+    {
+      "product": {
+        "$oid": "6726afbb9004387fd7088bc8"
+      },
+      "quantity": 1,
+      "_id": {
+        "$oid": "6726b1539004387fd70895ff"
+      }
+    },
+    {
+      "product": {
+        "$oid": "6726af829004387fd7088b86"
+      },
+      "quantity": 1,
+      "_id": {
+        "$oid": "6726b1539004387fd7089600"
+      }
+    }
+  ],
+  "description": "Clothes Sell",
+  "uniqueId": "17305889792009",
+  "createdAt": {
+    "$date": "2024-11-02T23:09:39.201Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T23:10:11.246Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726b13d9004387fd7089573"
+  },
+  "type": "sale",
+  "price": 207,
+  "status": "finished",
+  "orderSupplier": {
+    "$oid": "6726af489004387fd7088b4c"
+  },
+  "products": [
+    {
+      "product": {
+        "$oid": "6726af959004387fd7088b9c"
+      },
+      "quantity": 2,
+      "_id": {
+        "$oid": "6726b38a9004387fd708a4f4"
+      }
+    },
+    {
+      "product": {
+        "$oid": "6726af729004387fd7088b70"
+      },
+      "quantity": 1,
+      "_id": {
+        "$oid": "6726b38a9004387fd708a4f5"
+      }
+    }
+  ],
+  "description": "Shoes Sell",
+  "uniqueId": "17305889895525",
+  "createdAt": {
+    "$date": "2024-10-27T23:09:49.553Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T23:19:38.864Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726b1499004387fd70895a1"
+  },
+  "type": "sale",
+  "price": 250,
+  "status": "finished",
+  "orderSupplier": {
+    "$oid": "6726ae3d9004387fd7088798"
+  },
+  "products": [
+    {
+      "product": {
+        "$oid": "6726aeac9004387fd7088a93"
+      },
+      "quantity": 1,
+      "_id": {
+        "$oid": "6726b1499004387fd70895a2"
+      }
+    },
+    {
+      "product": {
+        "$oid": "6726af729004387fd7088b70"
+      },
+      "quantity": 2,
+      "_id": {
+        "$oid": "6726b1499004387fd70895a3"
+      }
+    }
+  ],
+  "description": "Acessories Sell",
+  "uniqueId": "17305890012976",
+  "createdAt": {
+    "$date": "2024-11-02T23:10:01.298Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T23:10:01.298Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726b1809004387fd708973c"
+  },
+  "type": "buy",
+  "price": 150,
+  "status": "finished",
+  "orderSupplier": {
+    "$oid": "6726af489004387fd7088b4c"
+  },
+  "products": [
+    {
+      "product": {
+        "$oid": "6726af959004387fd7088b9c"
+      },
+      "quantity": 2,
+      "_id": {
+        "$oid": "6726b1809004387fd708973d"
+      }
+    },
+    {
+      "product": {
+        "$oid": "6726af729004387fd7088b70"
+      },
+      "quantity": 1,
+      "_id": {
+        "$oid": "6726b1809004387fd708973e"
+      }
+    }
+  ],
+  "description": "Shoes and Acessories Buy",
+  "uniqueId": "17305890565224",
+  "createdAt": {
+    "$date": "2024-10-25T23:10:56.523Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T23:10:56.523Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726b2539004387fd7089d28"
+  },
+  "type": "sale",
+  "price": 200,
+  "status": "finished",
+  "orderSupplier": {
+    "$oid": "6726ae3d9004387fd7088798"
+  },
+  "products": [
+    {
+      "product": {
+        "$oid": "6726aeac9004387fd7088a93"
+      },
+      "quantity": 2,
+      "_id": {
+        "$oid": "6726b2539004387fd7089d29"
+      }
+    }
+  ],
+  "description": "Wristwatch Sell",
+  "uniqueId": "17305892671325",
+  "createdAt": {
+    "$date": "2024-07-10T23:14:27.133Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T23:14:27.133Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726b25f9004387fd7089d54"
+  },
+  "type": "buy",
+  "price": 180,
+  "status": "finished",
+  "orderSupplier": {
+    "$oid": "6726af439004387fd7088b42"
+  },
+  "products": [
+    {
+      "product": {
+        "$oid": "6726af829004387fd7088b86"
+      },
+      "quantity": 4,
+      "_id": {
+        "$oid": "6726b25f9004387fd7089d55"
+      }
+    },
+    {
+      "product": {
+        "$oid": "6726afbb9004387fd7088bc8"
+      },
+      "quantity": 2,
+      "_id": {
+        "$oid": "6726b25f9004387fd7089d56"
+      }
+    }
+  ],
+  "description": "Clothes Buy",
+  "uniqueId": "17305892793555",
+  "createdAt": {
+    "$date": "2024-11-02T23:14:39.356Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T23:14:39.356Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726b2da9004387fd708a0c6"
+  },
+  "type": "sale",
+  "price": 70,
+  "status": "finished",
+  "orderSupplier": {
+    "$oid": "6726af439004387fd7088b42"
+  },
+  "products": [
+    {
+      "product": {
+        "$oid": "6726af829004387fd7088b86"
+      },
+      "quantity": 3,
+      "_id": {
+        "$oid": "6726b2da9004387fd708a0c7"
+      }
+    }
+  ],
+  "description": "Clothes Sell",
+  "uniqueId": "17305894020382",
+  "createdAt": {
+    "$date": "2024-10-05T23:16:42.039Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T23:16:42.039Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6727d0cad86f4806e90f73f0"
+  },
+  "type": "buy",
+  "price": 30,
+  "status": "finished",
+  "orderSupplier": {
+    "$oid": "6726af439004387fd7088b42"
+  },
+  "products": [
+    {
+      "product": {
+        "$oid": "6726af829004387fd7088b86"
+      },
+      "quantity": 1,
+      "_id": {
+        "$oid": "6727d0cad86f4806e90f73f1"
+      }
+    }
+  ],
+  "description": "T Shirt Buy",
+  "uniqueId": "17306626026582",
+  "createdAt": {
+    "$date": "2024-11-03T19:36:42.665Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-03T19:36:42.665Z"
+  },
+  "__v": 0
+}]

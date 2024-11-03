@@ -1,0 +1,168 @@
+[{
+  "_id": {
+    "$oid": "6726aeac9004387fd7088a93"
+  },
+  "productName": "Wristwatch Brown",
+  "productSupplier": {
+    "$oid": "6726ae3d9004387fd7088798"
+  },
+  "productCategory": {
+    "$oid": "6726ae379004387fd708878a"
+  },
+  "sellPrice": 70,
+  "stock": 3,
+  "description": "Wristwatch Brown",
+  "status": "in stock",
+  "picturePath": "1730588331977-pngwing.com (3).png",
+  "createdAt": {
+    "$date": "2024-11-02T22:58:52.033Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T23:14:27.160Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726af729004387fd7088b70"
+  },
+  "productName": "Silver Necklace",
+  "productSupplier": {
+    "$oid": "6726ae3d9004387fd7088798"
+  },
+  "productCategory": {
+    "$oid": "6726af159004387fd7088ad6"
+  },
+  "sellPrice": 50,
+  "stock": 1,
+  "description": "Silver Necklace",
+  "status": "in stock",
+  "picturePath": "1730588530376-pngwing.com (4).png",
+  "createdAt": {
+    "$date": "2024-11-02T23:02:10.432Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T23:19:38.840Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726af829004387fd7088b86"
+  },
+  "productName": "Black T Shirt",
+  "productSupplier": {
+    "$oid": "6726af439004387fd7088b42"
+  },
+  "productCategory": {
+    "$oid": "6726af069004387fd7088acc"
+  },
+  "sellPrice": 10,
+  "stock": 6,
+  "description": "Black T Shirt",
+  "status": "in stock",
+  "picturePath": "1730588546692-pngwing.com (2).png",
+  "createdAt": {
+    "$date": "2024-11-02T23:02:26.777Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-03T19:36:42.795Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726af959004387fd7088b9c"
+  },
+  "productName": "Nike Sb Chron 2",
+  "productSupplier": {
+    "$oid": "6726af489004387fd7088b4c"
+  },
+  "productCategory": {
+    "$oid": "6726af3a9004387fd7088aec"
+  },
+  "sellPrice": 50,
+  "stock": 2,
+  "description": "Nike Sb Chron 2",
+  "status": "in stock",
+  "picturePath": "1730588564980-67066-1712062551734.png",
+  "createdAt": {
+    "$date": "2024-11-02T23:02:45.036Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T23:10:56.596Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726afad9004387fd7088bb2"
+  },
+  "productName": "Jeans Pants",
+  "productSupplier": {
+    "$oid": "6726af439004387fd7088b42"
+  },
+  "productCategory": {
+    "$oid": "6726af069004387fd7088acc"
+  },
+  "sellPrice": 20,
+  "stock": 2,
+  "description": "Jeans Pants",
+  "status": "in stock",
+  "picturePath": "1730588589086-232373004_1119_090-CALCA-JEANS-SKINNY-CINTURA-MEDIA.png",
+  "createdAt": {
+    "$date": "2024-11-02T23:03:09.146Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-03T20:14:51.114Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726afbb9004387fd7088bc8"
+  },
+  "productName": "Jacket",
+  "productSupplier": {
+    "$oid": "6726af439004387fd7088b42"
+  },
+  "productCategory": {
+    "$oid": "6726af069004387fd7088acc"
+  },
+  "sellPrice": 70,
+  "stock": 5,
+  "description": "Jeans Pants",
+  "status": "in stock",
+  "picturePath": "1730588603231-pngwing.com.png",
+  "createdAt": {
+    "$date": "2024-11-02T23:03:23.287Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-03T19:19:25.199Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726afcd9004387fd7088bde"
+  },
+  "productName": "Nike Air Jordan 1 ",
+  "productSupplier": {
+    "$oid": "6726af489004387fd7088b4c"
+  },
+  "productCategory": {
+    "$oid": "6726af3a9004387fd7088aec"
+  },
+  "sellPrice": 200,
+  "stock": 0,
+  "description": "Nike Air Jordan 1 ",
+  "status": "out of stock",
+  "picturePath": "1730588621655-pngwing.com (5).png",
+  "createdAt": {
+    "$date": "2024-11-02T23:03:41.713Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T23:05:56.764Z"
+  },
+  "__v": 0
+}]

@@ -1,0 +1,56 @@
+[{
+  "_id": {
+    "$oid": "6726ae379004387fd708878a"
+  },
+  "categoryName": "Wristwatch",
+  "description": "Wristwatch",
+  "createdAt": {
+    "$date": "2024-11-02T22:56:55.580Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T22:56:55.580Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726af069004387fd7088acc"
+  },
+  "categoryName": "Clothing",
+  "description": "Clothing",
+  "createdAt": {
+    "$date": "2024-11-02T23:00:22.622Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T23:00:22.622Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726af159004387fd7088ad6"
+  },
+  "categoryName": "Acessories",
+  "description": "Acessories",
+  "createdAt": {
+    "$date": "2024-11-02T23:00:37.323Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T23:00:37.323Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726af3a9004387fd7088aec"
+  },
+  "categoryName": "Shoes",
+  "description": "Shoes",
+  "createdAt": {
+    "$date": "2024-11-02T23:01:14.420Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T23:01:14.420Z"
+  },
+  "__v": 0
+}]

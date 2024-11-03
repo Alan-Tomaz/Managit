@@ -1,0 +1,42 @@
+[{
+  "_id": {
+    "$oid": "6726ae3d9004387fd7088798"
+  },
+  "supplierName": "Acessories 4U",
+  "description": "Acessories 4U",
+  "createdAt": {
+    "$date": "2024-11-02T22:57:01.859Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T22:57:01.859Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726af439004387fd7088b42"
+  },
+  "supplierName": "ABC-Outfits",
+  "description": "ABC-Outfits",
+  "createdAt": {
+    "$date": "2024-11-02T23:01:23.445Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T23:01:23.445Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726af489004387fd7088b4c"
+  },
+  "supplierName": "007-Shoes",
+  "description": "007-Shoes",
+  "createdAt": {
+    "$date": "2024-11-02T23:01:28.645Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T23:01:28.645Z"
+  },
+  "__v": 0
+}]

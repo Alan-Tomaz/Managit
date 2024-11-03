@@ -1,0 +1,2508 @@
+[{
+  "_id": {
+    "$oid": "672669277ebc1be0ad751c2e"
+  },
+  "seqNum": 1,
+  "description": "New record: User: Dean Winchester, Email: dean.winchester@gmail.com ",
+  "notification": "New record: User: Dean Winchester, Email: dean.winchester@gmail.com ",
+  "type": "register",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T18:02:15.767Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T18:02:15.767Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "672679397ebc1be0ad751f2f"
+  },
+  "seqNum": 2,
+  "description": "Created a new Category: Clothing ",
+  "notification": "New Category: Clothing ",
+  "type": "category",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T19:10:49.918Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T19:10:49.918Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "672679447ebc1be0ad751f36"
+  },
+  "seqNum": 3,
+  "description": "Uptaded a category: Clothing ",
+  "notification": "Category Updated: Clothing ",
+  "type": "category",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T19:11:00.186Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T19:11:00.186Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67267ce57ebc1be0ad751f69"
+  },
+  "seqNum": 4,
+  "description": "New record: User: Alice, Email: alice@gmail.com ",
+  "notification": "New record: User: Alice, Email: alice@gmail.com ",
+  "type": "register",
+  "userGuilty": {
+    "$oid": "67267ce57ebc1be0ad751f65"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T19:26:29.958Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T19:26:29.958Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67267d137ebc1be0ad752016"
+  },
+  "seqNum": 5,
+  "description": "Deleted the category: Clothing ",
+  "notification": "Category Deleted: Clothing ",
+  "type": "category",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T19:27:16.000Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T19:27:16.000Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "672688a8ef5a02308e32db95"
+  },
+  "seqNum": 6,
+  "description": "Created a new Category: Clothing ",
+  "notification": "New Category: Clothing ",
+  "type": "category",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T20:16:40.155Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T20:16:40.155Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "672688c8ef5a02308e32dbaf"
+  },
+  "seqNum": 7,
+  "description": "Created a new Supplier: ABC-Outfits ",
+  "notification": "New Supplier: ABC-Outfits ",
+  "type": "supplier",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T20:17:12.399Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T20:17:12.399Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "672688dfef5a02308e32dbc7"
+  },
+  "seqNum": 8,
+  "description": "Created a new Product: Jacket ",
+  "notification": "New Product: Jacket ",
+  "type": "product",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T20:17:35.923Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T20:17:35.923Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67268908ef5a02308e32dc82"
+  },
+  "seqNum": 9,
+  "description": "Deleted the supplier: ABC-Outfits ",
+  "notification": "Supplier Deleted: ABC-Outfits ",
+  "type": "supplier",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T20:18:16.469Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T20:18:16.469Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67268988ef5a02308e32dcc6"
+  },
+  "seqNum": 10,
+  "description": "Created a new Supplier: ABC-Outfits ",
+  "notification": "New Supplier: ABC-Outfits ",
+  "type": "supplier",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T20:20:24.886Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T20:20:24.886Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67268992ef5a02308e32dcde"
+  },
+  "seqNum": 11,
+  "description": "Created a new Product: Jacket ",
+  "notification": "New Product: Jacket ",
+  "type": "product",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T20:20:34.795Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T20:20:34.795Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726899daad98728567540e6"
+  },
+  "seqNum": 12,
+  "description": "Deleted the supplier: ABC-Outfits ",
+  "notification": "Supplier Deleted: ABC-Outfits ",
+  "type": "supplier",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T20:20:45.593Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T20:20:45.593Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "672689cc8083738e9607d7ca"
+  },
+  "seqNum": 13,
+  "description": "Created a new Supplier: ABC-Outfits ",
+  "notification": "New Supplier: ABC-Outfits ",
+  "type": "supplier",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T20:21:32.839Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T20:21:32.839Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "672689d58083738e9607d7e2"
+  },
+  "seqNum": 14,
+  "description": "Created a new Product: Jacket ",
+  "notification": "New Product: Jacket ",
+  "type": "product",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T20:21:41.810Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T20:21:41.810Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "672689e38083738e9607d815"
+  },
+  "seqNum": 15,
+  "description": "Deleted the product: Jacket ",
+  "notification": "Product Deleted: Jacket ",
+  "type": "product",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T20:21:55.460Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T20:21:55.460Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67268c438083738e9607d891"
+  },
+  "seqNum": 16,
+  "description": "Deleted the supplier: ABC-Outfits ",
+  "notification": "Supplier Deleted: ABC-Outfits ",
+  "type": "supplier",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T20:32:03.767Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T20:32:03.767Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67268d438083738e9607d8ce"
+  },
+  "seqNum": 17,
+  "description": "Created a new Supplier: ABC-Outfits ",
+  "notification": "New Supplier: ABC-Outfits ",
+  "type": "supplier",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T20:36:19.568Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T20:36:19.568Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67268d638083738e9607d906"
+  },
+  "seqNum": 18,
+  "description": "Created a new Product: Jacket ",
+  "notification": "New Product: Jacket ",
+  "type": "product",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T20:36:51.062Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T20:36:51.062Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67268e638083738e9607db56"
+  },
+  "seqNum": 19,
+  "description": "Created a new Category: Shoes ",
+  "notification": "New Category: Shoes ",
+  "type": "category",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T20:41:07.248Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T20:41:07.248Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67268e6e8083738e9607db6c"
+  },
+  "seqNum": 20,
+  "description": "Created a new Supplier: 007-Shoes ",
+  "notification": "New Supplier: 007-Shoes ",
+  "type": "supplier",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T20:41:18.582Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T20:41:18.582Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67268e918083738e9607dc00"
+  },
+  "seqNum": 21,
+  "description": "Created a new Product: Nike Sb Chron 2 ",
+  "notification": "New Product: Nike Sb Chron 2 ",
+  "type": "product",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T20:41:53.267Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T20:41:53.267Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67268fa18083738e9607ddba"
+  },
+  "seqNum": 22,
+  "description": "Created a new Product: Black T Shirt ",
+  "notification": "New Product: Black T Shirt ",
+  "type": "product",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T20:46:25.141Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T20:46:25.141Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67268fca8083738e9607ddd0"
+  },
+  "seqNum": 23,
+  "description": "Created a new Product: Jeans Pants ",
+  "notification": "New Product: Jeans Pants ",
+  "type": "product",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T20:47:06.222Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T20:47:06.222Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "672690088083738e9607de32"
+  },
+  "seqNum": 24,
+  "description": "Created a new Category: Wristwatch ",
+  "notification": "New Category: Wristwatch ",
+  "type": "category",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T20:48:08.493Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T20:48:08.493Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "672690538083738e9607de96"
+  },
+  "seqNum": 25,
+  "description": "Created a new Product: Wristwatch Brown ",
+  "notification": "New Product: Wristwatch Brown ",
+  "type": "product",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T20:49:23.669Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T20:49:23.669Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "672690df8083738e9607dfaa"
+  },
+  "seqNum": 26,
+  "description": "Created a new Category: Acessories ",
+  "notification": "New Category: Acessories ",
+  "type": "category",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T20:51:43.690Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T20:51:43.690Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726914c90c163527e189194"
+  },
+  "seqNum": 27,
+  "description": "Created a new Supplier: Acessories 4U ",
+  "notification": "New Supplier: Acessories 4U ",
+  "type": "supplier",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T20:53:32.951Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T20:53:32.951Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "672691615042d3e3ab3ceb6e"
+  },
+  "seqNum": 28,
+  "description": "Created a new Supplier: Wonderful Acessories ",
+  "notification": "New Supplier: Wonderful Acessories ",
+  "type": "supplier",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T20:53:53.631Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T20:53:53.631Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67269178756a12db542df2c6"
+  },
+  "seqNum": 29,
+  "description": "Deleted the supplier: Wonderful Acessories ",
+  "notification": "Supplier Deleted: Wonderful Acessories ",
+  "type": "supplier",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T20:54:16.160Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T20:54:16.160Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67269183756a12db542df2d0"
+  },
+  "seqNum": 30,
+  "description": "Created a new Supplier: Wonderful Acessories ",
+  "notification": "New Supplier: Wonderful Acessories ",
+  "type": "supplier",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T20:54:27.472Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T20:54:27.472Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726918a756a12db542df2db"
+  },
+  "seqNum": 31,
+  "description": "Deleted the supplier: Wonderful Acessories ",
+  "notification": "Supplier Deleted: Wonderful Acessories ",
+  "type": "supplier",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T20:54:34.227Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T20:54:34.227Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726918f4f2db78fa8dfdfda"
+  },
+  "seqNum": 32,
+  "description": "Created a new Supplier: Wonderful Acessori ",
+  "notification": "New Supplier: Wonderful Acessori ",
+  "type": "supplier",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T20:54:39.915Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T20:54:39.915Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726919d6903bd6d8167c2e2"
+  },
+  "seqNum": 33,
+  "description": "Deleted the supplier: Wonderful Acessori ",
+  "notification": "Supplier Deleted: Wonderful Acessori ",
+  "type": "supplier",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T20:54:53.955Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T20:54:53.955Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "672691ab6903bd6d8167c2eb"
+  },
+  "seqNum": 34,
+  "description": "Created a new Supplier: Wonderful Acesso ",
+  "notification": "New Supplier: Wonderful Acesso ",
+  "type": "supplier",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T20:55:07.135Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T20:55:07.135Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "672691b56903bd6d8167c30f"
+  },
+  "seqNum": 35,
+  "description": "Deleted the supplier: Wonderful Acesso ",
+  "notification": "Supplier Deleted: Wonderful Acesso ",
+  "type": "supplier",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T20:55:17.730Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T20:55:17.730Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "672694c9a1a20e12b8b03c4b"
+  },
+  "seqNum": 36,
+  "description": "Created a new Product: Silver Necklace ",
+  "notification": "New Product: Silver Necklace ",
+  "type": "product",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T21:08:25.671Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T21:08:25.671Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "672694eda1a20e12b8b03d29"
+  },
+  "seqNum": 37,
+  "description": "Created a new Order: 17305817415032, Type: buy ",
+  "notification": "New Order: 17305817415032, Type: buy ",
+  "type": "order",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T21:09:01.805Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T21:09:01.805Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67269541a1a20e12b8b041a8"
+  },
+  "seqNum": 38,
+  "description": "Created a new Order: 17305818251189, Type: buy ",
+  "notification": "New Order: 17305818251189, Type: buy ",
+  "type": "order",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T21:10:25.226Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T21:10:25.226Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726955da1a20e12b8b0426d"
+  },
+  "seqNum": 39,
+  "description": "Created a new Order: 17305818537733, Type: buy ",
+  "notification": "New Order: 17305818537733, Type: buy ",
+  "type": "order",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T21:10:53.847Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T21:10:53.847Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67269569a1a20e12b8b04291"
+  },
+  "seqNum": 40,
+  "description": "Created a new Order: 17305818654847, Type: buy ",
+  "notification": "New Order: 17305818654847, Type: buy ",
+  "type": "order",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T21:11:05.581Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T21:11:05.581Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67269574a1a20e12b8b042b5"
+  },
+  "seqNum": 41,
+  "description": "Created a new Order: 17305818765571, Type: buy ",
+  "notification": "New Order: 17305818765571, Type: buy ",
+  "type": "order",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T21:11:16.647Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T21:11:16.647Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726957ca1a20e12b8b042de"
+  },
+  "seqNum": 42,
+  "description": "Created a new Order: 17305818846275, Type: buy ",
+  "notification": "New Order: 17305818846275, Type: buy ",
+  "type": "order",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T21:11:24.703Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T21:11:24.703Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67269582a1a20e12b8b04308"
+  },
+  "seqNum": 43,
+  "description": "Uptaded a order: 17305818654847 ",
+  "notification": "Order 17305818654847 Updated",
+  "type": "order",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T21:11:30.393Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T21:11:30.393Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "672695ada1a20e12b8b0442e"
+  },
+  "seqNum": 44,
+  "description": "Created a new Order: 17305819332702, Type: sale ",
+  "notification": "New Order: 17305819332702, Type: sale ",
+  "type": "order",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T21:12:13.371Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T21:12:13.371Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "672695cfa1a20e12b8b044dd"
+  },
+  "seqNum": 45,
+  "description": "Created a new Order: 17305819669884, Type: sale ",
+  "notification": "New Order: 17305819669884, Type: sale ",
+  "type": "order",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T21:12:47.103Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T21:12:47.103Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726a592a1a20e12b8b057b9"
+  },
+  "seqNum": 46,
+  "description": "Created a new Order: 17305860022772, Type: sale ",
+  "notification": "New Order: 17305860022772, Type: sale ",
+  "type": "order",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T22:20:02.361Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T22:20:02.361Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726a5a0a1a20e12b8b057de"
+  },
+  "seqNum": 47,
+  "description": "Created a new Order: 17305860164863, Type: sale ",
+  "notification": "New Order: 17305860164863, Type: sale ",
+  "type": "order",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T22:20:16.555Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T22:20:16.555Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726a5a8a1a20e12b8b05804"
+  },
+  "seqNum": 48,
+  "description": "Created a new Order: 17305860246455, Type: sale ",
+  "notification": "New Order: 17305860246455, Type: sale ",
+  "type": "order",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T22:20:24.715Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T22:20:24.715Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726a5c6a1a20e12b8b058d5"
+  },
+  "seqNum": 49,
+  "description": "Created a new Order: 17305860540855, Type: sale ",
+  "notification": "New Order: 17305860540855, Type: sale ",
+  "type": "order",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T22:20:54.152Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T22:20:54.152Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726a6e7a1a20e12b8b05ab8"
+  },
+  "seqNum": 50,
+  "description": "Created a new Product: Nike Air Jordan 1  ",
+  "notification": "New Product: Nike Air Jordan 1  ",
+  "type": "product",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T22:25:43.764Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T22:25:43.764Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726abe69004387fd7088509"
+  },
+  "seqNum": 51,
+  "description": "Deleted the order: 17305817415032 ",
+  "notification": "Order Deleted: 17305817415032 ",
+  "type": "order",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T22:47:02.015Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T22:47:02.015Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726abe99004387fd708851d"
+  },
+  "seqNum": 52,
+  "description": "Deleted the order: 17305818251189 ",
+  "notification": "Order Deleted: 17305818251189 ",
+  "type": "order",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T22:47:05.346Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T22:47:05.346Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726abea9004387fd7088536"
+  },
+  "seqNum": 53,
+  "description": "Deleted the order: 17305818537733 ",
+  "notification": "Order Deleted: 17305818537733 ",
+  "type": "order",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T22:47:06.558Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T22:47:06.558Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726abeb9004387fd7088546"
+  },
+  "seqNum": 54,
+  "description": "Deleted the order: 17305818654847 ",
+  "notification": "Order Deleted: 17305818654847 ",
+  "type": "order",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T22:47:07.839Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T22:47:07.839Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726abed9004387fd708855b"
+  },
+  "seqNum": 55,
+  "description": "Deleted the order: 17305818765571 ",
+  "notification": "Order Deleted: 17305818765571 ",
+  "type": "order",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T22:47:09.230Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T22:47:09.230Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726abee9004387fd7088567"
+  },
+  "seqNum": 56,
+  "description": "Deleted the order: 17305818846275 ",
+  "notification": "Order Deleted: 17305818846275 ",
+  "type": "order",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T22:47:10.494Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T22:47:10.494Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726abf19004387fd708859c"
+  },
+  "seqNum": 57,
+  "description": "Deleted the order: 17305819332702 ",
+  "notification": "Order Deleted: 17305819332702 ",
+  "type": "order",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T22:47:13.081Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T22:47:13.081Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726abf29004387fd70885b7"
+  },
+  "seqNum": 58,
+  "description": "Deleted the order: 17305819669884 ",
+  "notification": "Order Deleted: 17305819669884 ",
+  "type": "order",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T22:47:14.579Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T22:47:14.579Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726abf39004387fd70885c9"
+  },
+  "seqNum": 59,
+  "description": "Deleted the order: 17305860022772 ",
+  "notification": "Order Deleted: 17305860022772 ",
+  "type": "order",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T22:47:15.912Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T22:47:15.912Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726abf59004387fd70885d7"
+  },
+  "seqNum": 60,
+  "description": "Deleted the order: 17305860164863 ",
+  "notification": "Order Deleted: 17305860164863 ",
+  "type": "order",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T22:47:17.354Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T22:47:17.354Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726abf69004387fd70885eb"
+  },
+  "seqNum": 61,
+  "description": "Deleted the order: 17305860246455 ",
+  "notification": "Order Deleted: 17305860246455 ",
+  "type": "order",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T22:47:18.703Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T22:47:18.703Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726abf89004387fd70885fa"
+  },
+  "seqNum": 62,
+  "description": "Deleted the order: 17305860540855 ",
+  "notification": "Order Deleted: 17305860540855 ",
+  "type": "order",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T22:47:20.245Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T22:47:20.245Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726abfe9004387fd708860b"
+  },
+  "seqNum": 63,
+  "description": "Deleted the product: Black T Shirt ",
+  "notification": "Product Deleted: Black T Shirt ",
+  "type": "product",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T22:47:26.586Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T22:47:26.586Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726ac009004387fd7088617"
+  },
+  "seqNum": 64,
+  "description": "Deleted the product: Jacket ",
+  "notification": "Product Deleted: Jacket ",
+  "type": "product",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T22:47:28.278Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T22:47:28.278Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726ac019004387fd7088623"
+  },
+  "seqNum": 65,
+  "description": "Deleted the product: Jeans Pants ",
+  "notification": "Product Deleted: Jeans Pants ",
+  "type": "product",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T22:47:29.753Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T22:47:29.753Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726ac039004387fd708862f"
+  },
+  "seqNum": 66,
+  "description": "Deleted the product: Nike Air Jordan 1  ",
+  "notification": "Product Deleted: Nike Air Jordan 1  ",
+  "type": "product",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T22:47:31.966Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T22:47:31.966Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726ac059004387fd708863b"
+  },
+  "seqNum": 67,
+  "description": "Deleted the product: Nike Sb Chron 2 ",
+  "notification": "Product Deleted: Nike Sb Chron 2 ",
+  "type": "product",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T22:47:33.639Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T22:47:33.639Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726ac079004387fd7088647"
+  },
+  "seqNum": 68,
+  "description": "Deleted the product: Silver Necklace ",
+  "notification": "Product Deleted: Silver Necklace ",
+  "type": "product",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T22:47:35.027Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T22:47:35.027Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726ac089004387fd7088653"
+  },
+  "seqNum": 69,
+  "description": "Deleted the product: Wristwatch Brown ",
+  "notification": "Product Deleted: Wristwatch Brown ",
+  "type": "product",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T22:47:36.457Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T22:47:36.457Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726ac0b9004387fd7088661"
+  },
+  "seqNum": 70,
+  "description": "Deleted the category: Acessories ",
+  "notification": "Category Deleted: Acessories ",
+  "type": "category",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T22:47:39.033Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T22:47:39.033Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726ac0c9004387fd708866c"
+  },
+  "seqNum": 71,
+  "description": "Deleted the category: Clothing ",
+  "notification": "Category Deleted: Clothing ",
+  "type": "category",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T22:47:40.426Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T22:47:40.426Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726ac0d9004387fd7088676"
+  },
+  "seqNum": 72,
+  "description": "Deleted the category: Shoes ",
+  "notification": "Category Deleted: Shoes ",
+  "type": "category",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T22:47:41.992Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T22:47:41.992Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726ac0f9004387fd708867f"
+  },
+  "seqNum": 73,
+  "description": "Deleted the category: Wristwatch ",
+  "notification": "Category Deleted: Wristwatch ",
+  "type": "category",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T22:47:43.725Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T22:47:43.725Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726ac129004387fd708868e"
+  },
+  "seqNum": 74,
+  "description": "Deleted the supplier: 007-Shoes ",
+  "notification": "Supplier Deleted: 007-Shoes ",
+  "type": "supplier",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T22:47:46.426Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T22:47:46.426Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726ac139004387fd7088699"
+  },
+  "seqNum": 75,
+  "description": "Deleted the supplier: ABC-Outfits ",
+  "notification": "Supplier Deleted: ABC-Outfits ",
+  "type": "supplier",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T22:47:47.832Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T22:47:47.832Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726ac159004387fd70886a4"
+  },
+  "seqNum": 76,
+  "description": "Deleted the supplier: Acessories 4U ",
+  "notification": "Supplier Deleted: Acessories 4U ",
+  "type": "supplier",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T22:47:49.373Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T22:47:49.373Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726ae379004387fd7088790"
+  },
+  "seqNum": 77,
+  "description": "Created a new Category: Wristwatch ",
+  "notification": "New Category: Wristwatch ",
+  "type": "category",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T22:56:55.640Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T22:56:55.640Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726ae3d9004387fd708879e"
+  },
+  "seqNum": 78,
+  "description": "Created a new Supplier: Acessories 4U ",
+  "notification": "New Supplier: Acessories 4U ",
+  "type": "supplier",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T22:57:01.908Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T22:57:01.908Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726ae549004387fd70887d2"
+  },
+  "seqNum": 79,
+  "description": "Created a new Product: Wristwatch Brown ",
+  "notification": "New Product: Wristwatch Brown ",
+  "type": "product",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T22:57:24.446Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T22:57:24.446Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726ae6b9004387fd7088830"
+  },
+  "seqNum": 80,
+  "description": "Created a new Order: 17305882675714, Type: buy ",
+  "notification": "New Order: 17305882675714, Type: buy ",
+  "type": "order",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T22:57:47.672Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T22:57:47.672Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726ae929004387fd70889bd"
+  },
+  "seqNum": 81,
+  "description": "Deleted the order: 17305882675714 ",
+  "notification": "Order Deleted: 17305882675714 ",
+  "type": "order",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T22:58:26.065Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T22:58:26.065Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726aea09004387fd7088a66"
+  },
+  "seqNum": 82,
+  "description": "Deleted the product: Wristwatch Brown ",
+  "notification": "Product Deleted: Wristwatch Brown ",
+  "type": "product",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T22:58:40.827Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T22:58:40.827Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726aeac9004387fd7088a99"
+  },
+  "seqNum": 83,
+  "description": "Created a new Product: Wristwatch Brown ",
+  "notification": "New Product: Wristwatch Brown ",
+  "type": "product",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T22:58:52.083Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T22:58:52.083Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726aeba9004387fd7088ab9"
+  },
+  "seqNum": 84,
+  "description": "Created a new Order: 17305883459968, Type: buy ",
+  "notification": "New Order: 17305883459968, Type: buy ",
+  "type": "order",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T22:59:06.092Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T22:59:06.092Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726af069004387fd7088ad2"
+  },
+  "seqNum": 85,
+  "description": "Created a new Category: Clothing ",
+  "notification": "New Category: Clothing ",
+  "type": "category",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T23:00:22.670Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T23:00:22.670Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726af159004387fd7088adc"
+  },
+  "seqNum": 86,
+  "description": "Created a new Category: Acessories ",
+  "notification": "New Category: Acessories ",
+  "type": "category",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T23:00:37.376Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T23:00:37.376Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726af3a9004387fd7088af2"
+  },
+  "seqNum": 87,
+  "description": "Created a new Category: Shoes ",
+  "notification": "New Category: Shoes ",
+  "type": "category",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T23:01:14.474Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T23:01:14.474Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726af439004387fd7088b48"
+  },
+  "seqNum": 88,
+  "description": "Created a new Supplier: ABC-Outfits ",
+  "notification": "New Supplier: ABC-Outfits ",
+  "type": "supplier",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T23:01:23.492Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T23:01:23.492Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726af489004387fd7088b52"
+  },
+  "seqNum": 89,
+  "description": "Created a new Supplier: 007-Shoes ",
+  "notification": "New Supplier: 007-Shoes ",
+  "type": "supplier",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T23:01:28.697Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T23:01:28.697Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726af729004387fd7088b76"
+  },
+  "seqNum": 90,
+  "description": "Created a new Product: Silver Necklace ",
+  "notification": "New Product: Silver Necklace ",
+  "type": "product",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T23:02:10.488Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T23:02:10.488Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726af829004387fd7088b8c"
+  },
+  "seqNum": 91,
+  "description": "Created a new Product: Black T Shirt ",
+  "notification": "New Product: Black T Shirt ",
+  "type": "product",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T23:02:26.833Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T23:02:26.833Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726af959004387fd7088ba4"
+  },
+  "seqNum": 92,
+  "description": "Created a new Product: Nike Sb Chron 2 ",
+  "notification": "New Product: Nike Sb Chron 2 ",
+  "type": "product",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T23:02:45.093Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T23:02:45.093Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726afad9004387fd7088bb8"
+  },
+  "seqNum": 93,
+  "description": "Created a new Product: Jeans Pants ",
+  "notification": "New Product: Jeans Pants ",
+  "type": "product",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T23:03:09.191Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T23:03:09.191Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726afbb9004387fd7088bce"
+  },
+  "seqNum": 94,
+  "description": "Created a new Product: Jacket ",
+  "notification": "New Product: Jacket ",
+  "type": "product",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T23:03:23.344Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T23:03:23.344Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726afcd9004387fd7088be4"
+  },
+  "seqNum": 95,
+  "description": "Created a new Product: Nike Air Jordan 1  ",
+  "notification": "New Product: Nike Air Jordan 1  ",
+  "type": "product",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T23:03:41.758Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T23:03:41.758Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726affa9004387fd7088cd6"
+  },
+  "seqNum": 96,
+  "description": "Created a new Order: 17305886661170, Type: buy ",
+  "notification": "New Order: 17305886661170, Type: buy ",
+  "type": "order",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T23:04:26.325Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T23:04:26.325Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726b0079004387fd7088cfd"
+  },
+  "seqNum": 97,
+  "description": "Created a new Order: 17305886791523, Type: buy ",
+  "notification": "New Order: 17305886791523, Type: buy ",
+  "type": "order",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T23:04:39.295Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T23:04:39.295Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726b0189004387fd7088d25"
+  },
+  "seqNum": 98,
+  "description": "Created a new Order: 17305886964380, Type: buy ",
+  "notification": "New Order: 17305886964380, Type: buy ",
+  "type": "order",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T23:04:56.566Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T23:04:56.566Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726b02a9004387fd7088d52"
+  },
+  "seqNum": 99,
+  "description": "Created a new Order: 17305887141663, Type: buy ",
+  "notification": "New Order: 17305887141663, Type: buy ",
+  "type": "order",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T23:05:14.327Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T23:05:14.327Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726b03d9004387fd7088e13"
+  },
+  "seqNum": 100,
+  "description": "Created a new Order: 17305887333037, Type: buy ",
+  "notification": "New Order: 17305887333037, Type: buy ",
+  "type": "order",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T23:05:33.378Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T23:05:33.378Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726b0509004387fd7088e3f"
+  },
+  "seqNum": 101,
+  "description": "Created a new Order: 17305887520352, Type: buy ",
+  "notification": "New Order: 17305887520352, Type: buy ",
+  "type": "order",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T23:05:52.114Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T23:05:52.114Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726b0549004387fd7088e81"
+  },
+  "seqNum": 102,
+  "description": "Uptaded a order: 17305886791523 ",
+  "notification": "Order 17305886791523 Updated",
+  "type": "order",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T23:05:56.845Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T23:05:56.845Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726b0ba9004387fd708927d"
+  },
+  "seqNum": 103,
+  "description": "Created a new Order: 17305888587569, Type: sale ",
+  "notification": "New Order: 17305888587569, Type: sale ",
+  "type": "order",
+  "userGuilty": {
+    "$oid": "67267ce57ebc1be0ad751f65"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T23:07:38.881Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T23:07:38.881Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726b0e49004387fd7089357"
+  },
+  "seqNum": 104,
+  "description": "Created a new Order: 17305889004008, Type: sale ",
+  "notification": "New Order: 17305889004008, Type: sale ",
+  "type": "order",
+  "userGuilty": {
+    "$oid": "67267ce57ebc1be0ad751f65"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T23:08:20.516Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T23:08:20.516Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726b0fd9004387fd7089382"
+  },
+  "seqNum": 105,
+  "description": "Created a new Order: 17305889256886, Type: sale ",
+  "notification": "New Order: 17305889256886, Type: sale ",
+  "type": "order",
+  "userGuilty": {
+    "$oid": "67267ce57ebc1be0ad751f65"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T23:08:45.877Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T23:08:45.877Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726b1059004387fd70893aa"
+  },
+  "seqNum": 106,
+  "description": "Created a new Order: 17305889331648, Type: sale ",
+  "notification": "New Order: 17305889331648, Type: sale ",
+  "type": "order",
+  "userGuilty": {
+    "$oid": "67267ce57ebc1be0ad751f65"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T23:08:53.235Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T23:08:53.235Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726b1229004387fd7089504"
+  },
+  "seqNum": 107,
+  "description": "Created a new Order: 17305889628415, Type: buy ",
+  "notification": "New Order: 17305889628415, Type: buy ",
+  "type": "order",
+  "userGuilty": {
+    "$oid": "67267ce57ebc1be0ad751f65"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T23:09:22.972Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T23:09:22.972Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726b1339004387fd708954e"
+  },
+  "seqNum": 108,
+  "description": "Created a new Order: 17305889792009, Type: sale ",
+  "notification": "New Order: 17305889792009, Type: sale ",
+  "type": "order",
+  "userGuilty": {
+    "$oid": "67267ce57ebc1be0ad751f65"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T23:09:39.333Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T23:09:39.333Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726b13d9004387fd708957b"
+  },
+  "seqNum": 109,
+  "description": "Created a new Order: 17305889895525, Type: sale ",
+  "notification": "New Order: 17305889895525, Type: sale ",
+  "type": "order",
+  "userGuilty": {
+    "$oid": "67267ce57ebc1be0ad751f65"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T23:09:49.653Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T23:09:49.653Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726b1499004387fd70895aa"
+  },
+  "seqNum": 110,
+  "description": "Created a new Order: 17305890012976, Type: sale ",
+  "notification": "New Order: 17305890012976, Type: sale ",
+  "type": "order",
+  "userGuilty": {
+    "$oid": "67267ce57ebc1be0ad751f65"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T23:10:01.403Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T23:10:01.403Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726b14e9004387fd70895d6"
+  },
+  "seqNum": 111,
+  "description": "Uptaded a order: 17305889895525 ",
+  "notification": "Order 17305889895525 Updated",
+  "type": "order",
+  "userGuilty": {
+    "$oid": "67267ce57ebc1be0ad751f65"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T23:10:06.687Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T23:10:06.687Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726b1539004387fd7089608"
+  },
+  "seqNum": 112,
+  "description": "Uptaded a order: 17305889792009 ",
+  "notification": "Order 17305889792009 Updated",
+  "type": "order",
+  "userGuilty": {
+    "$oid": "67267ce57ebc1be0ad751f65"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T23:10:11.295Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T23:10:11.295Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726b15c9004387fd7089638"
+  },
+  "seqNum": 113,
+  "description": "Uptaded a order: 17305889331648 ",
+  "notification": "Order 17305889331648 Updated",
+  "type": "order",
+  "userGuilty": {
+    "$oid": "67267ce57ebc1be0ad751f65"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T23:10:20.493Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T23:10:20.493Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726b1809004387fd7089746"
+  },
+  "seqNum": 114,
+  "description": "Created a new Order: 17305890565224, Type: buy ",
+  "notification": "New Order: 17305890565224, Type: buy ",
+  "type": "order",
+  "userGuilty": {
+    "$oid": "67267ce57ebc1be0ad751f65"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T23:10:56.653Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T23:10:56.653Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726b2539004387fd7089d2f"
+  },
+  "seqNum": 115,
+  "description": "Created a new Order: 17305892671325, Type: sale ",
+  "notification": "New Order: 17305892671325, Type: sale ",
+  "type": "order",
+  "userGuilty": {
+    "$oid": "67267ce57ebc1be0ad751f65"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T23:14:27.214Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T23:14:27.214Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726b25f9004387fd7089d5d"
+  },
+  "seqNum": 116,
+  "description": "Created a new Order: 17305892793555, Type: buy ",
+  "notification": "New Order: 17305892793555, Type: buy ",
+  "type": "order",
+  "userGuilty": {
+    "$oid": "67267ce57ebc1be0ad751f65"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T23:14:39.463Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T23:14:39.463Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726b2da9004387fd708a0cd"
+  },
+  "seqNum": 117,
+  "description": "Created a new Order: 17305894020382, Type: sale ",
+  "notification": "New Order: 17305894020382, Type: sale ",
+  "type": "order",
+  "userGuilty": {
+    "$oid": "67267ce57ebc1be0ad751f65"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T23:16:42.115Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T23:16:42.115Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726b3019004387fd708a20e"
+  },
+  "seqNum": 118,
+  "description": "Uptaded a order: 17305887333037 ",
+  "notification": "Order 17305887333037 Updated",
+  "type": "order",
+  "userGuilty": {
+    "$oid": "67267ce57ebc1be0ad751f65"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T23:17:21.247Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T23:17:21.247Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726b3749004387fd708a474"
+  },
+  "seqNum": 119,
+  "description": "Uptaded a order: 17305889331648 ",
+  "notification": "Order 17305889331648 Updated",
+  "type": "order",
+  "userGuilty": {
+    "$oid": "67267ce57ebc1be0ad751f65"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T23:19:16.121Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T23:19:16.121Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726b3789004387fd708a4ab"
+  },
+  "seqNum": 120,
+  "description": "Uptaded a order: 17305889331648 ",
+  "notification": "Order 17305889331648 Updated",
+  "type": "order",
+  "userGuilty": {
+    "$oid": "67267ce57ebc1be0ad751f65"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T23:19:20.972Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T23:19:20.972Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6726b38a9004387fd708a4fb"
+  },
+  "seqNum": 121,
+  "description": "Uptaded a order: 17305889895525 ",
+  "notification": "Order 17305889895525 Updated",
+  "type": "order",
+  "userGuilty": {
+    "$oid": "67267ce57ebc1be0ad751f65"
+  },
+  "createdAt": {
+    "$date": "2024-11-02T23:19:38.914Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-02T23:19:38.914Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6727cc6107ea1c6d7a4c8d8e"
+  },
+  "seqNum": 122,
+  "description": "Created a new Supplier: Teste ",
+  "notification": "New Supplier: Teste ",
+  "type": "supplier",
+  "userGuilty": {
+    "$oid": "67267ce57ebc1be0ad751f65"
+  },
+  "createdAt": {
+    "$date": "2024-11-03T19:17:53.092Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-03T19:17:53.092Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6727cc6807ea1c6d7a4c8d95"
+  },
+  "seqNum": 123,
+  "description": "Uptaded a supplier: Teste ",
+  "notification": "Supplier Updated: Teste ",
+  "type": "supplier",
+  "userGuilty": {
+    "$oid": "67267ce57ebc1be0ad751f65"
+  },
+  "createdAt": {
+    "$date": "2024-11-03T19:18:00.901Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-03T19:18:00.901Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6727cc6ce71806b0de2bf75c"
+  },
+  "seqNum": 124,
+  "description": "Deleted the supplier: Testes ",
+  "notification": "Supplier Deleted: Testes ",
+  "type": "supplier",
+  "userGuilty": {
+    "$oid": "67267ce57ebc1be0ad751f65"
+  },
+  "createdAt": {
+    "$date": "2024-11-03T19:18:04.723Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-03T19:18:04.723Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6727ccb81fab02921b202178"
+  },
+  "seqNum": 125,
+  "description": "Uptaded a product: Jacket ",
+  "notification": "Product Updated: Jacket ",
+  "type": "product",
+  "userGuilty": {
+    "$oid": "67267ce57ebc1be0ad751f65"
+  },
+  "createdAt": {
+    "$date": "2024-11-03T19:19:20.940Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-03T19:19:20.940Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6727ccbd1fab02921b202187"
+  },
+  "seqNum": 126,
+  "description": "Uptaded a product: Jacke ",
+  "notification": "Product Updated: Jacke ",
+  "type": "product",
+  "userGuilty": {
+    "$oid": "67267ce57ebc1be0ad751f65"
+  },
+  "createdAt": {
+    "$date": "2024-11-03T19:19:25.615Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-03T19:19:25.615Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6727d0cbd86f4806e90f73f5"
+  },
+  "seqNum": 127,
+  "description": "Created a new Order: 17306626026582, Type: buy ",
+  "notification": "New Order: 17306626026582, Type: buy ",
+  "type": "order",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-03T19:36:43.336Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-03T19:36:43.336Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6727d23ac96d9aea213da123"
+  },
+  "seqNum": 128,
+  "description": "Created a new Product: Teste ",
+  "notification": "New Product: Teste ",
+  "type": "product",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-03T19:42:50.117Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-03T19:42:50.117Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6727d2ab6653cff72507b7de"
+  },
+  "seqNum": 129,
+  "description": "Deleted the product: Teste ",
+  "notification": "Product Deleted: Teste ",
+  "type": "product",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-03T19:44:43.985Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-03T19:44:43.985Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6727d5f472460998a5b9a631"
+  },
+  "seqNum": 130,
+  "description": "Uptaded a product: Jeans Pants ",
+  "notification": "Product Updated: Jeans Pants ",
+  "type": "product",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-03T19:58:45.566Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-03T19:58:45.566Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6727d6002c534fe32a316ff7"
+  },
+  "seqNum": 131,
+  "description": "Uptaded a product: Jeans Pant ",
+  "notification": "Product Updated: Jeans Pant ",
+  "type": "product",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-03T19:58:56.397Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-03T19:58:56.397Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6727d9bbcb335f35516a8bad"
+  },
+  "seqNum": 132,
+  "description": "Uptaded a product: Jeans Pants ",
+  "notification": "Product Updated: Jeans Pants ",
+  "type": "product",
+  "userGuilty": {
+    "$oid": "672669277ebc1be0ad751c2a"
+  },
+  "createdAt": {
+    "$date": "2024-11-03T20:14:51.825Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-03T20:14:51.825Z"
+  },
+  "__v": 0
+}]
