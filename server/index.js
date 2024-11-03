@@ -19,11 +19,7 @@ dotenv.config();
 /* USE JSON REQUESTS */
 app.use(express.json());
 /* CORS RULES */
-app.use(cors({
-    origin: ["https://managit-dun.vercel.app"],
-    methods: ["POST", "GET", "PUT", "PATCH", "DELETE"],
-}
-));
+app.use(cors());
 /* GET THE DIRECTORY */
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -48,14 +44,10 @@ const port = process.env.PORT || 3000;
 mongoose.connect(process.env.MONGO_URL)
     .then(() => {
         console.log("Database Connected");
-        /* NORMAL SERVER START */
-        /*   app.listen(port, () => {
-              console.log(`App is Listening to port: ${port}`);
-          }) */
+        /* SERVER START */
+        app.listen(port, () => {
+            console.log(`App is Listening to port: ${port}`);
+        })
     }).catch((err) => {
         console.log(err)
     })
-
-/* VERCEL SERVER START */
-export default app;
-console.log(`App Started`); 
