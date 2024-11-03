@@ -1,10 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    apiUrl: import.meta.env.VITE_API_PRIVATE_KEY || "http://localhost",
-    apiPort: import.meta.env.VITE_API_TEMPLATE_KEY || "3000",
+    apiUrl: import.meta.env.VITE_API_URL || "http://localhost",
+    apiPort: import.meta.env.VITE_API_PORT || "3000",
     timeouts: []
 }
+
+console.log(import.meta.env)
 
 const MiscSlice = createSlice({
     name: "Misc",
