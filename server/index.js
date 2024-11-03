@@ -58,5 +58,5 @@ mongoose.connect(process.env.MONGO_URL)
     })
 
 /* VERCEL SERVER START */
-module.exports = app;
+export default app;
 console.log(`App Started`);
