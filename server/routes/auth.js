@@ -6,7 +6,7 @@ import { stopUpload, upload } from "../middlewares/upload.js";
 const router = express.Router();
 
 /* Register */
-router.post('/register', stopUpload, upload.single('picture'), register);
+router.post('/register', stopUpload);
 /* Login */
 router.post("/login", login);
 
