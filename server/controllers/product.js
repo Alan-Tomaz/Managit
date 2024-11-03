@@ -8,73 +8,72 @@ import { createLogMiddleware } from './log.js';
 /* CREATE PRODUCT */
 export const createProduct = async (req, res) => {
     try {
-        res.status(401).json({ error: "Due to the nature of the vercel platform, adding images cannot be done" });
-        /*     const {
-                productName,
-                productSupplier,
-                productCategory,
-                sellPrice,
-                description,
-                picturePath
-            } = req.body
-    
-            const filePath = `./public/assets/${picturePath}`;
-    
-            if ((productName == undefined || productName == '') || (productSupplier == undefined || productSupplier == '') || (productCategory == undefined || productCategory == '') || (sellPrice == undefined || sellPrice == '') || (description == undefined || description == '') || (picturePath == undefined || picturePath == '')) {
-                res.status(401).json({ error: "Fill All Fields!" });
+        const {
+            productName,
+            productSupplier,
+            productCategory,
+            sellPrice,
+            description,
+            picturePath
+        } = req.body
+
+        const filePath = `./public/assets/${picturePath}`;
+
+        if ((productName == undefined || productName == '') || (productSupplier == undefined || productSupplier == '') || (productCategory == undefined || productCategory == '') || (sellPrice == undefined || sellPrice == '') || (description == undefined || description == '') || (picturePath == undefined || picturePath == '')) {
+            res.status(401).json({ error: "Fill All Fields!" });
+            fs.unlink(filePath, (err) => { if (err) { console.log(err) } else { console.log("File is Deleted") } });
+        } else if (productName.length > 30) {
+            res.status(401).json({ error: "Product Name Too Long!" });
+            fs.unlink(filePath, (err) => { if (err) { console.log(err) } else { console.log("File is Deleted") } });
+        } else if (description.length > 50) {
+            res.status(401).json({ error: "Description Too Long!" });
+            fs.unlink(filePath, (err) => { if (err) { console.log(err) } else { console.log("File is Deleted") } });
+        } else if (sellPrice > 200) {
+            res.status(401).json({ error: "Sell Price Very Expensive!" });
+            fs.unlink(filePath, (err) => { if (err) { console.log(err) } else { console.log("File is Deleted") } });
+        }
+        else {
+
+            const categoryFinded = await Category.findOne({ _id: productCategory });
+            const supplierFinded = await Supplier.findOne({ _id: productSupplier });
+
+            if (categoryFinded == null) {
+                res.status(401).json({ error: "Category Does Not Exists" });
                 fs.unlink(filePath, (err) => { if (err) { console.log(err) } else { console.log("File is Deleted") } });
-            } else if (productName.length > 30) {
-                res.status(401).json({ error: "Product Name Too Long!" });
+            } else if (supplierFinded == null) {
+                res.status(401).json({ error: "Supplier Does Not Exists" });
                 fs.unlink(filePath, (err) => { if (err) { console.log(err) } else { console.log("File is Deleted") } });
-            } else if (description.length > 50) {
-                res.status(401).json({ error: "Description Too Long!" });
-                fs.unlink(filePath, (err) => { if (err) { console.log(err) } else { console.log("File is Deleted") } });
-            } else if (sellPrice > 200) {
-                res.status(401).json({ error: "Sell Price Very Expensive!" });
-                fs.unlink(filePath, (err) => { if (err) { console.log(err) } else { console.log("File is Deleted") } });
-            }
-            else {
-    
-                const categoryFinded = await Category.findOne({ _id: productCategory });
-                const supplierFinded = await Supplier.findOne({ _id: productSupplier });
-    
-                if (categoryFinded == null) {
-                    res.status(401).json({ error: "Category Does Not Exists" });
-                    fs.unlink(filePath, (err) => { if (err) { console.log(err) } else { console.log("File is Deleted") } });
-                } else if (supplierFinded == null) {
-                    res.status(401).json({ error: "Supplier Does Not Exists" });
+            } else {
+
+                const newProduct = new Product({
+                    productName,
+                    productSupplier: productSupplier,
+                    productCategory: productCategory,
+                    sellPrice,
+                    description,
+                    picturePath
+                })
+
+                const productFinded = await Product.findOne({ productName })
+
+                if (productFinded) {
+                    res.status(401).json({ error: "Product Already Exists" });
                     fs.unlink(filePath, (err) => { if (err) { console.log(err) } else { console.log("File is Deleted") } });
                 } else {
-    
-                    const newProduct = new Product({
-                        productName,
-                        productSupplier: productSupplier,
-                        productCategory: productCategory,
-                        sellPrice,
-                        description,
-                        picturePath
-                    })
-    
-                    const productFinded = await Product.findOne({ productName })
-    
-                    if (productFinded) {
-                        res.status(401).json({ error: "Product Already Exists" });
-                        fs.unlink(filePath, (err) => { if (err) { console.log(err) } else { console.log("File is Deleted") } });
-                    } else {
-                        const savedProduct = await newProduct.save()
-    */
-        /* LOG PARAMETERS 
-        req.body.info = savedProduct;
-        req.body.type = "create-product";
+                    const savedProduct = await newProduct.save()
 
-        res.status(201).json({ product: savedProduct });
+                    /* LOG PARAMETERS */
+                    req.body.info = savedProduct;
+                    req.body.type = "create-product";
 
-        setTimeout(() => {
-            createLogMiddleware(req);
-        }, 0);
-    }
-}
-} */
+                    res.status(201).json({ product: savedProduct });
+
+                    setTimeout(() => {
+                        createLogMiddleware(req);
+                    }, 0);
+                }
+            }
+        }
 
     } catch (error) {
 
@@ -267,7 +266,6 @@ export const updateProduct = async (req, res) => {
                         description
                     };
                     if (picturePath != undefined) {
-                        return res.status(401).json({ error: "Due to the nature of the vercel platform, adding images cannot be done" });
                         newProductValues.picturePath = picturePath;
                     }
 

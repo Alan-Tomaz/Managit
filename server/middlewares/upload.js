@@ -21,3 +21,8 @@ const storage = multer.diskStorage({
 })
 
 export const upload = multer({ storage, limits: { fileSize: 3000000 } })
+
+export const stopUpload = (req, res, next) => {
+    // Aqui você pode enviar a mensagem desejada
+    return res.status(404).json({ error: 'Due to the nature of the vercel platform, adding images cannot be done', msg: "Due to the nature of the vercel platform, adding images cannot be done" });
+};
