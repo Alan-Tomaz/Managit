@@ -577,7 +577,8 @@ export const updateUser = async (req, res) => {
 /* DELETE MANY USERS */
 export const deleteManyUsers = async (req, res) => {
     try {
-        const { idsToDelete } = req.query;
+        res.status(404).json({ error: "Due to the nature of the vercel platform, deleting items with images should not be done." });
+        /* const { idsToDelete } = req.query;
 
         if (idsToDelete.indexOf(req.body.userId) > 0) {
             return res.status(404).json({ error: "You cannot delete your own User" });
@@ -598,9 +599,9 @@ export const deleteManyUsers = async (req, res) => {
                 const filePath = `./public/assets/${user.picturePath}`;
                 fs.unlink(filePath, (err) => { if (err) { console.log(err) } else { console.log(`File ${index + 1} is Deleted`) } });
             })
-
-            /* LOG PARAMETERS */
-            req.body.info = usersToDelete;
+ */
+        /* LOG PARAMETERS */
+        /*     req.body.info = usersToDelete;
             req.body.type = "delete-many-users";
 
             res.status(200).json({ msg: "Users Successfully Deleted" });
@@ -608,7 +609,7 @@ export const deleteManyUsers = async (req, res) => {
             setTimeout(() => {
                 createLogMiddleware(req);
             }, 0)
-        }
+        } */
 
     } catch (error) {
         console.log(error);
@@ -619,7 +620,8 @@ export const deleteManyUsers = async (req, res) => {
 /* DELETE USER */
 export const deleteUser = async (req, res) => {
     try {
-        const { id } = req.params;
+        res.status(404).json({ error: "Due to the nature of the vercel platform, deleting items with images should not be done." });
+        /* const { id } = req.params;
 
         if (id == req.body.userId) {
             return res.status(404).json({ error: "You cannot delete your own User" });
@@ -632,20 +634,20 @@ export const deleteUser = async (req, res) => {
         if (!result) {
             return res.status(404).json({ error: "User not Found" });
         } else {
-            const filePath = `./public/assets/${user.picturePath}`;
-            /* Erase the old picture file */
-            fs.unlink(filePath, (err) => { if (err) { console.log(err) } else { console.log("File is Deleted") } });
+            const filePath = `./public/assets/${user.picturePath}`; */
+        /* Erase the old picture file */
+        /*             fs.unlink(filePath, (err) => { if (err) { console.log(err) } else { console.log("File is Deleted") } });
+         */
+        /* LOG PARAMETERS */
+        /*  req.body.info = user;
+         req.body.type = "delete-user";
 
-            /* LOG PARAMETERS */
-            req.body.info = user;
-            req.body.type = "delete-user";
+         res.status(200).json({ msg: "User Successfully Deleted" });
 
-            res.status(200).json({ msg: "User Successfully Deleted" });
-
-            setTimeout(() => {
-                createLogMiddleware(req);
-            }, 0)
-        }
+         setTimeout(() => {
+             createLogMiddleware(req);
+         }, 0)
+     } */
 
     } catch (error) {
         console.log(error.message)
