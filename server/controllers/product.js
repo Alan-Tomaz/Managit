@@ -352,26 +352,29 @@ export const deleteManyProducts = async (req, res) => {
 /* DELETE PRODUCT */
 export const deleteProduct = async (req, res) => {
     try {
-        const { id } = req.params;
 
-        const product = await Product.findById(id);
+        res.status(400).json({ msg: "Due to the nature of the vercel platform, deleting items with images should not be done." });
 
-        const itemDependent = await Order.findOne({ "products.product": product._id });
-
-        if (itemDependent) {
-            return res.status(404).json({ error: `The product ${product.productName} cannot be deleted because it is linked to other records.` });
-        }
-
-        const result = await Product.findByIdAndDelete(id);
-
-        if (!result) {
-            return res.status(404).json({ error: "Product not Found" });
-        } else {
-            const filePath = `./public/assets/${product.picturePath}`;
-            fs.unlink(filePath, (err) => { if (err) { console.log(err) } else { console.log("File is Deleted") } });
-
-            /* LOG PARAMETERS */
-            req.body.info = product;
+        /*     const { id } = req.params;
+    
+            const product = await Product.findById(id);
+    
+            const itemDependent = await Order.findOne({ "products.product": product._id });
+    
+            if (itemDependent) {
+                return res.status(404).json({ error: `The product ${product.productName} cannot be deleted because it is linked to other records.` });
+            }
+    
+            const result = await Product.findByIdAndDelete(id);
+    
+            if (!result) {
+                return res.status(404).json({ error: "Product not Found" });
+            } else {
+                const filePath = `./public/assets/${product.picturePath}`;
+                fs.unlink(filePath, (err) => { if (err) { console.log(err) } else { console.log("File is Deleted") } });
+     */
+        /* LOG PARAMETERS */
+        /*     req.body.info = product;
             req.body.type = "delete-product";
 
             res.status(200).json({ msg: "Product Successfully Deleted" });
@@ -379,7 +382,7 @@ export const deleteProduct = async (req, res) => {
             setTimeout(() => {
                 createLogMiddleware(req);
             }, 0)
-        }
+        } */
 
     } catch (error) {
         console.log(error.message)
